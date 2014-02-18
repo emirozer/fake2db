@@ -3,7 +3,7 @@ import argparse
 parser = argparse.ArgumentParser(description='Create test databases that are '
                                              '  populated with fake data.')
 
-parser.add_argument('amount_ of_rows', metavar='-r', type=int, nargs='+',
+parser.add_argument('amount_of_rows', metavar='-r', type=int, nargs='+',
                    help='amount of rows')
 
 parser.add_argument('database_pattern', metavar='-p', type=str, nargs='+',
