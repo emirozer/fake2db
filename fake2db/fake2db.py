@@ -9,7 +9,7 @@ parser.add_argument('amount_of_rows', metavar='-r', type=int, nargs='+',
 parser.add_argument('database_pattern', metavar='-p', type=str, nargs='+',
                    help='pattern of the database to be created')
 
-parser.add_argument('target_db', metavar='-d', type=int, nargs='+',
-                   help='target database / redis ? mongodb ? mysql ? sqlite ?')
+parser.add_argument('target_db', metavar='-d', type=str, nargs='+',
+                   help='target database / postgresql ? mysql ? sqlite ?')
 
 args = parser.parse_args()
