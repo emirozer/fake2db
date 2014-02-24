@@ -68,3 +68,26 @@ def detailed_registration(number_of_rows):
                  'passwords': list_of_passwords}
 
     return fake_data
+
+def user_agent(number_of_rows):
+    '''Represents the user agent information holding db
+    Columns of the following:
+    ipv4, country_code, user_agent
+    '''
+    list_of_ips = []
+    list_of_countrycodes = []
+    list_of_useragents = []
+
+    logging.info('Populating list objects with fake data..')
+
+    for n in range(0, number_of_rows):
+        list_of_ips.append(faker.ipv4())
+        list_of_countrycodes.append(faker.country_code())
+        list_of_useragents.append(faker.user_agent())
+
+    fake_data = {'ips': list_of_ips,
+                 'countrycodes': list_of_countrycodes,
+                 'useragents': list_of_useragents
+             }
+
+    return fake_data
