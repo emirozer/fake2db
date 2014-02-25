@@ -91,3 +91,30 @@ def user_agent(number_of_rows):
              }
 
     return fake_data
+
+def company(number_of_rows):
+    '''Represents the company information holding db
+    Columns of the following:
+    company name, start-up date, company email, domain name,city
+    '''
+    list_of_names = []
+    list_of_sdates = []
+    list_of_emails = []
+    list_of_domains = []
+    list_of_cities = []
+
+    for n in range(0, number_of_rows):
+        list_of_names.append(faker.company())
+        list_of_sdates.append(faker.date(pattern="%d-%m-%Y"))
+        list_of_emails.append(faker.company_email())
+        list_of_domains.append(faker.safe_email())
+        list_of_cities.append(faker.city())
+
+    fake_data = {'names': list_of_names,
+                 'sdates': list_of_sdates,
+                 'emails': list_of_emails,
+                 'domains': list_of_domains,
+                 'cities': list_of_cities
+             }
+
+    return fake_data
