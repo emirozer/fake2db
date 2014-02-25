@@ -25,9 +25,6 @@ def simple_registration(number_of_rows):
         list_of_emails.append(faker.safe_email())
         list_of_passwords.append(faker.md5(raw_output=False))
 
-    logging.info(list_of_emails)
-    logging.info(list_of_passwords)
-
     fake_data = {'emails': list_of_emails,
                  'passwords': list_of_passwords}
 
