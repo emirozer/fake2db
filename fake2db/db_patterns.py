@@ -21,6 +21,8 @@ def simple_registration(number_of_rows):
     list_of_emails = []
     list_of_passwords = []
 
+    logging.info('[SIMPLE]Populating list objects with fake data..')
+
     for n in range(0,number_of_rows):
         list_of_emails.append(faker.safe_email())
         list_of_passwords.append(faker.md5(raw_output=False))
@@ -47,7 +49,7 @@ def detailed_registration(number_of_rows):
     list_of_emails = []
     list_of_passwords = []
 
-    logging.info('Populating list objects with fake data..')
+    logging.info('[DETAILED]Populating list objects with fake data..')
 
     for n in range(0,number_of_rows):
         list_of_names.append(faker.name())
@@ -99,6 +101,8 @@ def company(number_of_rows):
     list_of_emails = []
     list_of_domains = []
     list_of_cities = []
+
+    logging.info('[COMPANY]Populating list objects with fake data..')
 
     for n in range(0, number_of_rows):
         list_of_names.append(faker.company())
