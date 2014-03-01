@@ -119,3 +119,42 @@ def company(number_of_rows):
              }
 
     return fake_data
+
+def customer(number_of_rows):
+    '''Represents the customer information holding db
+    Columns of the following:
+    name, last_name, address, country, city, registry_date,
+    birthdate, email, phone_number, locale'''
+
+    (list_of_names,list_of_lastnames,list_of_addresses) = ([],[],[])
+    (list_of_countries, list_of_cities, list_of_registrydates) = ([],[],[])
+    (list_of_birthdates, list_of_emails, list_of_phonenumbers) =([],[],[])
+    list_of_locales = []
+
+    logging.info('[CUSTOMER]Populating list objects with fake data..')
+
+    for n in range(0, number_of_rows):
+        list_of_names.append(faker.company())
+        list_of_lastnames.append(faker.last_name())
+        list_of_addresses.append(faker.address())
+        list_of_countries.append(faker.country())
+        list_of_cities.append(faker.city())
+        list_of_registrydates.append(faker.date(pattern="%d-%m-%Y"))
+        list_of_birthdates.append(faker.date(pattern="%d-%m-%Y"))
+        list_of_emails.append(faker.safe_email())
+        list_of_phonenumbers.append(faker.phone_number())
+        list_of_locales.append(faker.locale())
+
+    fake_data = {'names': list_of_names,
+                 'lastnames': list_of_lastnames,
+                 'addresses': list_of_addresses,
+                 'countries': list_of_countries,
+                 'cities': list_of_cities,
+                 'registrydates': list_of_registrydates,
+                 'birthdates': list_of_birthdates,
+                 'emails': list_of_emails,
+                 'phonenumbers': list_of_phonenumbers,
+                 'locales': list_of_locales
+             }
+
+    return fake_data
