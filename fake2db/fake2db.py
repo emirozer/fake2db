@@ -1,15 +1,26 @@
-import argparse
+import sys
 
-parser = argparse.ArgumentParser(description='Create test databases that are '
-                                             '  populated with fake data.')
+from sqlite_handler import fake2dbSqliteHandler
+from logging import getLogger
+from datetime import date
 
-parser.add_argument('amount_of_rows', metavar='-r', type=int, nargs='+',
-                   help='amount of rows')
+logger = getLogger(__name__)
+CLI_TAG = 'fake2db >>'
 
-parser.add_argument('database_pattern', metavar='-p', type=str, nargs='+',
-                   help='pattern of the database to be created')
+class fake2db:
+    
+    def exit(self):
+        sys.exit(0)
 
-parser.add_argument('target_db', metavar='-d', type=str, nargs='+',
-                   help='target database / postgresql ? mysql ? sqlite ?')
+    def help(self):
+        print('WORK IN PROGRESS')
 
-args = parser.parse_args()
+while True:
+    user_input = raw_input(CLI_TAG)
+    fake_sqlite_handler = fake2dbSqliteHandler()
+    if user_input == 'exit' or user_input == 'quit':
+        fake2db().exit()
+    elif user_input == 'sqlite':
+        fake_sqlite_handler.data_filler_simple_registration(3)
+    else:
+        print("You have entered a wrong command or argument , please type help")
