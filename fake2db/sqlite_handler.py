@@ -56,16 +56,21 @@ class fake2dbSqliteHandler():
         email TEXT unique, password TEXT)
         ''')
         conn.commit()
+        
 
-        for email, password in data.iteritems():
-            try:
-                cursor.execute('insert into simple_registration values(?,?,?)',(self._rnd_number(),email,password))
-                conn.commit()
-                logger.warning('Commit successful after write job!')
-            except Exception as e:
-                logger.error(e)
+        for password in data['passwords']:
+            for email in data['emails']:
+                try:
+                    cursor.execute('insert into simple_registration values(?,?,?)',(self._rnd_number(),email,password))
+                    conn.commit()
+                    logger.warning('Commit successful after write job!')
+                except Exception as e:
+                    logger.error(e)
 
         conn.close()
+
+
+
 
 
 
