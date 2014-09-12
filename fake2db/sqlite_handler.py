@@ -18,7 +18,7 @@ class fake2dbSqliteHandler():
         return ''.join(random.choice(string.ascii_uppercase) for i in range(6))
 
     def _rnd_number(self):
-        return random.randint(0, 100000)
+        return random.randint(0, 1000000)
 
     def database_caller_creator(self):
         '''creates a sqlite3 db
@@ -39,7 +39,6 @@ class fake2dbSqliteHandler():
     def data_filler_simple_registration(self, number_of_rows):
         '''creates and fills the table
         '''
-
         # incoming data structure 
         # {'emails' : a_list_of_emails,
         # 'passwords': a_list_of_passwords
@@ -57,7 +56,6 @@ class fake2dbSqliteHandler():
         ''')
         conn.commit()
         
-
         for password in data['passwords']:
             for email in data['emails']:
                 try:
