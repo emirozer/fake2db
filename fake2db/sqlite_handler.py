@@ -17,6 +17,9 @@ class fake2dbSqliteHandler():
         '''
         return ''.join(random.choice(string.ascii_uppercase) for i in range(6))
 
+    def _rnd_number(self):
+        return random.randint(0, 100000)
+
     def database_caller_creator(self):
         '''creates a sqlite3 db
         '''
@@ -56,9 +59,7 @@ class fake2dbSqliteHandler():
 
         for email, password in data.iteritems():
             try:
-                cursor.execute('''INSERT INTO simple_registration(email, password)
-                VALUES(:email, :password)''',
-                               {'email':email, 'password':password})
+                cursor.execute('insert into simple_registration values(?,?,?)',(self._rnd_number(),email,password))
                 conn.commit()
                 logger.warning('Commit successful after write job!')
             except Exception as e:
