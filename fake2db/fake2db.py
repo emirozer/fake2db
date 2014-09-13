@@ -11,7 +11,7 @@ CLI_TAG = 'fake2db >>'
 class InstanciateDBHandlerException(Exception):
     '''An Exception at the instantiation of the handler '''
 
-class fake2db:
+class Fake2Db:
     
     def exit(self):
         sys.exit(0)
@@ -28,7 +28,7 @@ while True:
         raise InstanciateDBHandlerException
 
     if user_input == 'exit' or user_input == 'quit':
-        fake2db().exit()
+        Fake2Db().exit()
 
     elif user_input.startswith('sqlite'):
         try:
@@ -40,7 +40,7 @@ while True:
         except:
             print("Your arguments are incorrect. Here's the help document : ")
             print("                                                         ")
-            fake2db().help()
+            Fake2Db().help()
 
         if db_pattern == 'simple_registration':
             fake_sqlite_handler.data_filler_simple_registration(number_of_rows)

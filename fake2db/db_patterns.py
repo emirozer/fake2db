@@ -5,7 +5,7 @@ except ImportError:
     logging.error('faker is not installed on the python packages..')
 
 
-class db_patterns:
+class DbPatterns:
     faker = Factory.create()
 
     def simple_registration(self, number_of_rows):

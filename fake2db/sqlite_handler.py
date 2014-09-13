@@ -2,7 +2,7 @@ import sqlite3
 import random
 import string
 
-from db_patterns import db_patterns
+from db_patterns import DbPatterns
 from logging import getLogger
 
 logger = getLogger(__name__)
@@ -43,7 +43,7 @@ class fake2dbSqliteHandler():
         # {'emails' : a_list_of_emails,
         # 'passwords': a_list_of_passwords
         # }
-        db_patterns_instance = db_patterns()
+        db_patterns_instance = DbPatterns()
         data = db_patterns_instance.simple_registration(number_of_rows)
 
         database = self.database_caller_creator('simpleRegistration_')
@@ -80,7 +80,7 @@ class fake2dbSqliteHandler():
         #             'emails': list_of_emails,
         #             'passwords': list_of_passwords}
 
-        db_patterns_instance = db_patterns()
+        db_patterns_instance = DbPatterns()
         data = db_patterns_instance.detailed_registration(number_of_rows)
 
         database = self.database_caller_creator('detailedRegistration_')
@@ -119,7 +119,7 @@ class fake2dbSqliteHandler():
         #             'countrycodes': list_of_countrycodes,
         #             'useragents': list_of_useragents}
 
-        db_patterns_instance = db_patterns()
+        db_patterns_instance = DbPatterns()
         data = db_patterns_instance.user_agent(number_of_rows)
 
         database = self.database_caller_creator('userAgent_')
@@ -154,7 +154,7 @@ class fake2dbSqliteHandler():
         #             'emails': list_of_emails,
         #             'domains': list_of_domains,
         #             'cities': list_of_cities
-        db_patterns_instance = db_patterns()
+        db_patterns_instance = DbPatterns()
         data = db_patterns_instance.company(number_of_rows)
 
         database = self.database_caller_creator('company_')
