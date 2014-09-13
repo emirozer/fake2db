@@ -103,7 +103,7 @@ class fake2dbSqliteHandler():
                         for phone in data['phones']:
                             for address in data['addresses']:
                                 try:
-                                    cursor.execute('insert into detailed_registration values(?,?,?,?,?,?,?)',(self._rnd_number(), email, password, lastname, name, address, phone))
+                                    cursor.execute('insert into detailed_registration values(?,?,?,?,?,?,?)',(self._rnd_number(),email,password,lastname,name,address,phone))
                                     conn.commit()
                                     logger.warning('Commit successful after write job!')
                                 except Exception as e:
@@ -173,8 +173,7 @@ class fake2dbSqliteHandler():
                     for domain in data['domains']:
                         for city in data['cities']:
                             try:
-                                cursor.execute('insert into simple_registration values(?,?,?,?,?,?)',
-                                               (self._rnd_number(), name, sdate, email, domain, city))
+                                cursor.execute('insert into simple_registration values (?,?,?,?,?,?)',(self._rnd_number(), name, sdate, email, domain, city))
                                 conn.commit()
                                 logger.warning('Commit successful after write job!')
                             except Exception as e:
