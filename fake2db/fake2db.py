@@ -38,6 +38,8 @@ while True:
         number_of_rows = splitted[2]
         if db_pattern == 'simple_registration':
             fake_sqlite_handler.data_filler_simple_registration(number_of_rows)
+        elif db_pattern == 'detailed_registration':
+            fake_sqlite_handler.data_filler_detailed_registration(number_of_rows)
 
     elif user_input.startswith('postgresql'):
         pass

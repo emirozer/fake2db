@@ -37,7 +37,7 @@ class fake2dbSqliteHandler():
         return database
 
     def data_filler_simple_registration(self, number_of_rows):
-        '''creates and fills the table
+        '''creates and fills the table with simple regis. information
         '''
         # incoming data structure 
         # {'emails' : a_list_of_emails,
@@ -52,7 +52,7 @@ class fake2dbSqliteHandler():
         
         cursor.execute('''
         CREATE TABLE simple_registration(id INTEGER PRIMARY KEY, 
-        email TEXT unique, password TEXT)
+        email TEXT , password TEXT)
         ''')
         conn.commit()
         
@@ -70,7 +70,7 @@ class fake2dbSqliteHandler():
         
 
     def data_filler_detailed_registration(self, number_of_rows):
-        '''creates and fills the table
+        '''creates and fills the table with detailed regis. information
         '''
         # incoming data structure
         #fake_data = {'names': list_of_names,
@@ -89,7 +89,7 @@ class fake2dbSqliteHandler():
         
         cursor.execute('''
         CREATE TABLE detailed_registration(id INTEGER PRIMARY KEY, 
-        email TEXT unique, password TEXT, lastname TEXT,
+        email TEXT, password TEXT, lastname TEXT,
         name TEXT, adress TEXT, phone TEXT,)
         ''')
         conn.commit()
@@ -111,3 +111,73 @@ class fake2dbSqliteHandler():
 
         conn.close()
 
+    def data_filler_user_agent(self, number_of_rows):
+        '''creates and fills the table with user agent data
+        '''
+        # incoming data structure
+        #fake_data = {'ips': list_of_ips,
+        #             'countrycodes': list_of_countrycodes,
+        #             'useragents': list_of_useragents}
+
+        db_patterns_instance = db_patterns()
+        data = db_patterns_instance.user_agent(number_of_rows)
+
+        database = self.database_caller_creator('userAgent_')
+        conn = sqlite3.connect(database)
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+        CREATE TABLE (id INTEGER PRIMARY KEY, 
+        ip TEXT, countrycode TEXT, useragent TEXT)
+        ''')
+        conn.commit()
+        
+        for ip in data['ips']:
+            for countrycode in data['countrycodes']:
+                for useragent in data['useragents']:
+                    try:
+                        cursor.execute('insert into simple_registration values(?,?,?,?)',
+                                       (self._rnd_number(), ip, countrycode, useragent))
+                        conn.commit()
+                        logger.warning('Commit successful after write job!')
+                    except Exception as e:
+                        logger.error(e)
+
+        conn.close()
+
+    def data_filler_company(self, number_of_rows):
+        '''creates and fills the table with company data
+        '''
+        # incoming data structure
+        #fake_data = {'names': list_of_names,
+        #             'sdates': list_of_sdates,
+        #             'emails': list_of_emails,
+        #             'domains': list_of_domains,
+        #             'cities': list_of_cities
+        db_patterns_instance = db_patterns()
+        data = db_patterns_instance.company(number_of_rows)
+
+        database = self.database_caller_creator('company_')
+        conn = sqlite3.connect(database)
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+        CREATE TABLE (id INTEGER PRIMARY KEY, 
+        name TEXT, sdate TEXT, email TEXT, domain TEXT, city TEXT)
+        ''')
+        conn.commit()
+        
+        for name in data['names']:
+            for sdate in data['sdates']:
+                for email in data['emails']:
+                    for domain in data['domains']:
+                        for city in data['cities']:
+                            try:
+                                cursor.execute('insert into simple_registration values(?,?,?,?,?,?)',
+                                               (self._rnd_number(), name, sdate, email, domain, city))
+                                conn.commit()
+                                logger.warning('Commit successful after write job!')
+                            except Exception as e:
+                                logger.error(e)
+
+        conn.close()
