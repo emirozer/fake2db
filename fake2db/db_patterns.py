@@ -2,7 +2,7 @@ import logging
 try:
     from faker import Factory
 except ImportError:
-    logging.error('self.faker is not installed on the python packages..')
+    logging.error('faker is not installed on the python packages..')
 
 
 class db_patterns:
