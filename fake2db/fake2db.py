@@ -48,5 +48,15 @@ if args.rows:
         logger.info('arguments found(rows and db), starting faking!!', extra=d)
         logger.warning('Rows argument : %s', args.rows, extra=d)
         logger.info('DB argument : %s', args.db, extra=d)
-        fake_sqlite_handler.data_filler_simple_registration(int(args.rows))
+        fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows))
         
+
+
+
+
+
+
+
+
+
+

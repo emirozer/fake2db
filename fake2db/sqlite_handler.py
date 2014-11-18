@@ -1,11 +1,21 @@
 import sqlite3
 import random
 import string
-
+import logging
+import getpass
+import socket
 from db_patterns import DbPatterns
-from logging import getLogger
 
-logger = getLogger(__name__)
+
+# Pull the local ip and username for meaningful logging
+username = getpass.getuser()
+local_ip = socket.gethostbyname(socket.gethostname())
+# Set the logger
+FORMAT = '%(asctime)-15s %(clientip)s %(user)-8s %(message)s'
+logging.basicConfig(format=FORMAT)
+d = {'clientip': local_ip, 'user': username}
+logger = logging.getLogger('fake2db_logger')
+# --------------------
 
 class DbConnException(Exception):
     """Database Connection or Creation Exception"""
@@ -20,23 +30,33 @@ class fake2dbSqliteHandler():
     def _rnd_number(self):
         return random.randint(0, 100000000)
 
-    def database_caller_creator(self, tag):
+    def fake2db_sqlite_initiator(self, number_of_rows):
+        '''Main handler for the operation
+        '''
+        rows = number_of_rows
+        conn = self.database_caller_creator()
+        self.data_filler_simple_registration(rows, conn)
+        self.data_filler_detailed_registration(rows, conn)
+        self.data_filler_company(rows, conn)
+        self.data_filler_user_agent(rows, conn)
+        conn.close()
+
+    def database_caller_creator(self):
         '''creates a sqlite3 db
         '''
         database = ''
         
         try:
-            database = tag + self.str_generator() + '.db'
+            database = 'sqlite_' + self.str_generator() + '.db'
             conn=sqlite3.connect(database)
-            conn.close()
-            logger.warning('Database created and opened succesfully: %s' %database)
+            logger.warning('Database created and opened succesfully: %s' %database, extra=d)
         except:
-            logger.error('Failed to connect or create database / sqlite3')
+            logger.error('Failed to connect or create database / sqlite3', extra=d)
             raise DbConnException
             
-        return database
-
-    def data_filler_simple_registration(self, number_of_rows):
+        return conn
+        
+    def data_filler_simple_registration(self, number_of_rows, conn):
         '''creates and fills the table with simple regis. information
         '''
         # incoming data structure 
@@ -45,11 +65,8 @@ class fake2dbSqliteHandler():
         # }
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.simple_registration(number_of_rows)
-
-        database = self.database_caller_creator('simpleRegistration_')
-        conn = sqlite3.connect(database)
         cursor = conn.cursor()
-        
+
         cursor.execute('''
         CREATE TABLE simple_registration(id INTEGER PRIMARY KEY, 
         email TEXT , password TEXT)
@@ -62,14 +79,12 @@ class fake2dbSqliteHandler():
                     cursor.execute('insert into simple_registration values(?,?,?)',
                                    (self._rnd_number(),email,password))
                     conn.commit()
-                    logger.warning('Commit successful after write job!')
+                    logger.warning('Commit successful after write job!', extra=d)
                 except Exception as e:
-                    logger.error(e)
-
-        conn.close()
+                    logger.error(e, extra=d)
         
 
-    def data_filler_detailed_registration(self, number_of_rows):
+    def data_filler_detailed_registration(self, number_of_rows, conn):
         '''creates and fills the table with detailed regis. information
         '''
         # incoming data structure
@@ -82,11 +97,8 @@ class fake2dbSqliteHandler():
 
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.detailed_registration(number_of_rows)
-
-        database = self.database_caller_creator('detailedRegistration_')
-        conn = sqlite3.connect(database)
         cursor = conn.cursor()
-        
+
         cursor.execute('''
         CREATE TABLE detailed_registration(id INTEGER PRIMARY KEY, 
         email TEXT, password TEXT, lastname TEXT,
@@ -105,13 +117,13 @@ class fake2dbSqliteHandler():
                                 try:
                                     cursor.execute('insert into detailed_registration values(?,?,?,?,?,?,?)',(self._rnd_number(),email,password,lastname,name,address,phone))
                                     conn.commit()
-                                    logger.warning('Commit successful after write job!')
+                                    logger.warning('Commit successful after write job!', extra=d)
                                 except Exception as e:
-                                    logger.error(e)
+                                    logger.error(e, extra=d)
 
-        conn.close()
 
-    def data_filler_user_agent(self, number_of_rows):
+
+    def data_filler_user_agent(self, number_of_rows, conn):
         '''creates and fills the table with user agent data
         '''
         # incoming data structure
@@ -121,11 +133,8 @@ class fake2dbSqliteHandler():
 
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.user_agent(number_of_rows)
-
-        database = self.database_caller_creator('userAgent_')
-        conn = sqlite3.connect(database)
         cursor = conn.cursor()
-        
+
         cursor.execute('''
         CREATE TABLE (id INTEGER PRIMARY KEY, 
         ip TEXT, countrycode TEXT, useragent TEXT)
@@ -139,13 +148,12 @@ class fake2dbSqliteHandler():
                         cursor.execute('insert into simple_registration values(?,?,?,?)',
                                        (self._rnd_number(), ip, countrycode, useragent))
                         conn.commit()
-                        logger.warning('Commit successful after write job!')
+                        logger.warning('Commit successful after write job!', extra=d)
                     except Exception as e:
-                        logger.error(e)
+                        logger.error(e, extra=d)
 
-        conn.close()
-
-    def data_filler_company(self, number_of_rows):
+        
+    def data_filler_company(self, number_of_rows, conn):
         '''creates and fills the table with company data
         '''
         # incoming data structure
@@ -156,9 +164,6 @@ class fake2dbSqliteHandler():
         #             'cities': list_of_cities
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.company(number_of_rows)
-
-        database = self.database_caller_creator('company_')
-        conn = sqlite3.connect(database)
         cursor = conn.cursor()
         
         cursor.execute('''
@@ -175,8 +180,6 @@ class fake2dbSqliteHandler():
                             try:
                                 cursor.execute('insert into simple_registration values (?,?,?,?,?,?)',(self._rnd_number(), name, sdate, email, domain, city))
                                 conn.commit()
-                                logger.warning('Commit successful after write job!')
+                                logger.warning('Commit successful after write job!', extra=d)
                             except Exception as e:
-                                logger.error(e)
-
-        conn.close()
+                                logger.error(e, extra=d)
