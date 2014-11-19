@@ -43,6 +43,8 @@ class fake2dbSqliteHandler():
 
     def database_caller_creator(self):
         '''creates a sqlite3 db
+        returns the related connection object
+        which will be later used to spawn the cursor
         '''
         database = ''
         
