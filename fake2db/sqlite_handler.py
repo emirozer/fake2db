@@ -138,7 +138,7 @@ class fake2dbSqliteHandler():
         cursor = conn.cursor()
 
         cursor.execute('''
-        CREATE TABLE (id INTEGER PRIMARY KEY, 
+        CREATE TABLE user_agent(id INTEGER PRIMARY KEY, 
         ip TEXT, countrycode TEXT, useragent TEXT)
         ''')
         conn.commit()
@@ -168,9 +168,8 @@ class fake2dbSqliteHandler():
         data = db_patterns_instance.company(number_of_rows)
         cursor = conn.cursor()
         
-        
         cursor.execute('''
-        CREATE TABLE (id INTEGER PRIMARY KEY, 
+        CREATE TABLE companies(id INTEGER PRIMARY KEY, 
         name TEXT, sdate TEXT, email TEXT, domain TEXT, city TEXT)
         ''')
         conn.commit()
