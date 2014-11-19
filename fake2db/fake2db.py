@@ -26,10 +26,7 @@ class Fake2Db:
     def exit(self):
         sys.exit(0)
 
-    def help(self):
-        print('WORK IN PROGRESS')
-
-
+    
 try:
     fake_sqlite_handler = fake2dbSqliteHandler()
 except:

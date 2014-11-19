@@ -100,11 +100,11 @@ class fake2dbSqliteHandler():
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.detailed_registration(number_of_rows)
         cursor = conn.cursor()
-
+        
         cursor.execute('''
         CREATE TABLE detailed_registration(id INTEGER PRIMARY KEY, 
         email TEXT, password TEXT, lastname TEXT,
-        name TEXT, adress TEXT, phone TEXT,)
+        name TEXT, adress TEXT, phone TEXT)
         ''')
         conn.commit()
         
@@ -167,6 +167,7 @@ class fake2dbSqliteHandler():
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.company(number_of_rows)
         cursor = conn.cursor()
+        
         
         cursor.execute('''
         CREATE TABLE (id INTEGER PRIMARY KEY, 
