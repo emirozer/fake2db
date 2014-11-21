@@ -147,8 +147,12 @@ class fake2dbMySqlHandler():
         for password in data['passwords']:
             for email in data['emails']:
                 try:
-                    cursor.execute('insert into simple_registration values(?,?,?)',
-                                   (self._rnd_number(),email,password))
+                    simple_registration_payload = ("INSERT INTO simple_registration "
+                                                   "(id, email, password) "
+                                                   "VALUES (%s, %s, %s)")
+                    
+                    simple_registration_data = (self._rnd_number(), email, password))
+                    cursor.execute(simple_registration_payload, simple_registration_data)
                     conn.commit()
                     logger.warning('Commit successful after write job!', extra=d)
                 except Exception as e:
@@ -179,7 +183,12 @@ class fake2dbMySqlHandler():
                         for phone in data['phones']:
                             for address in data['addresses']:
                                 try:
-                                    cursor.execute('insert into detailed_registration values(?,?,?,?,?,?,?)',(self._rnd_number(),email,password,lastname,name,address,phone))
+
+                                    detailed_registration_payload = ("INSERT INTO detailed_registration "
+                                                                     "(id, email, password, lastname, name, adress, phone) "
+                                                                     "VALUES (%s, %s, %s, %s, %s, %s, %s)")
+                                    detailed_registration_data = (self._rnd_number(),email,password,lastname,name,address,phone))
+                                    cursor.execute(detailed_registration_payload, detailed_registration_data)
                                     conn.commit()
                                     logger.warning('Commit successful after write job!', extra=d)
                                 except Exception as e:
@@ -203,8 +212,11 @@ class fake2dbMySqlHandler():
             for countrycode in data['countrycodes']:
                 for useragent in data['useragents']:
                     try:
-                        cursor.execute('insert into simple_registration values(?,?,?,?)',
-                                       (self._rnd_number(), ip, countrycode, useragent))
+                        user_agent_payload = ("INSERT INTO user_agent "
+                                                   "(id, ip, countrycode, useragent) "
+                                                   "VALUES (%s, %s, %s, %s)")
+                        user_agent_data = (self._rnd_number(), ip, countrycode, useragent))
+                        cursor.execute(user_agent_payload, user_agent_data)
                         conn.commit()
                         logger.warning('Commit successful after write job!', extra=d)
                     except Exception as e:
@@ -230,7 +242,11 @@ class fake2dbMySqlHandler():
                     for domain in data['domains']:
                         for city in data['cities']:
                             try:
-                                cursor.execute('insert into simple_registration values (?,?,?,?,?,?)',(self._rnd_number(), name, sdate, email, domain, city))
+                                companies_payload = ("INSERT INTO companies "
+                                                     "(id, name, sdate, email, domain, city) "
+                                                     "VALUES (%s, %s, %s, %s, %s, %s)")
+                                companies_data = (self._rnd_number(), name, sdate, email, domain, city))
+                                cursor.execute(companies_payload, companies_data)
                                 conn.commit()
                                 logger.warning('Commit successful after write job!', extra=d)
                             except Exception as e:
