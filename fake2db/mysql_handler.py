@@ -249,5 +249,8 @@ class fake2dbMySqlHandler():
                                 cursor.execute(companies_payload, companies_data)
                                 conn.commit()
                                 logger.warning('Commit successful after write job!', extra=d)
+                                logger.warning('CLOSING CURSOR!', extra=d)
+                                cursor.close()
+
                             except Exception as e:
                                 logger.error(e, extra=d)
