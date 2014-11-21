@@ -3,7 +3,7 @@ import string
 import logging
 import getpass
 import socket
-import mysql.connector
+import sys
 from db_patterns import DbPatterns
 
 
@@ -16,6 +16,13 @@ logging.basicConfig(format=FORMAT)
 d = {'clientip': local_ip, 'user': username}
 logger = logging.getLogger('fake2db_logger')
 # --------------------
+
+try:
+    import mysql.connector
+except ImportError:
+    logger.error('MySql Connector/Python not found on sys, you need to get it : 
+    http://dev.mysql.com/downloads/connector/python/')
+    sys.exit(0)
 
 class fake2dbMySqlHandler():
         
@@ -80,6 +87,8 @@ class fake2dbMySqlHandler():
         
 
     def mysql_table_creator(self):
+        '''Create all the tables in one method
+        '''
         TABLES = {}
         
         TABLES['simple_registration'] = (
@@ -123,6 +132,7 @@ class fake2dbMySqlHandler():
             ") ENGINE=InnoDB")
 
         return TABLES
+
     def data_filler_simple_registration(self, number_of_rows, conn):
         '''creates and fills the table with simple regis. information
         '''
