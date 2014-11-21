@@ -18,6 +18,7 @@ logger = logging.getLogger('fake2db_logger')
 # --------------------
 
 class fake2dbMySqlHandler():
+        
 
     def str_generator(self):
         '''generates uppercase 6 chars
@@ -32,6 +33,20 @@ class fake2dbMySqlHandler():
         '''
         rows = number_of_rows
         conn = self.database_caller_creator()
+        TABLES = self.mysql_table_creator()
+
+        for name, ddl in TABLES.iteritems():
+            try:
+                logger.info("Creating table {}: ".format(name), extra=d)
+                cursor.execute(ddl)
+            except mysql.connector.Error as err:
+                if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
+                    logger.error("Table already exists", extra=d)
+                else:
+                    logger.error(err.msg, extra=d)
+            else:
+                logger.info("OK", extra=d)
+
         self.data_filler_simple_registration(rows, conn)
         self.data_filler_detailed_registration(rows, conn)
         self.data_filler_company(rows, conn)
@@ -54,16 +69,60 @@ class fake2dbMySqlHandler():
             logger.warning('Database created and opened succesfully: %s' %database, extra=d)
         except mysql.connector.Error as err:
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                logger.error("Something is wrong with your user name or password")
+                logger.error("Something is wrong with your user name or password", extra=d)
             elif err.errno == errorcode.ER_BAD_DB_ERROR:
-                logger.error("Database does not exists")
+                logger.error("Database does not exists", extra=d)
             else:
-                print(err)
-                logger.error('Failed to connect or create database / mysql', extra=d)
+                logger.error('Failed to connect or create database / mysql : %s' err, extra=d)
                 
             
         return conn
         
+
+    def mysql_table_creator(self):
+        TABLES = {}
+        
+        TABLES['simple_registration'] = (
+            "CREATE TABLE `simple_registration` ("
+            "  `id` int NOT NULL AUTO_INCREMENT,"
+            "  `email` varchar NOT NULL,"
+            "  `password` varchar NOT NULL,"
+            "  PRIMARY KEY (`id`)"
+            ") ENGINE=InnoDB")
+
+        TABLES['detailed_registration'] = (
+            "CREATE TABLE `simple_registration` ("
+            "  `id` int NOT NULL AUTO_INCREMENT,"
+            "  `email` varchar NOT NULL,"
+            "  `password` varchar NOT NULL,"
+            "  `lastname` varchar NOT NULL,"
+            "  `name` varchar NOT NULL,"
+            "  `adress` varchar NOT NULL,"
+            "  `phone` varchar NOT NULL,"
+            "  PRIMARY KEY (`id`)"
+            ") ENGINE=InnoDB")
+
+        TABLES['user_agent'] = (
+            "CREATE TABLE `user_agent` ("
+            "  `id` int NOT NULL AUTO_INCREMENT,"
+            "  `ip` varchar NOT NULL,"
+            "  `countrycode` varchar NOT NULL,"
+            "  `useragent` varchar NOT NULL,"
+            "  PRIMARY KEY (`id`)"
+            ") ENGINE=InnoDB")
+
+        TABLES['companies'] = (
+            "CREATE TABLE `user_agent` ("
+            "  `id` int NOT NULL AUTO_INCREMENT,"
+            "  `name` varchar NOT NULL,"
+            "  `sdate` varchar NOT NULL,"
+            "  `email` varchar NOT NULL,"
+            "  `domain` varchar NOT NULL,"
+            "  `city` varchar NOT NULL,"
+            "  PRIMARY KEY (`id`)"
+            ") ENGINE=InnoDB")
+
+        return TABLES
     def data_filler_simple_registration(self, number_of_rows, conn):
         '''creates and fills the table with simple regis. information
         '''
@@ -74,12 +133,6 @@ class fake2dbMySqlHandler():
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.simple_registration(number_of_rows)
         cursor = conn.cursor()
-
-        cursor.execute('''
-        CREATE TABLE simple_registration(id INTEGER PRIMARY KEY, 
-        email TEXT , password TEXT)
-        ''')
-        conn.commit()
         
         for password in data['passwords']:
             for email in data['emails']:
@@ -106,13 +159,6 @@ class fake2dbMySqlHandler():
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.detailed_registration(number_of_rows)
         cursor = conn.cursor()
-        
-        cursor.execute('''
-        CREATE TABLE detailed_registration(id INTEGER PRIMARY KEY, 
-        email TEXT, password TEXT, lastname TEXT,
-        name TEXT, adress TEXT, phone TEXT)
-        ''')
-        conn.commit()
         
         # UGLY AS HELL , TODO: USE ITERTOOLS!!!!!!
         # TEMPORARY
@@ -142,12 +188,6 @@ class fake2dbMySqlHandler():
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.user_agent(number_of_rows)
         cursor = conn.cursor()
-
-        cursor.execute('''
-        CREATE TABLE user_agent(id INTEGER PRIMARY KEY, 
-        ip TEXT, countrycode TEXT, useragent TEXT)
-        ''')
-        conn.commit()
         
         for ip in data['ips']:
             for countrycode in data['countrycodes']:
@@ -173,12 +213,6 @@ class fake2dbMySqlHandler():
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.company(number_of_rows)
         cursor = conn.cursor()
-        
-        cursor.execute('''
-        CREATE TABLE companies(id INTEGER PRIMARY KEY, 
-        name TEXT, sdate TEXT, email TEXT, domain TEXT, city TEXT)
-        ''')
-        conn.commit()
         
         for name in data['names']:
             for sdate in data['sdates']:
