@@ -50,6 +50,6 @@ if args.rows:
         if args.db == 'sqlite':
             fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows))
         elif args.db == 'mysql':
-            fake_sqlite_handler.fake2db_mysql_initiator(int(args.rows))
+            fake_mysql_handler.fake2db_mysql_initiator(int(args.rows))
         else:
             logger.error('Please use with --help argument for usage information!', extra=d)

@@ -46,16 +46,14 @@ class fake2dbMySqlHandler():
         rows = number_of_rows
         conn = self.database_caller_creator()
         TABLES = self.mysql_table_creator()
+        cursor = conn.cursor()
 
         for name, ddl in TABLES.iteritems():
             try:
                 logger.info("Creating table {}: ".format(name), extra=d)
                 cursor.execute(ddl)
             except mysql.connector.Error as err:
-                if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
-                    logger.error("Table already exists", extra=d)
-                else:
-                    logger.error(err.msg, extra=d)
+                logger.error(err.msg, extra=d)
             else:
                 logger.info("OK", extra=d)
 
@@ -72,7 +70,7 @@ class fake2dbMySqlHandler():
         '''
         database = ''
         conn = None
-
+        
         try:
             database = 'mysql_' + self.str_generator() + '.db'
             conn = mysql.connector.connect(user='admin', password='admin',
@@ -80,12 +78,7 @@ class fake2dbMySqlHandler():
                                            database=database)
             logger.warning('Database created and opened succesfully: %s' %database, extra=d)
         except mysql.connector.Error as err:
-            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                logger.error("Something is wrong with your user name or password", extra=d)
-            elif err.errno == errorcode.ER_BAD_DB_ERROR:
-                logger.error("Database does not exists", extra=d)
-            else:
-                logger.error('Failed to connect or create database / mysql : %s', extra=d)
+            logger.error(err.message, extra=d)
                 
             
         return conn
