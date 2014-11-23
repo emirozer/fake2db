@@ -20,8 +20,7 @@ logger = logging.getLogger('fake2db_logger')
 try:
     import mysql.connector
 except ImportError:
-    logger.error('MySql Connector/Python not found on sys, you need to get it : 
-    http://dev.mysql.com/downloads/connector/python/')
+    logger.error('MySql Connector/Python not found on sys, you need to get it : http://dev.mysql.com/downloads/connector/python/')
     sys.exit(0)
 
 class fake2dbMySqlHandler():
@@ -80,7 +79,7 @@ class fake2dbMySqlHandler():
             elif err.errno == errorcode.ER_BAD_DB_ERROR:
                 logger.error("Database does not exists", extra=d)
             else:
-                logger.error('Failed to connect or create database / mysql : %s' err, extra=d)
+                logger.error('Failed to connect or create database / mysql : %s', extra=d)
                 
             
         return conn
@@ -151,7 +150,7 @@ class fake2dbMySqlHandler():
                                                    "(id, email, password) "
                                                    "VALUES (%s, %s, %s)")
                     
-                    simple_registration_data = (self._rnd_number(), email, password))
+                    simple_registration_data = (self._rnd_number(), email, password)
                     cursor.execute(simple_registration_payload, simple_registration_data)
                     conn.commit()
                     logger.warning('Commit successful after write job!', extra=d)
@@ -187,7 +186,7 @@ class fake2dbMySqlHandler():
                                     detailed_registration_payload = ("INSERT INTO detailed_registration "
                                                                      "(id, email, password, lastname, name, adress, phone) "
                                                                      "VALUES (%s, %s, %s, %s, %s, %s, %s)")
-                                    detailed_registration_data = (self._rnd_number(),email,password,lastname,name,address,phone))
+                                    detailed_registration_data = (self._rnd_number(),email,password,lastname,name,address,phone)
                                     cursor.execute(detailed_registration_payload, detailed_registration_data)
                                     conn.commit()
                                     logger.warning('Commit successful after write job!', extra=d)
@@ -215,7 +214,7 @@ class fake2dbMySqlHandler():
                         user_agent_payload = ("INSERT INTO user_agent "
                                                    "(id, ip, countrycode, useragent) "
                                                    "VALUES (%s, %s, %s, %s)")
-                        user_agent_data = (self._rnd_number(), ip, countrycode, useragent))
+                        user_agent_data = (self._rnd_number(), ip, countrycode, useragent)
                         cursor.execute(user_agent_payload, user_agent_data)
                         conn.commit()
                         logger.warning('Commit successful after write job!', extra=d)
@@ -245,7 +244,7 @@ class fake2dbMySqlHandler():
                                 companies_payload = ("INSERT INTO companies "
                                                      "(id, name, sdate, email, domain, city) "
                                                      "VALUES (%s, %s, %s, %s, %s, %s)")
-                                companies_data = (self._rnd_number(), name, sdate, email, domain, city))
+                                companies_data = (self._rnd_number(), name, sdate, email, domain, city)
                                 cursor.execute(companies_payload, companies_data)
                                 conn.commit()
                                 logger.warning('Commit successful after write job!', extra=d)
