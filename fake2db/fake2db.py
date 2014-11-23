@@ -53,17 +53,3 @@ if args.rows:
             fake_sqlite_handler.fake2db_mysql_initiator(int(args.rows))
         else:
             logger.error('Please use with --help argument for usage information!', extra=d)
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
