@@ -1,4 +1,5 @@
 import random
+import uuid
 import string
 import logging
 import getpass
@@ -31,8 +32,13 @@ class fake2dbMySqlHandler():
         '''
         return ''.join(random.choice(string.ascii_uppercase) for i in range(6))
 
-    def _rnd_number(self):
-        return random.randint(0, 100000000)
+    
+    def _rnd_id_generator(self):
+        '''generates a UUID such as :
+        UUID('dd1098bd-70ac-40ea-80ef-d963f09f95a7')
+        than gets rid of dashes
+        '''
+        return str(uuid.uuid4()).replace('-', '')
 
     def fake2db_mysql_initiator(self, number_of_rows):
         '''Main handler for the operation
@@ -150,13 +156,14 @@ class fake2dbMySqlHandler():
                                                    "(id, email, password) "
                                                    "VALUES (%s, %s, %s)")
                     
-                    simple_registration_data = (self._rnd_number(), email, password)
+                    simple_registration_data = (self._rnd_id_generator(), email, password)
                     cursor.execute(simple_registration_payload, simple_registration_data)
                     conn.commit()
-                    logger.warning('Commit successful after write job!', extra=d)
+                    
                 except Exception as e:
                     logger.error(e, extra=d)
-        
+
+        logger.warning('simple_registration Commits are successful after write job!', extra=d)
 
     def data_filler_detailed_registration(self, number_of_rows, conn):
         '''creates and fills the table with detailed regis. information
@@ -186,14 +193,14 @@ class fake2dbMySqlHandler():
                                     detailed_registration_payload = ("INSERT INTO detailed_registration "
                                                                      "(id, email, password, lastname, name, adress, phone) "
                                                                      "VALUES (%s, %s, %s, %s, %s, %s, %s)")
-                                    detailed_registration_data = (self._rnd_number(),email,password,lastname,name,address,phone)
+                                    detailed_registration_data = (self._rnd_id_generator(),email,password,lastname,name,address,phone)
                                     cursor.execute(detailed_registration_payload, detailed_registration_data)
                                     conn.commit()
-                                    logger.warning('Commit successful after write job!', extra=d)
+                                    
                                 except Exception as e:
                                     logger.error(e, extra=d)
 
-
+        logger.warning('detailed_registration Commits are successful after write job!', extra=d)
 
     def data_filler_user_agent(self, number_of_rows, conn):
         '''creates and fills the table with user agent data
@@ -214,13 +221,14 @@ class fake2dbMySqlHandler():
                         user_agent_payload = ("INSERT INTO user_agent "
                                                    "(id, ip, countrycode, useragent) "
                                                    "VALUES (%s, %s, %s, %s)")
-                        user_agent_data = (self._rnd_number(), ip, countrycode, useragent)
+                        user_agent_data = (self._rnd_id_generator(), ip, countrycode, useragent)
                         cursor.execute(user_agent_payload, user_agent_data)
                         conn.commit()
-                        logger.warning('Commit successful after write job!', extra=d)
+                        
                     except Exception as e:
                         logger.error(e, extra=d)
 
+        logger.warning('user_agent Commits are successful after write job!', extra=d)
         
     def data_filler_company(self, number_of_rows, conn):
         '''creates and fills the table with company data
@@ -244,12 +252,13 @@ class fake2dbMySqlHandler():
                                 companies_payload = ("INSERT INTO companies "
                                                      "(id, name, sdate, email, domain, city) "
                                                      "VALUES (%s, %s, %s, %s, %s, %s)")
-                                companies_data = (self._rnd_number(), name, sdate, email, domain, city)
+                                companies_data = (self._rnd_id_generator(), name, sdate, email, domain, city)
                                 cursor.execute(companies_payload, companies_data)
                                 conn.commit()
-                                logger.warning('Commit successful after write job!', extra=d)
+                                
                                 logger.warning('CLOSING CURSOR!', extra=d)
                                 cursor.close()
 
                             except Exception as e:
                                 logger.error(e, extra=d)
+        logger.warning('companies Commits are successful after write job!', extra=d)

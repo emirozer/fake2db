@@ -1,4 +1,5 @@
 import sqlite3
+import uuid
 import random
 import string
 import logging
@@ -27,8 +28,12 @@ class fake2dbSqliteHandler():
         '''
         return ''.join(random.choice(string.ascii_uppercase) for i in range(6))
 
-    def _rnd_number(self):
-        return random.randint(0, 100000000)
+    def _rnd_id_generator(self):
+        '''generates a UUID such as :
+        UUID('dd1098bd-70ac-40ea-80ef-d963f09f95a7')
+        than gets rid of dashes
+        '''
+        return str(uuid.uuid4()).replace('-', '')
 
     def fake2db_sqlite_initiator(self, number_of_rows):
         '''Main handler for the operation
@@ -70,7 +75,7 @@ class fake2dbSqliteHandler():
         cursor = conn.cursor()
 
         cursor.execute('''
-        CREATE TABLE simple_registration(id INTEGER PRIMARY KEY, 
+        CREATE TABLE simple_registration(id TEXT PRIMARY KEY, 
         email TEXT , password TEXT)
         ''')
         conn.commit()
@@ -79,12 +84,12 @@ class fake2dbSqliteHandler():
             for email in data['emails']:
                 try:
                     cursor.execute('insert into simple_registration values(?,?,?)',
-                                   (self._rnd_number(),email,password))
+                                   (self._rnd_id_generator(),email,password))
                     conn.commit()
-                    logger.warning('Commit successful after write job!', extra=d)
+                    
                 except Exception as e:
                     logger.error(e, extra=d)
-        
+        logger.warning('simple_registration Commits are successful after write job!', extra=d)
 
     def data_filler_detailed_registration(self, number_of_rows, conn):
         '''creates and fills the table with detailed regis. information
@@ -102,7 +107,7 @@ class fake2dbSqliteHandler():
         cursor = conn.cursor()
         
         cursor.execute('''
-        CREATE TABLE detailed_registration(id INTEGER PRIMARY KEY, 
+        CREATE TABLE detailed_registration(id TEXT PRIMARY KEY, 
         email TEXT, password TEXT, lastname TEXT,
         name TEXT, adress TEXT, phone TEXT)
         ''')
@@ -117,12 +122,12 @@ class fake2dbSqliteHandler():
                         for phone in data['phones']:
                             for address in data['addresses']:
                                 try:
-                                    cursor.execute('insert into detailed_registration values(?,?,?,?,?,?,?)',(self._rnd_number(),email,password,lastname,name,address,phone))
+                                    cursor.execute('insert into detailed_registration values(?,?,?,?,?,?,?)',(self._rnd_id_generator(),email,password,lastname,name,address,phone))
                                     conn.commit()
-                                    logger.warning('Commit successful after write job!', extra=d)
+                                    
                                 except Exception as e:
                                     logger.error(e, extra=d)
-
+        logger.warning('detailed_registration Commits are successful after write job!', extra=d)
 
 
     def data_filler_user_agent(self, number_of_rows, conn):
@@ -138,7 +143,7 @@ class fake2dbSqliteHandler():
         cursor = conn.cursor()
 
         cursor.execute('''
-        CREATE TABLE user_agent(id INTEGER PRIMARY KEY, 
+        CREATE TABLE user_agent(id TEXT PRIMARY KEY, 
         ip TEXT, countrycode TEXT, useragent TEXT)
         ''')
         conn.commit()
@@ -147,13 +152,13 @@ class fake2dbSqliteHandler():
             for countrycode in data['countrycodes']:
                 for useragent in data['useragents']:
                     try:
-                        cursor.execute('insert into simple_registration values(?,?,?,?)',
-                                       (self._rnd_number(), ip, countrycode, useragent))
+                        cursor.execute('insert into user_agent values(?,?,?,?)',
+                                       (self._rnd_id_generator(), ip, countrycode, useragent))
                         conn.commit()
-                        logger.warning('Commit successful after write job!', extra=d)
+                        
                     except Exception as e:
                         logger.error(e, extra=d)
-
+        logger.warning('user_agent Commits are successful after write job!', extra=d)
         
     def data_filler_company(self, number_of_rows, conn):
         '''creates and fills the table with company data
@@ -169,7 +174,7 @@ class fake2dbSqliteHandler():
         cursor = conn.cursor()
         
         cursor.execute('''
-        CREATE TABLE companies(id INTEGER PRIMARY KEY, 
+        CREATE TABLE companies(id TEXT PRIMARY KEY, 
         name TEXT, sdate TEXT, email TEXT, domain TEXT, city TEXT)
         ''')
         conn.commit()
@@ -180,8 +185,9 @@ class fake2dbSqliteHandler():
                     for domain in data['domains']:
                         for city in data['cities']:
                             try:
-                                cursor.execute('insert into simple_registration values (?,?,?,?,?,?)',(self._rnd_number(), name, sdate, email, domain, city))
+                                cursor.execute('insert into companies values (?,?,?,?,?,?)',(self._rnd_id_generator(), name, sdate, email, domain, city))
                                 conn.commit()
-                                logger.warning('Commit successful after write job!', extra=d)
                             except Exception as e:
                                 logger.error(e, extra=d)
+
+        logger.warning('companies Commits are successful after write job!', extra=d)
