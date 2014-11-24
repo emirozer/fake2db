@@ -44,9 +44,8 @@ class fake2dbMySqlHandler():
         '''Main handler for the operation
         '''
         rows = number_of_rows
-        conn = self.database_caller_creator()
+        cursor = self.database_caller_creator()
         TABLES = self.mysql_table_creator()
-        cursor = conn.cursor()
 
         for name, ddl in TABLES.iteritems():
             try:
@@ -57,11 +56,11 @@ class fake2dbMySqlHandler():
             else:
                 logger.info("OK", extra=d)
 
-        self.data_filler_simple_registration(rows, conn)
-        self.data_filler_detailed_registration(rows, conn)
-        self.data_filler_company(rows, conn)
-        self.data_filler_user_agent(rows, conn)
-        conn.close()
+        self.data_filler_simple_registration(rows, cursor)
+        self.data_filler_detailed_registration(rows, cursor)
+        self.data_filler_company(rows, cursor)
+        self.data_filler_user_agent(rows, cursor)
+        cursor.close()
 
     def database_caller_creator(self):
         '''creates a mysql db
@@ -69,19 +68,20 @@ class fake2dbMySqlHandler():
         which will be later used to spawn the cursor
         '''
         database = ''
-        conn = None
+        cursor = None
         
         try:
             database = 'mysql_' + self.str_generator() + '.db'
-            conn = mysql.connector.connect(user='admin', password='admin',
-                              host='127.0.0.1',
-                                           database=database)
+            
+            conn = mysql.connector.connect(user='root', host='localhost')
+            cursor = conn.cursor()
+            cursor.execute('CREATE DATABASE IF NOT EXISTS '+ database)
             logger.warning('Database created and opened succesfully: %s' %database, extra=d)
         except mysql.connector.Error as err:
             logger.error(err.message, extra=d)
                 
             
-        return conn
+        return cursor
         
 
     def mysql_table_creator(self):
@@ -131,7 +131,7 @@ class fake2dbMySqlHandler():
 
         return TABLES
 
-    def data_filler_simple_registration(self, number_of_rows, conn):
+    def data_filler_simple_registration(self, number_of_rows, cursor):
         '''creates and fills the table with simple regis. information
         '''
         # incoming data structure 
@@ -140,7 +140,6 @@ class fake2dbMySqlHandler():
         # }
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.simple_registration(number_of_rows)
-        cursor = conn.cursor()
         
         for password in data['passwords']:
             for email in data['emails']:
@@ -158,7 +157,7 @@ class fake2dbMySqlHandler():
 
         logger.warning('simple_registration Commits are successful after write job!', extra=d)
 
-    def data_filler_detailed_registration(self, number_of_rows, conn):
+    def data_filler_detailed_registration(self, number_of_rows, cursor):
         '''creates and fills the table with detailed regis. information
         '''
         # incoming data structure
@@ -171,7 +170,6 @@ class fake2dbMySqlHandler():
 
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.detailed_registration(number_of_rows)
-        cursor = conn.cursor()
         
         # UGLY AS HELL , TODO: USE ITERTOOLS!!!!!!
         # TEMPORARY
@@ -195,7 +193,7 @@ class fake2dbMySqlHandler():
 
         logger.warning('detailed_registration Commits are successful after write job!', extra=d)
 
-    def data_filler_user_agent(self, number_of_rows, conn):
+    def data_filler_user_agent(self, number_of_rows, cursor):
         '''creates and fills the table with user agent data
         '''
         # incoming data structure
@@ -205,8 +203,7 @@ class fake2dbMySqlHandler():
 
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.user_agent(number_of_rows)
-        cursor = conn.cursor()
-        
+                
         for ip in data['ips']:
             for countrycode in data['countrycodes']:
                 for useragent in data['useragents']:
@@ -223,7 +220,7 @@ class fake2dbMySqlHandler():
 
         logger.warning('user_agent Commits are successful after write job!', extra=d)
         
-    def data_filler_company(self, number_of_rows, conn):
+    def data_filler_company(self, number_of_rows, cursor):
         '''creates and fills the table with company data
         '''
         # incoming data structure
@@ -234,7 +231,6 @@ class fake2dbMySqlHandler():
         #             'cities': list_of_cities
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.company(number_of_rows)
-        cursor = conn.cursor()
         
         for name in data['names']:
             for sdate in data['sdates']:
