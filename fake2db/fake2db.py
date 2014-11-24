@@ -3,6 +3,7 @@ import argparse
 import socket
 import getpass
 import logging
+import subprocess
 
 from datetime import date
 from sqlite_handler import fake2dbSqliteHandler
@@ -21,12 +22,20 @@ logger = logging.getLogger('fake2db_logger')
 class InstanciateDBHandlerException(Exception):
     '''An Exception at the instantiation of the handler '''
 
-class Fake2Db:
-    
-    def exit(self):
-        sys.exit(0)
+def _mysqld_process_checkpoint():
+    '''this helper method checks if 
+    mysql server is available in the sys
+    if not fires up one
+    '''
+    try:
+        mysqld_check = subprocess.check_output("pgrep mysqld", shell=True)
+    except:
+        logger.warning('Your mysql server is offline, fake2db will try to launch it now!', extra=d)
+        # THIS HIJACKS THE CURRENT PY PROCESS!!!!!!!!!!!!!!
+        # FIX THIS / TEMP
+        subprocess.call("mysqld", shell=True)
 
-    
+
 try:
     fake_sqlite_handler = fake2dbSqliteHandler()
     fake_mysql_handler = fake2dbMySqlHandler()
@@ -50,6 +59,7 @@ if args.rows:
         if args.db == 'sqlite':
             fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows))
         elif args.db == 'mysql':
+            _mysqld_process_checkpoint()
             fake_mysql_handler.fake2db_mysql_initiator(int(args.rows))
         else:
             logger.error('Please use with --help argument for usage information!', extra=d)
