@@ -72,15 +72,14 @@ class fake2dbMySqlHandler():
         
         try:
             database = 'mysql_' + self.str_generator() + '.db'
-            
             conn = mysql.connector.connect(user='root', host='localhost')
             cursor = conn.cursor()
             cursor.execute('CREATE DATABASE IF NOT EXISTS '+ database)
             logger.warning('Database created and opened succesfully: %s' %database, extra=d)
+            
         except mysql.connector.Error as err:
             logger.error(err.message, extra=d)
                 
-            
         return cursor
         
 
@@ -250,4 +249,5 @@ class fake2dbMySqlHandler():
 
                             except Exception as e:
                                 logger.error(e, extra=d)
+                                
         logger.warning('companies Commits are successful after write job!', extra=d)
