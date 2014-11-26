@@ -11,7 +11,7 @@ setup(
     long_description=os.path.join(os.path.dirname(__file__), 'README.md'),
     packages=find_packages(exclude=[]),
     entry_points={'console_scripts':
-                  ['fake2db = fake2db/fake2db.py']},
+                  ['fake2db = fake2db:main']},
     install_requires=[
         'faker==0.4.2',
     ],
@@ -20,7 +20,7 @@ setup(
         'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU License',
+        'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
     ],
