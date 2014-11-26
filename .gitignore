@@ -4,3 +4,4 @@ env/
 fake2db/*.pyc
 fake2db/*.db
 fake2db/*.db-journal
+fake2db.egg-info
