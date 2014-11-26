@@ -4,6 +4,7 @@ import socket
 import getpass
 import logging
 import subprocess
+import time
 
 from datetime import date
 from sqlite_handler import fake2dbSqliteHandler
@@ -31,10 +32,10 @@ def _mysqld_process_checkpoint():
         mysqld_check = subprocess.check_output("pgrep mysqld", shell=True)
     except:
         logger.warning('Your mysql server is offline, fake2db will try to launch it now!', extra=d)
-        # THIS HIJACKS THE CURRENT PY PROCESS!!!!!!!!!!!!!!
-        # FIX THIS / TEMP
-        subprocess.call("mysqld", shell=True)
-
+        # close_fds = True argument is the flag that is responsible
+        # for Popen to launch the process completely independent
+        subprocess.Popen("mysqld", close_fds = True, shell=True)
+        time.sleep(3)
 
 try:
     fake_sqlite_handler = fake2dbSqliteHandler()
