@@ -44,9 +44,9 @@ class fake2dbMySqlHandler():
         '''Main handler for the operation
         '''
         rows = number_of_rows
-        cursor = self.database_caller_creator()
+        cursor, conn = self.database_caller_creator()
         TABLES = self.mysql_table_creator()
-
+        
         for name, ddl in TABLES.iteritems():
             try:
                 logger.info("Creating table {}: ".format(name), extra=d)
@@ -69,6 +69,7 @@ class fake2dbMySqlHandler():
         '''
         database = ''
         cursor = None
+        conn = None
         
         try:
             database = 'mysql_' + self.str_generator() + '.db'
@@ -80,7 +81,7 @@ class fake2dbMySqlHandler():
         except mysql.connector.Error as err:
             logger.error(err.message, extra=d)
                 
-        return cursor
+        return cursor, conn
         
 
     def mysql_table_creator(self):
