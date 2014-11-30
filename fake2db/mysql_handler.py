@@ -47,19 +47,18 @@ class fake2dbMySqlHandler():
         cursor, conn = self.database_caller_creator()
         TABLES = self.mysql_table_creator()
         
-        for name, ddl in TABLES.iteritems():
+        for item in TABLES:
             try:
-                logger.info("Creating table {}: ".format(name), extra=d)
-                cursor.execute(ddl)
+                cursor.execute(item)
             except mysql.connector.Error as err:
                 logger.error(err.msg, extra=d)
             else:
                 logger.info("OK", extra=d)
 
-        self.data_filler_simple_registration(rows, cursor)
-        self.data_filler_detailed_registration(rows, cursor)
-        self.data_filler_company(rows, cursor)
-        self.data_filler_user_agent(rows, cursor)
+        self.data_filler_simple_registration(rows, cursor, conn)
+        self.data_filler_detailed_registration(rows, cursor, conn)
+        self.data_filler_company(rows, cursor, conn)
+        self.data_filler_user_agent(rows, cursor, conn)
         cursor.close()
 
     def database_caller_creator(self):
@@ -72,11 +71,12 @@ class fake2dbMySqlHandler():
         conn = None
         
         try:
-            database = 'mysql_' + self.str_generator() + '.db'
-            conn = mysql.connector.connect(user='root', host='localhost')
+            db = 'mysql_' + self.str_generator()
+            conn = mysql.connector.connect(user='root', host='localhost', database=database)
             cursor = conn.cursor()
-            cursor.execute('CREATE DATABASE IF NOT EXISTS '+ database)
-            logger.warning('Database created and opened succesfully: %s' %database, extra=d)
+            cursor.execute('CREATE DATABASE IF NOT EXISTS '+ db)
+            cursor.execute('USE '+ db)
+            logger.warning('Database created and opened succesfully: %s' %db, extra=d)
             
         except mysql.connector.Error as err:
             logger.error(err.message, extra=d)
@@ -91,47 +91,47 @@ class fake2dbMySqlHandler():
         
         TABLES['simple_registration'] = (
             "CREATE TABLE `simple_registration` ("
-            "  `id` int NOT NULL AUTO_INCREMENT,"
-            "  `email` varchar NOT NULL,"
-            "  `password` varchar NOT NULL,"
+            "  `id` varchar(30) NOT NULL,"
+            "  `email` varchar(20) NOT NULL,"
+            "  `password` varchar(20) NOT NULL,"
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
 
         TABLES['detailed_registration'] = (
             "CREATE TABLE `simple_registration` ("
-            "  `id` int NOT NULL AUTO_INCREMENT,"
-            "  `email` varchar NOT NULL,"
-            "  `password` varchar NOT NULL,"
-            "  `lastname` varchar NOT NULL,"
-            "  `name` varchar NOT NULL,"
-            "  `adress` varchar NOT NULL,"
-            "  `phone` varchar NOT NULL,"
+            "  `id` varchar(30) NOT NULL,"
+            "  `email` varchar(20) NOT NULL,"
+            "  `password` varchar(20) NOT NULL,"
+            "  `lastname` varchar(15) NOT NULL,"
+            "  `name` varchar(15) NOT NULL,"
+            "  `adress` varchar(20) NOT NULL,"
+            "  `phone` varchar(20) NOT NULL,"
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
 
         TABLES['user_agent'] = (
             "CREATE TABLE `user_agent` ("
-            "  `id` int NOT NULL AUTO_INCREMENT,"
-            "  `ip` varchar NOT NULL,"
-            "  `countrycode` varchar NOT NULL,"
-            "  `useragent` varchar NOT NULL,"
+            "  `id` varchar(30) NOT NULL,"
+            "  `ip` varchar(18) NOT NULL,"
+            "  `countrycode` varchar(10) NOT NULL,"
+            "  `useragent` varchar(100) NOT NULL,"
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
 
         TABLES['companies'] = (
             "CREATE TABLE `user_agent` ("
-            "  `id` int NOT NULL AUTO_INCREMENT,"
-            "  `name` varchar NOT NULL,"
-            "  `sdate` varchar NOT NULL,"
-            "  `email` varchar NOT NULL,"
-            "  `domain` varchar NOT NULL,"
-            "  `city` varchar NOT NULL,"
+            "  `id` varchar(30) NOT NULL,"
+            "  `name` varchar(15) NOT NULL,"
+            "  `sdate` date NOT NULL,"
+            "  `email` varchar(20) NOT NULL,"
+            "  `domain` varchar(20) NOT NULL,"
+            "  `city` varchar(15) NOT NULL,"
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
 
         return TABLES
 
-    def data_filler_simple_registration(self, number_of_rows, cursor):
+    def data_filler_simple_registration(self, number_of_rows, cursor, conn):
         '''creates and fills the table with simple regis. information
         '''
         # incoming data structure 
@@ -157,7 +157,7 @@ class fake2dbMySqlHandler():
 
         logger.warning('simple_registration Commits are successful after write job!', extra=d)
 
-    def data_filler_detailed_registration(self, number_of_rows, cursor):
+    def data_filler_detailed_registration(self, number_of_rows, cursor, conn):
         '''creates and fills the table with detailed regis. information
         '''
         # incoming data structure
@@ -193,7 +193,7 @@ class fake2dbMySqlHandler():
 
         logger.warning('detailed_registration Commits are successful after write job!', extra=d)
 
-    def data_filler_user_agent(self, number_of_rows, cursor):
+    def data_filler_user_agent(self, number_of_rows, cursor, conn):
         '''creates and fills the table with user agent data
         '''
         # incoming data structure
@@ -220,7 +220,7 @@ class fake2dbMySqlHandler():
 
         logger.warning('user_agent Commits are successful after write job!', extra=d)
         
-    def data_filler_company(self, number_of_rows, cursor):
+    def data_filler_company(self, number_of_rows, cursor, conn):
         '''creates and fills the table with company data
         '''
         # incoming data structure
