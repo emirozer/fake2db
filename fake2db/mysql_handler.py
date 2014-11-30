@@ -66,13 +66,12 @@ class fake2dbMySqlHandler():
         returns the related connection object
         which will be later used to spawn the cursor
         '''
-        database = ''
         cursor = None
         conn = None
         
         try:
             db = 'mysql_' + self.str_generator()
-            conn = mysql.connector.connect(user='root', host='localhost', database=database)
+            conn = mysql.connector.connect(user='root', host='localhost')
             cursor = conn.cursor()
             cursor.execute('CREATE DATABASE IF NOT EXISTS '+ db)
             cursor.execute('USE '+ db)
@@ -96,7 +95,7 @@ class fake2dbMySqlHandler():
             "  `password` varchar(20) NOT NULL,"
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
-
+        
         TABLES['detailed_registration'] = (
             "CREATE TABLE `simple_registration` ("
             "  `id` varchar(30) NOT NULL,"
