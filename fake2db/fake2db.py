@@ -9,6 +9,7 @@ import time
 from datetime import date
 from sqlite_handler import fake2dbSqliteHandler
 from mysql_handler import fake2dbMySqlHandler
+from postgresql_handler import fake2dbPostgresqlHandler
 
 # Pull the local ip and username for meaningful logging
 username = getpass.getuser()
@@ -54,6 +55,7 @@ def _mysqld_process_checkpoint():
 try:
     fake_sqlite_handler = fake2dbSqliteHandler()
     fake_mysql_handler = fake2dbMySqlHandler()
+    fake_postgresql_handler = fake2dbPostgresqlHandler()
 except:
     raise InstanciateDBHandlerException
 
@@ -78,6 +80,6 @@ if args.rows:
             fake_mysql_handler.fake2db_mysql_initiator(int(args.rows))
         elif args.db == 'postgresql':
             _postgresql_process_checkpoint()
-            # TODO
+            fake_postgresql_handler.fake2db_postgresql_initiator(int(args.rows))
         else:
             logger.error('Please use with --help argument for usage information!', extra=d)
