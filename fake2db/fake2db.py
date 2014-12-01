@@ -22,7 +22,21 @@ logger = logging.getLogger('fake2db_logger')
 
 class InstanciateDBHandlerException(Exception):
     '''An Exception at the instantiation of the handler '''
-
+    
+def _postgresql_process_checkpoint():
+    '''this helper method checks if
+    postgresql server is available in the sys
+    if not fires up one
+    '''
+    try:
+        postgresql_check = subprocess.check_output("pgrep postgres", shell=True)
+    except:
+        logger.warning('Your postgresql server is offline, fake2db will try to launch it now!', extra=d)
+        # close_fds = True argument is the flag that is responsible
+        # for Popen to launch the process completely independent
+        subprocess.Popen("postgres -D /usr/local/pgsql/data", close_fds = True, shell=True)
+        time.sleep(3)
+        
 def _mysqld_process_checkpoint():
     '''this helper method checks if 
     mysql server is available in the sys
@@ -62,5 +76,8 @@ if args.rows:
         elif args.db == 'mysql':
             _mysqld_process_checkpoint()
             fake_mysql_handler.fake2db_mysql_initiator(int(args.rows))
+        elif args.db == 'postgresql':
+            _postgresql_process_checkpoint()
+            # TODO
         else:
             logger.error('Please use with --help argument for usage information!', extra=d)
