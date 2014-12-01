@@ -5,6 +5,8 @@ import logging
 import getpass
 import socket
 import sys
+import time
+import subprocess
 from db_patterns import DbPatterns
 
 
@@ -57,7 +59,9 @@ class fake2dbPostgresqlHandler():
         
         try:
             db = 'postgresql_' + self.str_generator()
-            conn = psycopg2.connect("dbname=test user="+username)
+            subprocess.Popen("createdb --no-password --owner "+ username +" "+ db, shell=True)
+            time.sleep(1)
+            conn = psycopg2.connect("dbname="+ db +" user="+username)
             cursor = conn.cursor()
             logger.warning('Database created and opened succesfully: %s' %db, extra=d)
         except Exception as err:
