@@ -1,1 +1,2 @@
 psycopg2>=2.5.4
+fake-factory>=0.4.2
