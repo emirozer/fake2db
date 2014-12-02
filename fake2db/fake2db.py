@@ -6,7 +6,6 @@ import logging
 import subprocess
 import time
 
-from datetime import date
 from sqlite_handler import Fake2dbSqliteHandler
 from mysql_handler import Fake2dbMySqlHandler
 from postgresql_handler import Fake2dbPostgresqlHandler

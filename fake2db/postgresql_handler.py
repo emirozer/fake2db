@@ -1,5 +1,4 @@
 import random
-import uuid
 import string
 import logging
 import getpass
