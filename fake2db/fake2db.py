@@ -7,9 +7,9 @@ import subprocess
 import time
 
 from datetime import date
-from sqlite_handler import fake2dbSqliteHandler
-from mysql_handler import fake2dbMySqlHandler
-from postgresql_handler import fake2dbPostgresqlHandler
+from sqlite_handler import Fake2dbSqliteHandler
+from mysql_handler import Fake2dbMySqlHandler
+from postgresql_handler import Fake2dbPostgresqlHandler
 
 # Pull the local ip and username for meaningful logging
 username = getpass.getuser()
@@ -21,9 +21,11 @@ d = {'clientip': local_ip, 'user': username}
 logger = logging.getLogger('fake2db_logger')
 # --------------------
 
+
 class InstanciateDBHandlerException(Exception):
     '''An Exception at the instantiation of the handler '''
-    
+
+
 def _postgresql_process_checkpoint():
     '''this helper method checks if
     postgresql server is available in the sys
@@ -35,9 +37,10 @@ def _postgresql_process_checkpoint():
         logger.warning('Your postgresql server is offline, fake2db will try to launch it now!', extra=d)
         # close_fds = True argument is the flag that is responsible
         # for Popen to launch the process completely independent
-        subprocess.Popen("postgres -D /usr/local/pgsql/data", close_fds = True, shell=True)
+        subprocess.Popen("postgres -D /usr/local/pgsql/data", close_fds=True, shell=True)
         time.sleep(3)
-        
+
+
 def _mysqld_process_checkpoint():
     '''this helper method checks if 
     mysql server is available in the sys
@@ -49,13 +52,14 @@ def _mysqld_process_checkpoint():
         logger.warning('Your mysql server is offline, fake2db will try to launch it now!', extra=d)
         # close_fds = True argument is the flag that is responsible
         # for Popen to launch the process completely independent
-        subprocess.Popen("mysqld", close_fds = True, shell=True)
+        subprocess.Popen("mysqld", close_fds=True, shell=True)
         time.sleep(3)
 
+
 try:
-    fake_sqlite_handler = fake2dbSqliteHandler()
-    fake_mysql_handler = fake2dbMySqlHandler()
-    fake_postgresql_handler = fake2dbPostgresqlHandler()
+    fake_sqlite_handler = Fake2dbSqliteHandler()
+    fake_mysql_handler = Fake2dbMySqlHandler()
+    fake_postgresql_handler = Fake2dbPostgresqlHandler()
 except:
     raise InstanciateDBHandlerException
 

@@ -18,11 +18,12 @@ d = {'clientip': local_ip, 'user': username}
 logger = logging.getLogger('fake2db_logger')
 # --------------------
 
+
 class DbConnException(Exception):
     """Database Connection or Creation Exception"""
 
-class fake2dbSqliteHandler():
 
+class Fake2dbSqliteHandler():
     def str_generator(self):
         '''generates uppercase 6 chars
         '''
@@ -52,17 +53,17 @@ class fake2dbSqliteHandler():
         which will be later used to spawn the cursor
         '''
         database = ''
-        
+
         try:
             database = 'sqlite_' + self.str_generator() + '.db'
-            conn=sqlite3.connect(database)
-            logger.warning('Database created and opened succesfully: %s' %database, extra=d)
+            conn = sqlite3.connect(database)
+            logger.warning('Database created and opened succesfully: %s' % database, extra=d)
         except:
             logger.error('Failed to connect or create database / sqlite3', extra=d)
             raise DbConnException
-            
+
         return conn
-        
+
     def data_filler_simple_registration(self, number_of_rows, conn):
         '''creates and fills the table with simple regis. information
         '''
@@ -79,14 +80,14 @@ class fake2dbSqliteHandler():
         email TEXT , password TEXT)
         ''')
         conn.commit()
-        
+
         for password in data['passwords']:
             for email in data['emails']:
                 try:
                     cursor.execute('insert into simple_registration values(?,?,?)',
-                                   (self._rnd_id_generator(),email,password))
+                                   (self._rnd_id_generator(), email, password))
                     conn.commit()
-                    
+
                 except Exception as e:
                     logger.error(e, extra=d)
         logger.warning('simple_registration Commits are successful after write job!', extra=d)
@@ -95,7 +96,7 @@ class fake2dbSqliteHandler():
         '''creates and fills the table with detailed regis. information
         '''
         # incoming data structure
-        #fake_data = {'names': list_of_names,
+        # fake_data = {'names': list_of_names,
         #             'lastnames': list_of_lastnames,
         #             'addresses': list_of_lastnames,
         #             'phones': list_of_phones,
@@ -105,14 +106,14 @@ class fake2dbSqliteHandler():
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.detailed_registration(number_of_rows)
         cursor = conn.cursor()
-        
+
         cursor.execute('''
         CREATE TABLE detailed_registration(id TEXT PRIMARY KEY, 
         email TEXT, password TEXT, lastname TEXT,
         name TEXT, adress TEXT, phone TEXT)
         ''')
         conn.commit()
-        
+
         # UGLY AS HELL , TODO: USE ITERTOOLS!!!!!!
         # TEMPORARY
         for password in data['passwords']:
@@ -122,19 +123,19 @@ class fake2dbSqliteHandler():
                         for phone in data['phones']:
                             for address in data['addresses']:
                                 try:
-                                    cursor.execute('insert into detailed_registration values(?,?,?,?,?,?,?)',(self._rnd_id_generator(),email,password,lastname,name,address,phone))
+                                    cursor.execute('insert into detailed_registration values(?,?,?,?,?,?,?)', (
+                                        self._rnd_id_generator(), email, password, lastname, name, address, phone))
                                     conn.commit()
-                                    
+
                                 except Exception as e:
                                     logger.error(e, extra=d)
         logger.warning('detailed_registration Commits are successful after write job!', extra=d)
-
 
     def data_filler_user_agent(self, number_of_rows, conn):
         '''creates and fills the table with user agent data
         '''
         # incoming data structure
-        #fake_data = {'ips': list_of_ips,
+        # fake_data = {'ips': list_of_ips,
         #             'countrycodes': list_of_countrycodes,
         #             'useragents': list_of_useragents}
 
@@ -147,7 +148,7 @@ class fake2dbSqliteHandler():
         ip TEXT, countrycode TEXT, useragent TEXT)
         ''')
         conn.commit()
-        
+
         for ip in data['ips']:
             for countrycode in data['countrycodes']:
                 for useragent in data['useragents']:
@@ -155,16 +156,16 @@ class fake2dbSqliteHandler():
                         cursor.execute('insert into user_agent values(?,?,?,?)',
                                        (self._rnd_id_generator(), ip, countrycode, useragent))
                         conn.commit()
-                        
+
                     except Exception as e:
                         logger.error(e, extra=d)
         logger.warning('user_agent Commits are successful after write job!', extra=d)
-        
+
     def data_filler_company(self, number_of_rows, conn):
         '''creates and fills the table with company data
         '''
         # incoming data structure
-        #fake_data = {'names': list_of_names,
+        # fake_data = {'names': list_of_names,
         #             'sdates': list_of_sdates,
         #             'emails': list_of_emails,
         #             'domains': list_of_domains,
@@ -172,20 +173,21 @@ class fake2dbSqliteHandler():
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.company(number_of_rows)
         cursor = conn.cursor()
-        
+
         cursor.execute('''
         CREATE TABLE companies(id TEXT PRIMARY KEY, 
         name TEXT, sdate TEXT, email TEXT, domain TEXT, city TEXT)
         ''')
         conn.commit()
-        
+
         for name in data['names']:
             for sdate in data['sdates']:
                 for email in data['emails']:
                     for domain in data['domains']:
                         for city in data['cities']:
                             try:
-                                cursor.execute('insert into companies values (?,?,?,?,?,?)',(self._rnd_id_generator(), name, sdate, email, domain, city))
+                                cursor.execute('insert into companies values (?,?,?,?,?,?)',
+                                               (self._rnd_id_generator(), name, sdate, email, domain, city))
                                 conn.commit()
                             except Exception as e:
                                 logger.error(e, extra=d)

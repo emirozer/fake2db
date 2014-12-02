@@ -28,9 +28,8 @@ except ImportError:
     on the root of the project')
     sys.exit(0)
 
-class fake2dbPostgresqlHandler():
-        
 
+class Fake2dbPostgresqlHandler():
     def str_generator(self):
         '''generates uppercase 6 chars
         '''
@@ -41,7 +40,7 @@ class fake2dbPostgresqlHandler():
         '''
         rows = number_of_rows
         cursor, conn = self.database_caller_creator()
-        
+
         self.data_filler_simple_registration(rows, cursor, conn)
         self.data_filler_detailed_registration(rows, cursor, conn)
         self.data_filler_company(rows, cursor, conn)
@@ -56,17 +55,17 @@ class fake2dbPostgresqlHandler():
         '''
         cursor = None
         conn = None
-        
+
         try:
             db = 'postgresql_' + self.str_generator()
-            subprocess.Popen("createdb --no-password --owner "+ username +" "+ db, shell=True)
+            subprocess.Popen("createdb --no-password --owner " + username + " " + db, shell=True)
             time.sleep(1)
-            conn = psycopg2.connect("dbname="+ db +" user="+username)
+            conn = psycopg2.connect("dbname=" + db + " user=" + username)
             cursor = conn.cursor()
-            logger.warning('Database created and opened succesfully: %s' %db, extra=d)
+            logger.warning('Database created and opened succesfully: %s' % db, extra=d)
         except Exception as err:
             logger.error(err, extra=d)
-                
+
         return cursor, conn
 
     def data_filler_simple_registration(self, number_of_rows, cursor, conn):
@@ -78,17 +77,17 @@ class fake2dbPostgresqlHandler():
         # }
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.simple_registration(number_of_rows)
-        
+
         cursor.execute("CREATE TABLE simple_registration (id serial PRIMARY KEY, email varchar, password varchar);")
-        
+
         for password in data['passwords']:
             for email in data['emails']:
                 try:
                     cursor.execute("INSERT INTO simple_registration "
                                    "(id, email, password) "
-                                   "VALUES (%s, %s)",(email, password))
+                                   "VALUES (%s, %s)", (email, password))
                     conn.commit()
-                    
+
                 except Exception as e:
                     logger.error(e, extra=d)
 
@@ -98,7 +97,7 @@ class fake2dbPostgresqlHandler():
         '''creates and fills the table with detailed regis. information
         '''
         # incoming data structure
-        #fakedata = {'names': list_of_names,
+        # fakedata = {'names': list_of_names,
         #             'lastnames': list_of_lastnames,
         #             'addresses': list_of_lastnames,
         #             'phones': list_of_phones,
@@ -107,7 +106,10 @@ class fake2dbPostgresqlHandler():
 
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.detailed_registration(number_of_rows)
-        cursor.execute("CREATE TABLE detailed_registration (id serial PRIMARY KEY, email varchar, password varchar, lastname varchar, name varchar, adress varchar, phone varchar);")
+        cursor.execute(
+            "CREATE TABLE detailed_registration "
+            "(id serial PRIMARY KEY, email varchar, password varchar, "
+            "lastname varchar, name varchar, adress varchar, phone varchar);")
         # UGLY AS HELL , TODO: USE ITERTOOLS!!!!!!
         # TEMPORARY
         for password in data['passwords']:
@@ -120,10 +122,11 @@ class fake2dbPostgresqlHandler():
 
                                     cursor.execute("INSERT INTO detailed_registration "
                                                    "(email, password, lastname, name, adress, phone) "
-                                                   "VALUES (%s, %s, %s, %s, %s, %s)",(email, password, lastname, name, address, phone))
-                                    
+                                                   "VALUES (%s, %s, %s, %s, %s, %s)",
+                                                   (email, password, lastname, name, address, phone))
+
                                     conn.commit()
-                                    
+
                                 except Exception as e:
                                     logger.error(e, extra=d)
 
@@ -133,39 +136,42 @@ class fake2dbPostgresqlHandler():
         '''creates and fills the table with user agent data
         '''
         # incoming data structure
-        #fake_data = {'ips': list_of_ips,
+        # fake_data = {'ips': list_of_ips,
         #             'countrycodes': list_of_countrycodes,
         #             'useragents': list_of_useragents}
 
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.user_agent(number_of_rows)
-        cursor.execute("CREATE TABLE user_agent (id serial PRIMARY KEY, ip varchar, countrycode varchar, useragent varchar);")
+        cursor.execute(
+            "CREATE TABLE user_agent (id serial PRIMARY KEY, ip varchar, countrycode varchar, useragent varchar);")
         for ip in data['ips']:
             for countrycode in data['countrycodes']:
                 for useragent in data['useragents']:
                     try:
                         cursor.execute("INSERT INTO user_agent "
-                                                   "(ip, countrycode, useragent) "
-                                                   "VALUES (%s, %s, %s)",(ip, countrycode, useragent))
+                                       "(ip, countrycode, useragent) "
+                                       "VALUES (%s, %s, %s)", (ip, countrycode, useragent))
                         conn.commit()
-                        
+
                     except Exception as e:
                         logger.error(e, extra=d)
 
         logger.warning('user_agent Commits are successful after write job!', extra=d)
-        
+
     def data_filler_company(self, number_of_rows, cursor, conn):
         '''creates and fills the table with company data
         '''
         # incoming data structure
-        #fake_data = {'names': list_of_names,
+        # fake_data = {'names': list_of_names,
         #             'sdates': list_of_sdates,
         #             'emails': list_of_emails,
         #             'domains': list_of_domains,
         #             'cities': list_of_cities
         db_patterns_instance = DbPatterns()
         data = db_patterns_instance.company(number_of_rows)
-        cursor.execute("CREATE TABLE company (id serial PRIMARY KEY, name varchar, sdate date, email varchar, domain varchar, city varchar);")
+        cursor.execute(
+            "CREATE TABLE company (id serial PRIMARY KEY, "
+            "name varchar, sdate date, email varchar, domain varchar, city varchar);")
         for name in data['names']:
             for sdate in data['sdates']:
                 for email in data['emails']:
@@ -174,10 +180,10 @@ class fake2dbPostgresqlHandler():
                             try:
                                 companies_payload = ("INSERT INTO companies "
                                                      "(name, sdate, email, domain, city) "
-                                                     "VALUES (%s, %s, %s, %s, %s)",(name, sdate, email, domain, city))
+                                                     "VALUES (%s, %s, %s, %s, %s)", (name, sdate, email, domain, city))
                                 conn.commit()
-                                
+
                             except Exception as e:
                                 logger.error(e, extra=d)
-                                
+
         logger.warning('companies Commits are successful after write job!', extra=d)
