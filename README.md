@@ -1,4 +1,4 @@
-![alt-text](http://prntscr.com/5d31i7)
+![Screenshot](https://raw.github.com/emirozer/fake2db/master/docs/fake2db_logo_screenshot.png)
 ===========
 This is a WIP
 ------
@@ -7,6 +7,7 @@ This is a WIP
 
 Create test databases using most popular patterns.
 Current support is sqlite, mysql, postgresql, mongodb
+
 ###### Installation
 > pip install fake2db
 
