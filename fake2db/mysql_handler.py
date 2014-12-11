@@ -31,16 +31,18 @@ class Fake2dbMySqlHandler():
         rows = number_of_rows
         cursor, conn = self.database_caller_creator()
         tables = self.mysql_table_creator()
+        keys = tables.keys()
         
-        for item in tables:
+        for key in keys:
             try:
-                cursor.execute(item)
+                cursor.execute(tables[key])
                 conn.commit()
             except mysql.connector.Error as err:
                 logger.error(err.msg, extra=d)
             else:
                 logger.info("OK", extra=d)
-
+                
+        logger.warning('Table creation ops finished', extra=d)
         self.data_filler_simple_registration(rows, cursor, conn)
         self.data_filler_detailed_registration(rows, cursor, conn)
         self.data_filler_company(rows, cursor, conn)
@@ -56,7 +58,7 @@ class Fake2dbMySqlHandler():
         '''
         cursor = None
         conn = None
-
+        
         try:
             db = 'mysql_' + str_generator(self)
             conn = mysql.connector.connect(user='root', host='localhost')
@@ -136,7 +138,7 @@ class Fake2dbMySqlHandler():
     def data_filler_simple_registration(self, number_of_rows, cursor, conn):
         '''creates and fills the table with simple regis. information
         '''
-
+        
         try:
             for i in range(0, number_of_rows):
                 simple_registration_payload = ("INSERT INTO simple_registration "
