@@ -37,6 +37,7 @@ class Fake2dbPostgresqlHandler():
         self.data_filler_detailed_registration(rows, cursor, conn)
         self.data_filler_company(rows, cursor, conn)
         self.data_filler_user_agent(rows, cursor, conn)
+        self.data_filler_customer(rows, cursor, conn)
         cursor.close()
         conn.close()
 
