@@ -3,7 +3,7 @@ import os
 
 setup(
     name='fake2db',
-    version='0.1',
+    version='0.0.2',
     author='Emir Ozer',
     author_email='emirozer@yandex.com',
     url='https://github.com/emirozer/fake2db',
@@ -14,6 +14,8 @@ setup(
                   ['fake2db = fake2db.fake2db:main']},
     install_requires=[
         'faker==0.4.2',
+        'fake-factory>=0.4.2',
+        'pymongo>=2.7.2',
     ],
     include_package_data=True,
     classifiers=[
