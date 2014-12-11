@@ -31,7 +31,7 @@ class Fake2dbMySqlHandler():
         rows = number_of_rows
         cursor, conn = self.database_caller_creator()
         tables = self.mysql_table_creator()
-
+        
         for item in tables:
             try:
                 cursor.execute(item)
@@ -44,7 +44,9 @@ class Fake2dbMySqlHandler():
         self.data_filler_detailed_registration(rows, cursor, conn)
         self.data_filler_company(rows, cursor, conn)
         self.data_filler_user_agent(rows, cursor, conn)
+        self.data_filler_customer(rows, cursor, conn)
         cursor.close()
+        conn.close()
 
     def database_caller_creator(self):
         '''creates a mysql db
@@ -225,7 +227,5 @@ class Fake2dbMySqlHandler():
                 conn.commit()
 
             logger.warning('detailed_registration Commits are successful after write job!', extra=d)
-            logger.warning('CLOSING CURSOR!', extra=d)
-            cursor.close()
         except Exception as e:
             logger.error(e, extra=d)
