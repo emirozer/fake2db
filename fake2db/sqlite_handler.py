@@ -2,19 +2,9 @@ import sqlite3
 import uuid
 import random
 import string
-import logging
-import getpass
-import socket
 
-# Pull the local ip and username for meaningful logging
-username = getpass.getuser()
-local_ip = socket.gethostbyname(socket.gethostname())
-# Set the logger
-FORMAT = '%(asctime)-15s %(clientip)s %(user)-8s %(message)s'
-logging.basicConfig(format=FORMAT)
-d = {'clientip': local_ip, 'user': username}
-logger = logging.getLogger('fake2db_logger')
-# --------------------
+from helpers import fake2db_logger, str_generator, rnd_id_generator
+
 
 try:
     from faker import Factory
@@ -23,8 +13,9 @@ except ImportError:
     pip install -r requirements.txt  \
     on the root of the project')
     
+logger, extra_information = fake2db_logger()
+d = extra_information
 
-    
 class DbConnException(Exception):
     """Database Connection or Creation Exception"""
 
@@ -33,18 +24,6 @@ class Fake2dbSqliteHandler():
     
     faker = Factory.create()
     
-    def str_generator(self):
-        '''generates uppercase 6 chars
-        '''
-        return ''.join(random.choice(string.ascii_uppercase) for i in range(6))
-
-    def _rnd_id_generator(self):
-        '''generates a UUID such as :
-        UUID('dd1098bd-70ac-40ea-80ef-d963f09f95a7')
-        than gets rid of dashes
-        '''
-        return str(uuid.uuid4()).replace('-', '')
-
     def fake2db_sqlite_initiator(self, number_of_rows):
         '''Main handler for the operation
         '''
@@ -63,9 +42,9 @@ class Fake2dbSqliteHandler():
         which will be later used to spawn the cursor
         '''
         database = ''
-
+        import ipdb;ipdb.set_trace()
         try:
-            database = 'sqlite_' + self.str_generator() + '.db'
+            database = 'sqlite_' + str_generator(self) + '.db'
             conn = sqlite3.connect(database)
             logger.warning('Database created and opened succesfully: %s' % database, extra=d)
         except:
@@ -86,7 +65,7 @@ class Fake2dbSqliteHandler():
         conn.commit()
         try:
             for i in range(0, number_of_rows):
-                cursor.execute('insert into simple_registration values(?,?,?)', (self._rnd_id_generator(), self.faker.safe_email(), self.faker.md5(raw_output=False)))
+                cursor.execute('insert into simple_registration values(?,?,?)', (rnd_id_generator(self), self.faker.safe_email(), self.faker.md5(raw_output=False)))
                 conn.commit()
             logger.warning('simple_registration Commits are successful after write job!', extra=d)
         except Exception as e:
@@ -107,7 +86,7 @@ class Fake2dbSqliteHandler():
 
         try:
             for i in range(0, number_of_rows):
-                cursor.execute('insert into detailed_registration values(?,?,?,?,?,?,?)', (self._rnd_id_generator(), self.faker.safe_email(), self.faker.md5(raw_output=False), self.faker.last_name(), self.faker.name(), self.faker.address(), self.faker.phone_number()))
+                cursor.execute('insert into detailed_registration values(?,?,?,?,?,?,?)', (rnd_id_generator(self), self.faker.safe_email(), self.faker.md5(raw_output=False), self.faker.last_name(), self.faker.name(), self.faker.address(), self.faker.phone_number()))
                 conn.commit()
                                
             logger.warning('detailed_registration Commits are successful after write job!', extra=d)
@@ -131,7 +110,7 @@ class Fake2dbSqliteHandler():
         try:
             for i in range(0, number_of_rows):
                 cursor.execute('insert into user_agent values(?,?,?,?)',
-                    (self._rnd_id_generator(), self.faker.ipv4(), self.faker.country_code(), self.faker.user_agent()))
+                    (rnd_id_generator(self), self.faker.ipv4(), self.faker.country_code(), self.faker.user_agent()))
                 conn.commit()
             logger.warning('user_agent Commits are successful after write job!', extra=d)
         except Exception as e:
@@ -151,7 +130,7 @@ class Fake2dbSqliteHandler():
         try:
             for i in range(0, number_of_rows):
                 cursor.execute('insert into companies values (?,?,?,?,?,?)',
-                               (self._rnd_id_generator(), self.faker.name(), self.faker.date(pattern="%d-%m-%Y"), self.faker.company_email(), self.faker.safe_email(), self.faker.city()))
+                               (rnd_id_generator(self), self.faker.name(), self.faker.date(pattern="%d-%m-%Y"), self.faker.company_email(), self.faker.safe_email(), self.faker.city()))
             conn.commit()
             logger.warning('companies Commits are successful after write job!', extra=d)
         except Exception as e:
@@ -169,7 +148,7 @@ class Fake2dbSqliteHandler():
         try:
             for i in range(0, number_of_rows):
                 cursor.execute('insert into customer values (?,?,?,?,?,?,?,?,?,?,?)',
-                               (self._rnd_id_generator(), self.faker.name(), self.faker.last_name(), self.faker.address(), self.faker.country(), self.faker.city(), self.faker.date(pattern="%d-%m-%Y"), self.faker.date(pattern="%d-%m-%Y"), self.faker.safe_email(), self.faker.phone_number(), self.faker.locale()))
+                               (rnd_id_generator(self), self.faker.name(), self.faker.last_name(), self.faker.address(), self.faker.country(), self.faker.city(), self.faker.date(pattern="%d-%m-%Y"), self.faker.date(pattern="%d-%m-%Y"), self.faker.safe_email(), self.faker.phone_number(), self.faker.locale()))
             conn.commit()
             logger.warning('customer Commits are successful after write job!', extra=d)
         except Exception as e:
