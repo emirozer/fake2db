@@ -35,6 +35,7 @@ class Fake2dbMySqlHandler():
         for item in tables:
             try:
                 cursor.execute(item)
+                conn.commit()
             except mysql.connector.Error as err:
                 logger.error(err.msg, extra=d)
             else:
