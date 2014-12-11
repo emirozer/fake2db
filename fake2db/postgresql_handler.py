@@ -45,9 +45,7 @@ class Fake2dbPostgresqlHandler():
         returns the related connection object
         which will be later used to spawn the cursor
         '''
-        cursor = None
-        conn = None
-
+        
         try:
             db = 'postgresql_' + str_generator(self)
             subprocess.Popen("createdb --no-password --owner " + username + " " + db, shell=True)
@@ -65,6 +63,7 @@ class Fake2dbPostgresqlHandler():
         '''
         
         cursor.execute("CREATE TABLE simple_registration (id serial PRIMARY KEY, email varchar, password varchar);")
+        conn.commit()
 
         try:
             
@@ -87,6 +86,7 @@ class Fake2dbPostgresqlHandler():
             "CREATE TABLE detailed_registration "
             "(id serial PRIMARY KEY, email varchar, password varchar, "
             "lastname varchar, name varchar, adress varchar, phone varchar);")
+        conn.commit()
         try:
             
             for i in range(0, number_of_rows):
