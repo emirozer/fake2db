@@ -1,10 +1,9 @@
 import sqlite3
-import uuid
-import random
-import string
 
 from helpers import fake2db_logger, str_generator, rnd_id_generator
 
+logger, extra_information = fake2db_logger()
+d = extra_information
 
 try:
     from faker import Factory
@@ -12,18 +11,15 @@ except ImportError:
     logger.error('faker package not found onto python packages, please run : \
     pip install -r requirements.txt  \
     on the root of the project')
-    
-logger, extra_information = fake2db_logger()
-d = extra_information
+
 
 class DbConnException(Exception):
     """Database Connection or Creation Exception"""
 
 
 class Fake2dbSqliteHandler():
-    
     faker = Factory.create()
-    
+
     def fake2db_sqlite_initiator(self, number_of_rows):
         '''Main handler for the operation
         '''
@@ -42,7 +38,6 @@ class Fake2dbSqliteHandler():
         which will be later used to spawn the cursor
         '''
         database = ''
-        import ipdb;ipdb.set_trace()
         try:
             database = 'sqlite_' + str_generator(self) + '.db'
             conn = sqlite3.connect(database)
@@ -65,12 +60,12 @@ class Fake2dbSqliteHandler():
         conn.commit()
         try:
             for i in range(0, number_of_rows):
-                cursor.execute('insert into simple_registration values(?,?,?)', (rnd_id_generator(self), self.faker.safe_email(), self.faker.md5(raw_output=False)))
+                cursor.execute('insert into simple_registration values(?,?,?)',
+                               (rnd_id_generator(self), self.faker.safe_email(), self.faker.md5(raw_output=False)))
                 conn.commit()
             logger.warning('simple_registration Commits are successful after write job!', extra=d)
         except Exception as e:
             logger.error(e, extra=d)
-            
 
     def data_filler_detailed_registration(self, number_of_rows, conn):
         '''creates and fills the table with detailed regis. information
@@ -86,15 +81,15 @@ class Fake2dbSqliteHandler():
 
         try:
             for i in range(0, number_of_rows):
-                cursor.execute('insert into detailed_registration values(?,?,?,?,?,?,?)', (rnd_id_generator(self), self.faker.safe_email(), self.faker.md5(raw_output=False), self.faker.last_name(), self.faker.name(), self.faker.address(), self.faker.phone_number()))
+                cursor.execute('insert into detailed_registration values(?,?,?,?,?,?,?)', (
+                    rnd_id_generator(self), self.faker.safe_email(), self.faker.md5(raw_output=False),
+                    self.faker.last_name(), self.faker.name(), self.faker.address(), self.faker.phone_number()))
                 conn.commit()
-                               
+
             logger.warning('detailed_registration Commits are successful after write job!', extra=d)
-                               
+
         except Exception as e:
             logger.error(e, extra=d)
-                               
-        
 
     def data_filler_user_agent(self, number_of_rows, conn):
         '''creates and fills the table with user agent data
@@ -110,12 +105,12 @@ class Fake2dbSqliteHandler():
         try:
             for i in range(0, number_of_rows):
                 cursor.execute('insert into user_agent values(?,?,?,?)',
-                    (rnd_id_generator(self), self.faker.ipv4(), self.faker.country_code(), self.faker.user_agent()))
+                               (rnd_id_generator(self), self.faker.ipv4(), self.faker.country_code(),
+                                self.faker.user_agent()))
                 conn.commit()
             logger.warning('user_agent Commits are successful after write job!', extra=d)
         except Exception as e:
             logger.error(e, extra=d)
-        
 
     def data_filler_company(self, number_of_rows, conn):
         '''creates and fills the table with company data
@@ -130,7 +125,8 @@ class Fake2dbSqliteHandler():
         try:
             for i in range(0, number_of_rows):
                 cursor.execute('insert into companies values (?,?,?,?,?,?)',
-                               (rnd_id_generator(self), self.faker.name(), self.faker.date(pattern="%d-%m-%Y"), self.faker.company_email(), self.faker.safe_email(), self.faker.city()))
+                               (rnd_id_generator(self), self.faker.name(), self.faker.date(pattern="%d-%m-%Y"),
+                                self.faker.company_email(), self.faker.safe_email(), self.faker.city()))
             conn.commit()
             logger.warning('companies Commits are successful after write job!', extra=d)
         except Exception as e:
@@ -142,13 +138,17 @@ class Fake2dbSqliteHandler():
         cursor = conn.cursor()
         cursor.execute('''
         CREATE TABLE customer(id TEXT PRIMARY KEY, 
-        name TEXT, lastname TEXT, address TEXT, country TEXT, city TEXT, registry_date TEXT, birthdate TEXT, email TEXT, phone_number TEXT, locale TEXT)
+        name TEXT, lastname TEXT, address TEXT, country TEXT, city TEXT, registry_date TEXT, birthdate TEXT, email TEXT,
+         phone_number TEXT, locale TEXT)
         ''')
         conn.commit()
         try:
             for i in range(0, number_of_rows):
                 cursor.execute('insert into customer values (?,?,?,?,?,?,?,?,?,?,?)',
-                               (rnd_id_generator(self), self.faker.name(), self.faker.last_name(), self.faker.address(), self.faker.country(), self.faker.city(), self.faker.date(pattern="%d-%m-%Y"), self.faker.date(pattern="%d-%m-%Y"), self.faker.safe_email(), self.faker.phone_number(), self.faker.locale()))
+                               (rnd_id_generator(self), self.faker.name(), self.faker.last_name(), self.faker.address(),
+                                self.faker.country(), self.faker.city(), self.faker.date(pattern="%d-%m-%Y"),
+                                self.faker.date(pattern="%d-%m-%Y"), self.faker.safe_email(), self.faker.phone_number(),
+                                self.faker.locale()))
             conn.commit()
             logger.warning('customer Commits are successful after write job!', extra=d)
         except Exception as e:
