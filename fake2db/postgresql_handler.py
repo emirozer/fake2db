@@ -1,5 +1,6 @@
 import sys
 import time
+import getpass
 import subprocess
 
 from helpers import fake2db_logger, str_generator
@@ -46,6 +47,9 @@ class Fake2dbPostgresqlHandler():
         returns the related connection object
         which will be later used to spawn the cursor
         '''
+        cursor = None
+        conn = None
+        username = getpass.getuser()
         
         try:
             db = 'postgresql_' + str_generator(self)
@@ -70,7 +74,7 @@ class Fake2dbPostgresqlHandler():
             
             for i in range(0, number_of_rows):
                 cursor.execute("INSERT INTO simple_registration "
-                               "(id, email, password) "
+                               "(email, password) "
                                "VALUES (%s, %s)", (self.faker.safe_email(), self.faker.md5(raw_output=False)))
                 conn.commit()
                 
