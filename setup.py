@@ -13,7 +13,6 @@ setup(
     entry_points={'console_scripts':
                   ['fake2db = fake2db.fake2db:main']},
     install_requires=[
-        'faker==0.0.4',
         'fake-factory>=0.4.2',
         'pymongo>=2.7.2',
         'psycopg2>=2.5.4',
