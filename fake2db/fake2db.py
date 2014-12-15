@@ -9,6 +9,7 @@ import time
 from sqlite_handler import Fake2dbSqliteHandler
 from mysql_handler import Fake2dbMySqlHandler
 from postgresql_handler import Fake2dbPostgresqlHandler
+from mongodb_handler import Fake2dbMongodbHandler
 
 # Pull the local ip and username for meaningful logging
 username = getpass.getuser()
@@ -54,11 +55,25 @@ def _mysqld_process_checkpoint():
         subprocess.Popen("mysqld", close_fds=True, shell=True)
         time.sleep(3)
 
+def _mongodb_process_checkpoint():
+    '''this helper method checks if 
+    mongodb server is available in the sys
+    if not fires up one
+    '''
+    try:
+        mongodb_check = subprocess.check_output("pgrep mongod", shell=True)
+    except:
+        logger.warning('Your mongodb server is offline, fake2db will try to launch it now!', extra=d)
+        # close_fds = True argument is the flag that is responsible
+        # for Popen to launch the process completely independent
+        subprocess.Popen("mongod", close_fds=True, shell=True)
+        time.sleep(3)
 
 try:
     fake_sqlite_handler = Fake2dbSqliteHandler()
     fake_mysql_handler = Fake2dbMySqlHandler()
     fake_postgresql_handler = Fake2dbPostgresqlHandler()
+    fake_mongodb_handler = Fake2dbMongodbHandler()
 except:
     raise InstanciateDBHandlerException
 
@@ -84,5 +99,8 @@ if args.rows:
         elif args.db == 'postgresql':
             _postgresql_process_checkpoint()
             fake_postgresql_handler.fake2db_postgresql_initiator(int(args.rows))
+        elif args.db == 'mongodb':
+            _mongodb_process_checkpoint()
+            fake_mongodb_handler.fake2db_mongodb_initiator(int(args.rows))
         else:
             logger.error('Please use with --help argument for usage information!', extra=d)
