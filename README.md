@@ -27,3 +27,7 @@ rows is pretty clear...
 db argument takes 4 possible options : sqlite, mysql, postgresql, mongodb
 
 > fake2db --rows 200 --db sqlite
+
+
+##### Sample output - sqlite
+![Screenshot](https://raw.github.com/emirozer/fake2db/master/docs/fake2db_example_sqlite.png)
