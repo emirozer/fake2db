@@ -1,4 +1,4 @@
 psycopg2>=2.5.4
-faker==0.4.2
+faker==0.0.4
 fake-factory>=0.4.2
 pymongo>=2.7.2
