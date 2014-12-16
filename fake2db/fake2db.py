@@ -14,7 +14,7 @@ from helpers import fake2db_logger
 
 logger, extra_information = fake2db_logger()
 
-class InstanciateDBHandlerException(Exception):
+class InstantiateDBHandlerException(Exception):
     '''An Exception at the instantiation of the handler '''
 
 
@@ -67,7 +67,7 @@ try:
     fake_postgresql_handler = Fake2dbPostgresqlHandler()
     fake_mongodb_handler = Fake2dbMongodbHandler()
 except:
-    raise InstanciateDBHandlerException
+    raise InstantiateDBHandlerException
 
 def main():
     parser = argparse.ArgumentParser()
