@@ -5,18 +5,18 @@ This is a WIP
 ***
 ##### About
 
-Create test databases using most popular patterns(AFAIK).
-Current support is sqlite, mysql, postgresql, mongodb.
+Generate fake but valid data filled databases for test purposes using most popular patterns(AFAIK).
+Current support is *sqlite, mysql, postgresql, mongodb*.
 
 ##### Installation
 
-The installation also retrieves 'requirements'.
-Which are : *faker, fake-factory, pymongo, psycopg2*
+The installation through pypi also retrieves 'requirements'.
+Which are : *fake-factory, pymongo, psycopg2*
 > pip install fake2db
 
 ###### non-PYPI included req
 
-mysql connector:
+mysql connector is needed for mysql db generation:
 > http://dev.mysql.com/downloads/connector/python/
 
 
@@ -30,4 +30,10 @@ db argument takes 4 possible options : sqlite, mysql, postgresql, mongodb
 
 
 ##### Sample output - sqlite
-![Screenshot](https://raw.github.com/emirozer/fake2db/master/docs/fake2db_example_sqlite.png)
+![Screenshot](https://raw.github.com/emirozer/fake2db/master/docs/fake2db_example_sqlite.png)
+
+
+#### TODO
+    * Add more DB types
+    * Add optional parameter 'name' to fake2db other than random name generation
+    * Fix db patterns / add more
