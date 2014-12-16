@@ -14,6 +14,7 @@ from helpers import fake2db_logger
 
 logger, extra_information = fake2db_logger()
 
+
 class InstantiateDBHandlerException(Exception):
     '''An Exception at the instantiation of the handler '''
 
@@ -47,6 +48,7 @@ def _mysqld_process_checkpoint():
         subprocess.Popen("mysqld", close_fds=True, shell=True)
         time.sleep(3)
 
+
 def _mongodb_process_checkpoint():
     '''this helper method checks if 
     mongodb server is available in the sys
@@ -61,6 +63,7 @@ def _mongodb_process_checkpoint():
         subprocess.Popen("mongod", close_fds=True, shell=True)
         time.sleep(3)
 
+
 try:
     fake_sqlite_handler = Fake2dbSqliteHandler()
     fake_mysql_handler = Fake2dbMySqlHandler()
@@ -69,10 +72,12 @@ try:
 except:
     raise InstantiateDBHandlerException
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--rows", help="Amount of rows desired per table")
-    parser.add_argument("--db", help="Db type for creation: sqlite, mysql, postgresql, mongodb, couchdb, to be expanded")
+    parser.add_argument("--db",
+                        help="Db type for creation: sqlite, mysql, postgresql, mongodb, couchdb, to be expanded")
     args = parser.parse_args()
 
     if not args.rows or not args.db:
@@ -83,7 +88,7 @@ def main():
             logger.info('arguments found(rows and db), starting faking!!', extra=extra_information)
             logger.warning('Rows argument : %s', args.rows, extra=extra_information)
             logger.info('DB argument : %s', args.db, extra=extra_information)
-            
+
             if args.db == 'sqlite':
                 fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows))
             elif args.db == 'mysql':
@@ -96,7 +101,9 @@ def main():
                 _mongodb_process_checkpoint()
                 fake_mongodb_handler.fake2db_mongodb_initiator(int(args.rows))
             else:
-                logger.error('Wrong arg for db parameter. Valid ones : sqlite - mysql - postgresql - mongodb', extra=extra_information)
-                    
+                logger.error('Wrong arg for db parameter. Valid ones : sqlite - mysql - postgresql - mongodb',
+                             extra=extra_information)
+
+
 if __name__ == '__main__':
     main()

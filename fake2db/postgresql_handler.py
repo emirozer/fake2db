@@ -15,7 +15,6 @@ except ImportError:
     pip install -r requirements.txt  \
     on the root of the project')
 
-
 try:
     import psycopg2
 except ImportError:
@@ -50,7 +49,7 @@ class Fake2dbPostgresqlHandler():
         cursor = None
         conn = None
         username = getpass.getuser()
-        
+
         try:
             db = 'postgresql_' + str_generator(self)
             subprocess.Popen("createdb --no-password --owner " + username + " " + db, shell=True)
@@ -66,50 +65,51 @@ class Fake2dbPostgresqlHandler():
     def data_filler_simple_registration(self, number_of_rows, cursor, conn):
         '''creates and fills the table with simple regis. information
         '''
-        
+
         cursor.execute("CREATE TABLE simple_registration (id serial PRIMARY KEY, email varchar, password varchar);")
         conn.commit()
 
         try:
-            
+
             for i in range(0, number_of_rows):
                 cursor.execute("INSERT INTO simple_registration "
                                "(email, password) "
                                "VALUES (%s, %s)", (self.faker.safe_email(), self.faker.md5(raw_output=False)))
                 conn.commit()
-                
+
             logger.warning('simple_registration Commits are successful after write job!', extra=d)
-            
+
         except Exception as e:
             logger.error(e, extra=d)
 
     def data_filler_detailed_registration(self, number_of_rows, cursor, conn):
         '''creates and fills the table with detailed regis. information
         '''
-        
+
         cursor.execute(
             "CREATE TABLE detailed_registration "
             "(id serial PRIMARY KEY, email varchar, password varchar, "
             "lastname varchar, name varchar, adress varchar, phone varchar);")
         conn.commit()
         try:
-            
+
             for i in range(0, number_of_rows):
                 cursor.execute("INSERT INTO detailed_registration "
                                "(email, password, lastname, name, adress, phone) "
                                "VALUES (%s, %s, %s, %s, %s, %s)",
-                               (self.faker.safe_email(), self.faker.md5(raw_output=False), self.faker.last_name(), self.faker.name(), self.faker.address(), self.faker.phone_number()))
+                               (self.faker.safe_email(), self.faker.md5(raw_output=False), self.faker.last_name(),
+                                self.faker.name(), self.faker.address(), self.faker.phone_number()))
                 conn.commit()
-                
+
             logger.warning('detailed_registration Commits are successful after write job!', extra=d)
-            
+
         except Exception as e:
             logger.error(e, extra=d)
 
     def data_filler_user_agent(self, number_of_rows, cursor, conn):
         '''creates and fills the table with user agent data
         '''
-        
+
         cursor.execute(
             "CREATE TABLE user_agent (id serial PRIMARY KEY, ip varchar, countrycode varchar, useragent varchar);")
         try:
@@ -121,7 +121,7 @@ class Fake2dbPostgresqlHandler():
                                (self.faker.ipv4(), self.faker.country_code(),
                                 self.faker.user_agent()))
                 conn.commit()
-                
+
             logger.warning('user_agent Commits are successful after write job!', extra=d)
         except Exception as e:
             logger.error(e, extra=d)
@@ -129,7 +129,7 @@ class Fake2dbPostgresqlHandler():
     def data_filler_company(self, number_of_rows, cursor, conn):
         '''creates and fills the table with company data
         '''
-        
+
         cursor.execute(
             "CREATE TABLE company (id serial PRIMARY KEY, "
             "name varchar, sdate date, email varchar, domain varchar, city varchar);")
@@ -140,26 +140,28 @@ class Fake2dbPostgresqlHandler():
                                      "(name, sdate, email, domain, city) "
                                      "VALUES (%s, %s, %s, %s, %s)",
                                      (self.faker.name(), self.faker.date(pattern="%d-%m-%Y"),
-                                self.faker.company_email(), self.faker.safe_email(), self.faker.city()))
+                                      self.faker.company_email(), self.faker.safe_email(), self.faker.city()))
                 conn.commit()
-                
+
             logger.warning('companies Commits are successful after write job!', extra=d)
         except Exception as e:
             logger.error(e, extra=d)
 
-        
     def data_filler_customer(self, number_of_rows, cursor, conn):
         '''creates and fills the table with customer data
         '''
-        
+
         cursor.execute(
             "CREATE TABLE customer (id serial PRIMARY KEY, "
-            "name varchar, lastname varchar, address varchar, country varchar, city varchar, registry_date varchar, birthdate varchar, email varchar, phone_number varchar, locale varchar);")
+            "name varchar, lastname varchar, address varchar, country varchar, "
+            "city varchar, registry_date varchar, birthdate varchar, email varchar, "
+            "phone_number varchar, locale varchar);")
         conn.commit()
         try:
             for i in range(0, number_of_rows):
                 cursor.execute("INSERT INTO customer "
-                               "(name, lastname, address, country, city, registry_date, birthdate, email, phone_number, locale)"
+                               "(name, lastname, address, country, city, registry_date, "
+                               "birthdate, email, phone_number, locale)"
                                "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                                (self.faker.name(), self.faker.last_name(), self.faker.address(),
                                 self.faker.country(), self.faker.city(), self.faker.date(pattern="%d-%m-%Y"),
