@@ -23,11 +23,12 @@ mysql connector is needed for mysql db generation:
 ##### Usage
 
 It is as follows, at this point in time, fake2db accepts rows and db argument.
-rows are pretty clear...
-db argument takes 4 possible options : sqlite, mysql, postgresql, mongodb
+*--rows* argument is pretty clear...
+*--db* argument takes 4 possible options : sqlite, mysql, postgresql, mongodb
+*--name* argument is OPTIONAL. When it is absent fake2db will name db's randomly.
 
 > fake2db --rows 200 --db sqlite
-
+> fake2db --rows 1500 --db postgresql --name test_database_postgre
 
 ##### Sample output - sqlite
 ![Screenshot](https://raw.github.com/emirozer/fake2db/master/docs/fake2db_example_sqlite.png)
@@ -35,5 +36,4 @@ db argument takes 4 possible options : sqlite, mysql, postgresql, mongodb
 
 #### TODO
     * Add more DB types
-    * Add optional parameter 'name' to fake2db other than random name generation
     * Fix db patterns / add more

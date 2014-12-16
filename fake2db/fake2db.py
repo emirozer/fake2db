@@ -78,6 +78,8 @@ def main():
     parser.add_argument("--rows", help="Amount of rows desired per table")
     parser.add_argument("--db",
                         help="Db type for creation: sqlite, mysql, postgresql, mongodb, couchdb, to be expanded")
+    parser.add_argument("--name", help="OPTIONAL : Give a name to the db to be generated. ")
+    
     args = parser.parse_args()
 
     if not args.rows or not args.db:
@@ -90,16 +92,32 @@ def main():
             logger.info('DB argument : %s', args.db, extra=extra_information)
 
             if args.db == 'sqlite':
-                fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows))
+                if args.name:
+                    fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows), str(args.name))
+                else:
+                    fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows))
+                    
             elif args.db == 'mysql':
                 _mysqld_process_checkpoint()
-                fake_mysql_handler.fake2db_mysql_initiator(int(args.rows))
+                if args.name:
+                    fake_mysql_handler.fake2db_mysql_initiator(int(args.rows), str(args.name))
+                else:
+                    fake_mysql_handler.fake2db_mysql_initiator(int(args.rows))
+                    
             elif args.db == 'postgresql':
                 _postgresql_process_checkpoint()
-                fake_postgresql_handler.fake2db_postgresql_initiator(int(args.rows))
+                if args.name:
+                    fake_postgresql_handler.fake2db_postgresql_initiator(int(args.rows), str(args.name))
+                else:
+                    fake_postgresql_handler.fake2db_postgresql_initiator(int(args.rows))
+                    
             elif args.db == 'mongodb':
                 _mongodb_process_checkpoint()
-                fake_mongodb_handler.fake2db_mongodb_initiator(int(args.rows))
+                if args.name:
+                    fake_mongodb_handler.fake2db_mongodb_initiator(int(args.rows), str(args.name))
+                else:
+                    fake_mongodb_handler.fake2db_mongodb_initiator(int(args.rows))
+                    
             else:
                 logger.error('Wrong arg for db parameter. Valid ones : sqlite - mysql - postgresql - mongodb',
                              extra=extra_information)

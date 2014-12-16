@@ -27,12 +27,16 @@ except ImportError:
 class Fake2dbPostgresqlHandler():
     faker = Factory.create()
 
-    def fake2db_postgresql_initiator(self, number_of_rows):
+    def fake2db_postgresql_initiator(self, number_of_rows, name=None):
         '''Main handler for the operation
         '''
         rows = number_of_rows
-        cursor, conn = self.database_caller_creator()
-
+        
+        if name:
+            cursor, conn = self.database_caller_creator(name)
+        else:
+            cursor, conn = self.database_caller_creator()
+        
         self.data_filler_simple_registration(rows, cursor, conn)
         self.data_filler_detailed_registration(rows, cursor, conn)
         self.data_filler_company(rows, cursor, conn)
@@ -41,7 +45,7 @@ class Fake2dbPostgresqlHandler():
         cursor.close()
         conn.close()
 
-    def database_caller_creator(self):
+    def database_caller_creator(self, name=None):
         '''creates a postgresql db
         returns the related connection object
         which will be later used to spawn the cursor
@@ -51,7 +55,11 @@ class Fake2dbPostgresqlHandler():
         username = getpass.getuser()
 
         try:
-            db = 'postgresql_' + str_generator(self)
+            if name:
+                db = name
+            else:
+                db = 'postgresql_' + str_generator(self)
+                
             subprocess.Popen("createdb --no-password --owner " + username + " " + db, shell=True)
             time.sleep(1)
             conn = psycopg2.connect("dbname=" + db + " user=" + username)

@@ -20,11 +20,16 @@ class DbConnException(Exception):
 class Fake2dbSqliteHandler():
     faker = Factory.create()
 
-    def fake2db_sqlite_initiator(self, number_of_rows):
+    def fake2db_sqlite_initiator(self, number_of_rows, name=None):
         '''Main handler for the operation
         '''
         rows = number_of_rows
-        conn = self.database_caller_creator()
+        
+        if name:
+            conn = self.database_caller_creator(name)
+        else:
+            conn = self.database_caller_creator()
+            
         self.data_filler_simple_registration(rows, conn)
         self.data_filler_detailed_registration(rows, conn)
         self.data_filler_company(rows, conn)
@@ -32,14 +37,18 @@ class Fake2dbSqliteHandler():
         self.data_filler_customer(rows, conn)
         conn.close()
 
-    def database_caller_creator(self):
+    def database_caller_creator(self, name=None):
         '''creates a sqlite3 db
         returns the related connection object
         which will be later used to spawn the cursor
         '''
         database = ''
         try:
-            database = 'sqlite_' + str_generator(self) + '.db'
+            if name:
+                database = name + '.db'
+            else:
+                database = 'sqlite_' + str_generator(self) + '.db'
+                
             conn = sqlite3.connect(database)
             logger.warning('Database created and opened succesfully: %s' % database, extra=d)
         except:
