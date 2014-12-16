@@ -97,8 +97,6 @@ def main():
                 fake_mongodb_handler.fake2db_mongodb_initiator(int(args.rows))
             else:
                 logger.error('Wrong arg for db parameter. Valid ones : sqlite - mysql - postgresql - mongodb', extra=extra_information)
-        else:
-            logger.error('Please use with --help argument for usage information!', extra=extra_information)
-            
+                    
 if __name__ == '__main__':
     main()
