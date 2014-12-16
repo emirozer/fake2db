@@ -4,14 +4,13 @@ from helpers import fake2db_logger, str_generator, rnd_id_generator
 
 
 logger, extra_information = fake2db_logger()
-d = extra_information
 
 try:
     import mysql.connector
 except ImportError:
     logger.error(
         'MySql Connector/Python not found on sys, '
-        'you need to get it : http://dev.mysql.com/downloads/connector/python/')
+        'you need to get it : http://dev.mysql.com/downloads/connector/python/', extra=extra_information)
     sys.exit(0)
 
 try:
@@ -19,7 +18,7 @@ try:
 except ImportError:
     logger.error('faker package not found onto python packages, please run : \
     pip install -r requirements.txt  \
-    on the root of the project')
+    on the root of the project', extra=extra_information)
 
 
 class Fake2dbMySqlHandler():
@@ -38,11 +37,11 @@ class Fake2dbMySqlHandler():
                 cursor.execute(tables[key])
                 conn.commit()
             except mysql.connector.Error as err:
-                logger.error(err.msg, extra=d)
+                logger.error(err.msg, extra=extra_information)
             else:
-                logger.info("OK", extra=d)
+                logger.info("OK", extra=extra_information)
                 
-        logger.warning('Table creation ops finished', extra=d)
+        logger.warning('Table creation ops finished', extra=extra_information)
         self.data_filler_simple_registration(rows, cursor, conn)
         self.data_filler_detailed_registration(rows, cursor, conn)
         self.data_filler_company(rows, cursor, conn)
@@ -65,10 +64,10 @@ class Fake2dbMySqlHandler():
             cursor = conn.cursor()
             cursor.execute('CREATE DATABASE IF NOT EXISTS ' + db)
             cursor.execute('USE ' + db)
-            logger.warning('Database created and opened succesfully: %s' % db, extra=d)
+            logger.warning('Database created and opened succesfully: %s' % db, extra=extra_information)
 
         except mysql.connector.Error as err:
-            logger.error(err.message, extra=d)
+            logger.error(err.message, extra=extra_information)
 
         return cursor, conn
 
@@ -150,9 +149,9 @@ class Fake2dbMySqlHandler():
                 cursor.execute(simple_registration_payload, simple_registration_data)
                 conn.commit()
 
-            logger.warning('simple_registration Commits are successful after write job!', extra=d)
+            logger.warning('simple_registration Commits are successful after write job!', extra=extra_information)
         except Exception as e:
-            logger.error(e, extra=d)
+            logger.error(e, extra=extra_information)
 
     def data_filler_detailed_registration(self, number_of_rows, cursor, conn):
         '''creates and fills the table with detailed regis. information
@@ -171,10 +170,10 @@ class Fake2dbMySqlHandler():
                 cursor.execute(detailed_registration_payload, detailed_registration_data)
                 conn.commit()
 
-            logger.warning('detailed_registration Commits are successful after write job!', extra=d)
+            logger.warning('detailed_registration Commits are successful after write job!', extra=extra_information)
 
         except Exception as e:
-            logger.error(e, extra=d)
+            logger.error(e, extra=extra_information)
 
     def data_filler_user_agent(self, number_of_rows, cursor, conn):
         '''creates and fills the table with user agent data
@@ -189,9 +188,9 @@ class Fake2dbMySqlHandler():
                 cursor.execute(user_agent_payload, user_agent_data)
                 conn.commit()
 
-            logger.warning('user_agent Commits are successful after write job!', extra=d)
+            logger.warning('user_agent Commits are successful after write job!', extra=extra_information)
         except Exception as e:
-            logger.error(e, extra=d)
+            logger.error(e, extra=extra_information)
 
     def data_filler_company(self, number_of_rows, cursor, conn):
         '''creates and fills the table with company data
@@ -205,9 +204,9 @@ class Fake2dbMySqlHandler():
                                   self.faker.company_email(), self.faker.safe_email(), self.faker.city())
                 cursor.execute(companies_payload, companies_data)
                 conn.commit()
-            logger.warning('companies Commits are successful after write job!', extra=d)
+            logger.warning('companies Commits are successful after write job!', extra=extra_information)
         except Exception as e:
-            logger.error(e, extra=d)
+            logger.error(e, extra=extra_information)
 
     def data_filler_customer(self, number_of_rows, cursor, conn):
         '''creates and fills the table with customer
@@ -229,6 +228,6 @@ class Fake2dbMySqlHandler():
 
                 conn.commit()
 
-            logger.warning('detailed_registration Commits are successful after write job!', extra=d)
+            logger.warning('detailed_registration Commits are successful after write job!', extra=extra_information)
         except Exception as e:
-            logger.error(e, extra=d)
+            logger.error(e, extra=extra_information)
