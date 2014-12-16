@@ -23,7 +23,7 @@ mysql connector:
 ##### Usage
 
 It is as follows, at this point in time, fake2db accepts rows and db argument.
-rows is pretty clear...
+rows are pretty clear...
 db argument takes 4 possible options : sqlite, mysql, postgresql, mongodb
 
 > fake2db --rows 200 --db sqlite
