@@ -111,7 +111,7 @@ def main():
             elif args.db == 'postgresql':
                 _postgresql_process_checkpoint()
                 host = args.host or "localhost"
-                port = args.port or 5432
+                port = args.port or "5432"
                 if args.name:
                     fake_postgresql_handler.fake2db_postgresql_initiator(host, port, int(args.rows), str(args.name))
                 else:
