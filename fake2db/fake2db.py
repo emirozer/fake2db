@@ -79,6 +79,8 @@ def main():
     parser.add_argument("--db",
                         help="Db type for creation: sqlite, mysql, postgresql, mongodb, couchdb, to be expanded")
     parser.add_argument("--name", help="OPTIONAL : Give a name to the db to be generated. ")
+    parser.add_argument("--host", help="OPTIONAL : Hostname of db. ")
+    parser.add_argument("--port", help="OPTIONAL : Port of db. ")
     
     args = parser.parse_args()
 
@@ -106,10 +108,12 @@ def main():
                     
             elif args.db == 'postgresql':
                 _postgresql_process_checkpoint()
+                host = args.host or "localhost"
+                port = args.port or "5432"
                 if args.name:
-                    fake_postgresql_handler.fake2db_postgresql_initiator(int(args.rows), str(args.name))
+                    fake_postgresql_handler.fake2db_postgresql_initiator(host, port, int(args.rows), str(args.name))
                 else:
-                    fake_postgresql_handler.fake2db_postgresql_initiator(int(args.rows))
+                    fake_postgresql_handler.fake2db_postgresql_initiator(host, port, int(args.rows))
                     
             elif args.db == 'mongodb':
                 _mongodb_process_checkpoint()

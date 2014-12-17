@@ -27,15 +27,15 @@ except ImportError:
 class Fake2dbPostgresqlHandler():
     faker = Factory.create()
 
-    def fake2db_postgresql_initiator(self, number_of_rows, name=None):
+    def fake2db_postgresql_initiator(self, host, port, number_of_rows, name=None):
         '''Main handler for the operation
         '''
         rows = number_of_rows
         
         if name:
-            cursor, conn = self.database_caller_creator(name)
+            cursor, conn = self.database_caller_creator(host, port, name)
         else:
-            cursor, conn = self.database_caller_creator()
+            cursor, conn = self.database_caller_creator(host, port)
         
         self.data_filler_simple_registration(rows, cursor, conn)
         self.data_filler_detailed_registration(rows, cursor, conn)
@@ -45,7 +45,7 @@ class Fake2dbPostgresqlHandler():
         cursor.close()
         conn.close()
 
-    def database_caller_creator(self, name=None):
+    def database_caller_creator(self, host, port, name=None):
         '''creates a postgresql db
         returns the related connection object
         which will be later used to spawn the cursor
@@ -62,7 +62,7 @@ class Fake2dbPostgresqlHandler():
                 
             subprocess.Popen("createdb --no-password --owner " + username + " " + db, shell=True)
             time.sleep(1)
-            conn = psycopg2.connect("dbname=" + db + " user=" + username)
+            conn = psycopg2.connect("dbname=" + db + " user=" + username + " host=" + host + " port=" + port)
             cursor = conn.cursor()
             logger.warning('Database created and opened succesfully: %s' % db, extra=d)
         except Exception as err:
