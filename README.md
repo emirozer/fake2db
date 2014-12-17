@@ -14,7 +14,17 @@ The installation through pypi also retrieves 'requirements'.
 Which are : *fake-factory, pymongo, psycopg2*
 > pip install fake2db
 
-###### non-PYPI included req
+###### non-PYPI included REQUIREMENT
+
+For psycopg2 to install you need *pg_config* in your system.
+
+On Mac, the solution is to install *postgresql*:
+> brew install postgresql
+
+On CentOS, the solution is to install *postgresql-devel*:
+> sudo yum install postgresql-devel
+
+###### Optional - if you are going to use mysql
 
 mysql connector is needed for mysql db generation:
 > http://dev.mysql.com/downloads/connector/python/
