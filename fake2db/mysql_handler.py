@@ -24,15 +24,15 @@ except ImportError:
 class Fake2dbMySqlHandler():
     faker = Factory.create()
 
-    def fake2db_mysql_initiator(self, number_of_rows, name=None):
+    def fake2db_mysql_initiator(self, host, port, number_of_rows, name=None):
         '''Main handler for the operation
         '''
         rows = number_of_rows
         
         if name:
-            cursor, conn = self.database_caller_creator(name)
+            cursor, conn = self.database_caller_creator(host, port, name)
         else:
-            cursor, conn = self.database_caller_creator()
+            cursor, conn = self.database_caller_creator(host, port)
         
         tables = self.mysql_table_creator()
         keys = tables.keys()
@@ -55,7 +55,7 @@ class Fake2dbMySqlHandler():
         cursor.close()
         conn.close()
 
-    def database_caller_creator(self, name=None):
+    def database_caller_creator(self, host, port, name=None):
         '''creates a mysql db
         returns the related connection object
         which will be later used to spawn the cursor
@@ -69,7 +69,7 @@ class Fake2dbMySqlHandler():
             else:
                 db = 'mysql_' + str_generator(self)
                 
-            conn = mysql.connector.connect(user='root', host='localhost')
+            conn = mysql.connector.connect(user='root', host=host, port=port)
             cursor = conn.cursor()
             cursor.execute('CREATE DATABASE IF NOT EXISTS ' + db)
             cursor.execute('USE ' + db)
