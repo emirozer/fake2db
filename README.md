@@ -3,16 +3,22 @@
 This is a WIP
 ------
 ***
+
+
 ##### About
 
 Generate fake but valid data filled databases for test purposes using most popular patterns(AFAIK).
 Current support is *sqlite, mysql, postgresql, mongodb*.
+
+
 
 ##### Installation
 
 The installation through pypi also retrieves 'requirements'.
 Which are : *fake-factory, pymongo, psycopg2*
 > pip install fake2db
+
+
 
 ###### non-PYPI included REQUIREMENT
 
@@ -24,10 +30,14 @@ On Mac, the solution is to install *postgresql*:
 On CentOS, the solution is to install *postgresql-devel*:
 > sudo yum install postgresql-devel
 
+
+
 ###### Optional - if you are going to use mysql
 
 mysql connector is needed for mysql db generation:
 > http://dev.mysql.com/downloads/connector/python/
+
+
 
 
 ##### Usage
@@ -40,8 +50,12 @@ It is as follows, at this point in time, fake2db accepts rows and db argument.
 > fake2db --rows 200 --db sqlite
 > fake2db --rows 1500 --db postgresql --name test_database_postgre
 
+
+
 ##### Sample output - sqlite
 ![Screenshot](https://raw.github.com/emirozer/fake2db/master/docs/fake2db_example_sqlite.png)
+
+
 
 
 #### TODO
