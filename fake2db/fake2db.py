@@ -111,7 +111,7 @@ def main():
             elif args.db == 'postgresql':
                 _postgresql_process_checkpoint()
                 host = args.host or "localhost"
-                port = args.port or "5432"
+                port = args.port or 5432
                 if args.name:
                     fake_postgresql_handler.fake2db_postgresql_initiator(host, port, int(args.rows), str(args.name))
                 else:
@@ -119,10 +119,12 @@ def main():
                     
             elif args.db == 'mongodb':
                 _mongodb_process_checkpoint()
+                host = args.host or "localhost"
+                port = args.port or 27017
                 if args.name:
-                    fake_mongodb_handler.fake2db_mongodb_initiator(int(args.rows), str(args.name))
+                    fake_mongodb_handler.fake2db_mongodb_initiator(host, int(port), int(args.rows), str(args.name))
                 else:
-                    fake_mongodb_handler.fake2db_mongodb_initiator(int(args.rows))
+                    fake_mongodb_handler.fake2db_mongodb_initiator(host, int(port), int(args.rows))
                     
             else:
                 logger.error('Wrong arg for db parameter. Valid ones : sqlite - mysql - postgresql - mongodb',
