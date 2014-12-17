@@ -74,7 +74,7 @@ class Fake2dbPostgresqlHandler():
         '''creates and fills the table with simple regis. information
         '''
 
-        cursor.execute("CREATE TABLE simple_registration (id serial PRIMARY KEY, email varchar, password varchar);")
+        cursor.execute("CREATE TABLE simple_registration (id serial PRIMARY KEY, email varchar(300), password varchar(300));")
         conn.commit()
 
         try:
@@ -96,8 +96,8 @@ class Fake2dbPostgresqlHandler():
 
         cursor.execute(
             "CREATE TABLE detailed_registration "
-            "(id serial PRIMARY KEY, email varchar, password varchar, "
-            "lastname varchar, name varchar, adress varchar, phone varchar);")
+            "(id serial PRIMARY KEY, email varchar(300), password varchar(300), "
+            "lastname varchar(300), name varchar(300), adress varchar(300), phone varchar(300));")
         conn.commit()
         try:
 
@@ -119,7 +119,7 @@ class Fake2dbPostgresqlHandler():
         '''
 
         cursor.execute(
-            "CREATE TABLE user_agent (id serial PRIMARY KEY, ip varchar, countrycode varchar, useragent varchar);")
+            "CREATE TABLE user_agent (id serial PRIMARY KEY, ip varchar(300), countrycode varchar(300), useragent varchar(300));")
         try:
 
             for i in range(0, number_of_rows):
@@ -140,7 +140,7 @@ class Fake2dbPostgresqlHandler():
 
         cursor.execute(
             "CREATE TABLE company (id serial PRIMARY KEY, "
-            "name varchar, sdate date, email varchar, domain varchar, city varchar);")
+            "name varchar(300), sdate date, email varchar(300), domain varchar(300), city varchar(300));")
         conn.commit()
         try:
             for i in range(0, number_of_rows):
@@ -161,9 +161,9 @@ class Fake2dbPostgresqlHandler():
 
         cursor.execute(
             "CREATE TABLE customer (id serial PRIMARY KEY, "
-            "name varchar, lastname varchar, address varchar, country varchar, "
-            "city varchar, registry_date varchar, birthdate varchar, email varchar, "
-            "phone_number varchar, locale varchar);")
+            "name varchar(300), lastname varchar(300), address varchar(300), country varchar(300), "
+            "city varchar(300), registry_date varchar(300), birthdate varchar(300), email varchar(300), "
+            "phone_number varchar(300), locale varchar(300));")
         conn.commit()
         try:
             for i in range(0, number_of_rows):
