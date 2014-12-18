@@ -38,14 +38,24 @@ mysql connector is needed for mysql db generation:
 ##### Usage
 
 It is as follows, at this point in time, fake2db accepts rows and db argument.
+
 *--rows* argument is pretty clear...
+
 *--db* argument takes 4 possible options : sqlite, mysql, postgresql, mongodb
+
 *--name* argument is OPTIONAL. When it is absent fake2db will name db's randomly.
+
+*--host* argument is OPTIONAL. Hostname to use for database connection. Not used for sqlite.
+
+*--port* argument is OPTIONAL. Port to use for database connection. Not used for sqlite.
 
 > fake2db --rows 200 --db sqlite
 <br>
 > fake2db --rows 1500 --db postgresql --name test_database_postgre
 
+In addition to the databases supported in the db argument, you can also run fake2db with FoundationDB SQL Layer. Once SQL Layer is installed, simply use the postgresql generator and specify the SQL Layer port. For example:
+
+> fake2db --rows --db postgresql --port 15432
 
 <br>
 ##### Sample output - sqlite
