@@ -19,7 +19,7 @@ def fake2db_logger():
     return logger, extra_information
 
 def str_generator(self):
-    '''generates uppercase 6 chars
+    '''generates uppercase 8 chars
     '''
     return ''.join(random.choice(string.ascii_uppercase) for i in range(8))
 
