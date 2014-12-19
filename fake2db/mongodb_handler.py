@@ -23,15 +23,15 @@ except ImportError:
 class Fake2dbMongodbHandler():
     faker = Factory.create()
 
-    def fake2db_mongodb_initiator(self, number_of_rows, name=None):
+    def fake2db_mongodb_initiator(self, host, port, number_of_rows, name=None):
         '''Main handler for the operation
         '''
         rows = number_of_rows
         
         if name:
-            db = self.database_caller_creator(name)
+            db = self.database_caller_creator(host, port, name)
         else:
-            db = self.database_caller_creator()
+            db = self.database_caller_creator(host, port)
 
         self.data_filler_simple_registration(rows, db)
         self.data_filler_detailed_registration(rows, db)
@@ -40,13 +40,13 @@ class Fake2dbMongodbHandler():
         self.data_filler_customer(rows, db)
         
         
-    def database_caller_creator(self, name=None):
+    def database_caller_creator(self, host, port, name=None):
         '''creates a mongodb database
         returns the related connection object
         which will be later used to spawn the cursor
         '''
                 
-        client = pymongo.MongoClient()
+        client = pymongo.MongoClient(host, port)
         
         if name:
             db = client[name]

@@ -27,15 +27,15 @@ except ImportError:
 class Fake2dbPostgresqlHandler():
     faker = Factory.create()
 
-    def fake2db_postgresql_initiator(self, number_of_rows, name=None):
+    def fake2db_postgresql_initiator(self, host, port, number_of_rows, name=None):
         '''Main handler for the operation
         '''
         rows = number_of_rows
         
         if name:
-            cursor, conn = self.database_caller_creator(name)
+            cursor, conn = self.database_caller_creator(host, port, name)
         else:
-            cursor, conn = self.database_caller_creator()
+            cursor, conn = self.database_caller_creator(host, port)
         
         self.data_filler_simple_registration(rows, cursor, conn)
         self.data_filler_detailed_registration(rows, cursor, conn)
@@ -45,7 +45,7 @@ class Fake2dbPostgresqlHandler():
         cursor.close()
         conn.close()
 
-    def database_caller_creator(self, name=None):
+    def database_caller_creator(self, host, port, name=None):
         '''creates a postgresql db
         returns the related connection object
         which will be later used to spawn the cursor
@@ -62,7 +62,7 @@ class Fake2dbPostgresqlHandler():
                 
             subprocess.Popen("createdb --no-password --owner " + username + " " + db, shell=True)
             time.sleep(1)
-            conn = psycopg2.connect("dbname=" + db + " user=" + username)
+            conn = psycopg2.connect("dbname=" + db + " user=" + username + " host=" + host + " port=" + port)
             cursor = conn.cursor()
             logger.warning('Database created and opened succesfully: %s' % db, extra=d)
         except Exception as err:
@@ -74,7 +74,7 @@ class Fake2dbPostgresqlHandler():
         '''creates and fills the table with simple regis. information
         '''
 
-        cursor.execute("CREATE TABLE simple_registration (id serial PRIMARY KEY, email varchar, password varchar);")
+        cursor.execute("CREATE TABLE simple_registration (id serial PRIMARY KEY, email varchar(300), password varchar(300));")
         conn.commit()
 
         try:
@@ -96,8 +96,8 @@ class Fake2dbPostgresqlHandler():
 
         cursor.execute(
             "CREATE TABLE detailed_registration "
-            "(id serial PRIMARY KEY, email varchar, password varchar, "
-            "lastname varchar, name varchar, adress varchar, phone varchar);")
+            "(id serial PRIMARY KEY, email varchar(300), password varchar(300), "
+            "lastname varchar(300), name varchar(300), adress varchar(300), phone varchar(300));")
         conn.commit()
         try:
 
@@ -119,7 +119,7 @@ class Fake2dbPostgresqlHandler():
         '''
 
         cursor.execute(
-            "CREATE TABLE user_agent (id serial PRIMARY KEY, ip varchar, countrycode varchar, useragent varchar);")
+            "CREATE TABLE user_agent (id serial PRIMARY KEY, ip varchar(300), countrycode varchar(300), useragent varchar(300));")
         try:
 
             for i in range(0, number_of_rows):
@@ -140,7 +140,7 @@ class Fake2dbPostgresqlHandler():
 
         cursor.execute(
             "CREATE TABLE company (id serial PRIMARY KEY, "
-            "name varchar, sdate date, email varchar, domain varchar, city varchar);")
+            "name varchar(300), sdate date, email varchar(300), domain varchar(300), city varchar(300));")
         conn.commit()
         try:
             for i in range(0, number_of_rows):
@@ -161,9 +161,9 @@ class Fake2dbPostgresqlHandler():
 
         cursor.execute(
             "CREATE TABLE customer (id serial PRIMARY KEY, "
-            "name varchar, lastname varchar, address varchar, country varchar, "
-            "city varchar, registry_date varchar, birthdate varchar, email varchar, "
-            "phone_number varchar, locale varchar);")
+            "name varchar(300), lastname varchar(300), address varchar(300), country varchar(300), "
+            "city varchar(300), registry_date varchar(300), birthdate varchar(300), email varchar(300), "
+            "phone_number varchar(300), locale varchar(300));")
         conn.commit()
         try:
             for i in range(0, number_of_rows):
