@@ -6,10 +6,6 @@ import logging
 import subprocess
 import time
 
-from sqlite_handler import Fake2dbSqliteHandler
-from mysql_handler import Fake2dbMySqlHandler
-from postgresql_handler import Fake2dbPostgresqlHandler
-from mongodb_handler import Fake2dbMongodbHandler
 from helpers import fake2db_logger
 
 logger, extra_information = fake2db_logger()
@@ -64,15 +60,6 @@ def _mongodb_process_checkpoint():
         time.sleep(3)
 
 
-try:
-    fake_sqlite_handler = Fake2dbSqliteHandler()
-    fake_mysql_handler = Fake2dbMySqlHandler()
-    fake_postgresql_handler = Fake2dbPostgresqlHandler()
-    fake_mongodb_handler = Fake2dbMongodbHandler()
-except:
-    raise InstantiateDBHandlerException
-
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--rows", help="Amount of rows desired per table")
@@ -94,12 +81,22 @@ def main():
             logger.info('DB argument : %s', args.db, extra=extra_information)
 
             if args.db == 'sqlite':
+                try:
+                    from sqlite_handler import Fake2dbSqliteHandler
+                    fake_sqlite_handler = Fake2dbSqliteHandler()
+                except:
+                    raise InstantiateDBHandlerException
                 if args.name:
                     fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows), str(args.name))
                 else:
                     fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows))
                     
             elif args.db == 'mysql':
+                try:
+                    from mysql_handler import Fake2dbMySqlHandler
+                    fake_mysql_handler = Fake2dbMySqlHandler()
+                except:
+                    raise InstantiateDBHandlerException
                 _mysqld_process_checkpoint()
                 host = args.host or "127.0.0.1"
                 port = args.port or "3306"
@@ -109,6 +106,11 @@ def main():
                     fake_mysql_handler.fake2db_mysql_initiator(host, port, int(args.rows))
                     
             elif args.db == 'postgresql':
+                try:
+                    from postgresql_handler import Fake2dbPostgresqlHandler
+                    fake_postgresql_handler = Fake2dbPostgresqlHandler()
+                except:
+                    raise InstantiateDBHandlerException
                 _postgresql_process_checkpoint()
                 host = args.host or "localhost"
                 port = args.port or "5432"
@@ -118,6 +120,11 @@ def main():
                     fake_postgresql_handler.fake2db_postgresql_initiator(host, port, int(args.rows))
                     
             elif args.db == 'mongodb':
+                try:
+                    from mongodb_handler import Fake2dbMongodbHandler
+                    fake_mongodb_handler = Fake2dbMongodbHandler()
+                except:
+                    raise InstantiateDBHandlerException
                 _mongodb_process_checkpoint()
                 host = args.host or "localhost"
                 port = args.port or 27017
