@@ -11,7 +11,6 @@ except ImportError:
     logger.error(
         'MySql Connector/Python not found on sys, '
         'you need to get it : http://dev.mysql.com/downloads/connector/python/', extra=extra_information)
-    sys.exit(0)
 
 try:
     from faker import Factory

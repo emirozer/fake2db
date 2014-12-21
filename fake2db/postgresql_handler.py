@@ -21,7 +21,6 @@ except ImportError:
     logger.error('psycopg2 package not found onto python packages, please run : \
     pip install -r requirements.txt  \
     on the root of the project')
-    sys.exit(0)
 
 
 class Fake2dbPostgresqlHandler():
