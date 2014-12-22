@@ -113,7 +113,7 @@ class Fake2dbMySqlHandler():
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
 
-        tables['companies'] = (
+        tables['company'] = (
             "CREATE TABLE `user_agent` ("
             "  `id` varchar(30) NOT NULL,"
             "  `name` varchar(15) NOT NULL,"
@@ -205,10 +205,10 @@ class Fake2dbMySqlHandler():
         '''
         try:
             for i in range(0, number_of_rows):
-                companies_payload = ("INSERT INTO companies "
+                companies_payload = ("INSERT INTO company "
                                      "(id, name, sdate, email, domain, city) "
                                      "VALUES (%s, %s, %s, %s, %s, %s)")
-                companies_data = (rnd_id_generator(self), self.faker.name(), self.faker.date(pattern="%d-%m-%Y"),
+                companies_data = (rnd_id_generator(self), self.faker.company(), self.faker.date(pattern="%d-%m-%Y"),
                                   self.faker.company_email(), self.faker.safe_email(), self.faker.city())
                 cursor.execute(companies_payload, companies_data)
                 conn.commit()

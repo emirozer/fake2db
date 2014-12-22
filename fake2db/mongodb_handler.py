@@ -125,7 +125,7 @@ class Fake2dbMongodbHandler():
             
             for i in range(0, number_of_rows):
                 post_comp_reg = {"id": rnd_id_generator(self),
-                                 "name": self.faker.name(),
+                                 "name": self.faker.company(),
                                  "date": self.faker.date(pattern="%d-%m-%Y"),
                                  "email": self.faker.company_email(),
                                  "domain": self.faker.safe_email(),

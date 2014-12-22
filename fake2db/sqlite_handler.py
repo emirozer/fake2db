@@ -127,14 +127,14 @@ class Fake2dbSqliteHandler():
         cursor = conn.cursor()
 
         cursor.execute('''
-        CREATE TABLE companies(id TEXT PRIMARY KEY, 
+        CREATE TABLE company(id TEXT PRIMARY KEY, 
         name TEXT, sdate TEXT, email TEXT, domain TEXT, city TEXT)
         ''')
         conn.commit()
         try:
             for i in range(0, number_of_rows):
-                cursor.execute('insert into companies values (?,?,?,?,?,?)',
-                               (rnd_id_generator(self), self.faker.name(), self.faker.date(pattern="%d-%m-%Y"),
+                cursor.execute('insert into company values (?,?,?,?,?,?)',
+                               (rnd_id_generator(self), self.faker.company(), self.faker.date(pattern="%d-%m-%Y"),
                                 self.faker.company_email(), self.faker.safe_email(), self.faker.city()))
             conn.commit()
             logger.warning('companies Commits are successful after write job!', extra=d)
