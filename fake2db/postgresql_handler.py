@@ -139,15 +139,15 @@ class Fake2dbPostgresqlHandler():
 
         cursor.execute(
             "CREATE TABLE company (id serial PRIMARY KEY, "
-            "name varchar(300), sdate date, email varchar(300), domain varchar(300), city varchar(300));")
+            "name varchar(300), sdate varchar(300), email varchar(300), domain varchar(300), city varchar(300));")
         conn.commit()
         try:
             for i in range(0, number_of_rows):
-                companies_payload = ("INSERT INTO companies "
-                                     "(name, sdate, email, domain, city) "
-                                     "VALUES (%s, %s, %s, %s, %s)",
-                                     (self.faker.name(), self.faker.date(pattern="%d-%m-%Y"),
-                                      self.faker.company_email(), self.faker.safe_email(), self.faker.city()))
+                cursor.execute("INSERT INTO company "
+                               "(name, sdate, email, domain, city) "
+                               "VALUES (%s, %s, %s, %s, %s)",
+                               (self.faker.company(), self.faker.date(pattern="%d-%m-%Y"),
+                                self.faker.company_email(), self.faker.safe_email(), self.faker.city()))
                 conn.commit()
 
             logger.warning('companies Commits are successful after write job!', extra=d)
