@@ -74,68 +74,67 @@ def main():
     if not args.rows or not args.db:
         logger.error('Please use with --help argument for usage information!', extra=extra_information)
 
-    if args.rows:
-        if args.db:
-            logger.info('arguments found(rows and db), starting faking!!', extra=extra_information)
-            logger.warning('Rows argument : %s', args.rows, extra=extra_information)
-            logger.info('DB argument : %s', args.db, extra=extra_information)
+    else:
+        logger.info('arguments found(rows and db), starting faking!!', extra=extra_information)
+        logger.warning('Rows argument : %s', args.rows, extra=extra_information)
+        logger.info('DB argument : %s', args.db, extra=extra_information)
 
-            if args.db == 'sqlite':
-                try:
-                    from sqlite_handler import Fake2dbSqliteHandler
-                    fake_sqlite_handler = Fake2dbSqliteHandler()
-                except:
-                    raise InstantiateDBHandlerException
-                if args.name:
-                    fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows), str(args.name))
-                else:
-                    fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows))
-                    
-            elif args.db == 'mysql':
-                try:
-                    from mysql_handler import Fake2dbMySqlHandler
-                    fake_mysql_handler = Fake2dbMySqlHandler()
-                except:
-                    raise InstantiateDBHandlerException
-                _mysqld_process_checkpoint()
-                host = args.host or "127.0.0.1"
-                port = args.port or "3306"
-                if args.name:
-                    fake_mysql_handler.fake2db_mysql_initiator(host, port, int(args.rows), str(args.name))
-                else:
-                    fake_mysql_handler.fake2db_mysql_initiator(host, port, int(args.rows))
-                    
-            elif args.db == 'postgresql':
-                try:
-                    from postgresql_handler import Fake2dbPostgresqlHandler
-                    fake_postgresql_handler = Fake2dbPostgresqlHandler()
-                except:
-                    raise InstantiateDBHandlerException
-                _postgresql_process_checkpoint()
-                host = args.host or "localhost"
-                port = args.port or "5432"
-                if args.name:
-                    fake_postgresql_handler.fake2db_postgresql_initiator(host, port, int(args.rows), str(args.name))
-                else:
-                    fake_postgresql_handler.fake2db_postgresql_initiator(host, port, int(args.rows))
-                    
-            elif args.db == 'mongodb':
-                try:
-                    from mongodb_handler import Fake2dbMongodbHandler
-                    fake_mongodb_handler = Fake2dbMongodbHandler()
-                except:
-                    raise InstantiateDBHandlerException
-                _mongodb_process_checkpoint()
-                host = args.host or "localhost"
-                port = args.port or 27017
-                if args.name:
-                    fake_mongodb_handler.fake2db_mongodb_initiator(host, int(port), int(args.rows), str(args.name))
-                else:
-                    fake_mongodb_handler.fake2db_mongodb_initiator(host, int(port), int(args.rows))
-                    
+        if args.db == 'sqlite':
+            try:
+                from sqlite_handler import Fake2dbSqliteHandler
+                fake_sqlite_handler = Fake2dbSqliteHandler()
+            except:
+                raise InstantiateDBHandlerException
+            if args.name:
+                fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows), str(args.name))
             else:
-                logger.error('Wrong arg for db parameter. Valid ones : sqlite - mysql - postgresql - mongodb',
-                             extra=extra_information)
+                fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows))
+                
+        elif args.db == 'mysql':
+            try:
+                from mysql_handler import Fake2dbMySqlHandler
+                fake_mysql_handler = Fake2dbMySqlHandler()
+            except:
+                raise InstantiateDBHandlerException
+            _mysqld_process_checkpoint()
+            host = args.host or "127.0.0.1"
+            port = args.port or "3306"
+            if args.name:
+                fake_mysql_handler.fake2db_mysql_initiator(host, port, int(args.rows), str(args.name))
+            else:
+                fake_mysql_handler.fake2db_mysql_initiator(host, port, int(args.rows))
+                
+        elif args.db == 'postgresql':
+            try:
+                from postgresql_handler import Fake2dbPostgresqlHandler
+                fake_postgresql_handler = Fake2dbPostgresqlHandler()
+            except:
+                raise InstantiateDBHandlerException
+            _postgresql_process_checkpoint()
+            host = args.host or "localhost"
+            port = args.port or "5432"
+            if args.name:
+                fake_postgresql_handler.fake2db_postgresql_initiator(host, port, int(args.rows), str(args.name))
+            else:
+                fake_postgresql_handler.fake2db_postgresql_initiator(host, port, int(args.rows))
+                
+        elif args.db == 'mongodb':
+            try:
+                from mongodb_handler import Fake2dbMongodbHandler
+                fake_mongodb_handler = Fake2dbMongodbHandler()
+            except:
+                raise InstantiateDBHandlerException
+            _mongodb_process_checkpoint()
+            host = args.host or "localhost"
+            port = args.port or 27017
+            if args.name:
+                fake_mongodb_handler.fake2db_mongodb_initiator(host, int(port), int(args.rows), str(args.name))
+            else:
+                fake_mongodb_handler.fake2db_mongodb_initiator(host, int(port), int(args.rows))
+                
+        else:
+            logger.error('Wrong arg for db parameter. Valid ones : sqlite - mysql - postgresql - mongodb',
+                         extra=extra_information)
 
 
 if __name__ == '__main__':
