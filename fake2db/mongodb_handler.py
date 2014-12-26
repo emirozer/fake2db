@@ -26,7 +26,7 @@ class Fake2dbMongodbHandler():
         '''Main handler for the operation
         '''
         rows = number_of_rows
-        
+
         if name:
             db = self.database_caller_creator(host, port, name)
         else:
@@ -37,50 +37,50 @@ class Fake2dbMongodbHandler():
         self.data_filler_company(rows, db)
         self.data_filler_user_agent(rows, db)
         self.data_filler_customer(rows, db)
-        
-        
+
+
     def database_caller_creator(self, host, port, name=None):
         '''creates a mongodb database
         returns the related connection object
         which will be later used to spawn the cursor
         '''
-                
+
         client = pymongo.MongoClient(host, port)
-        
+
         if name:
             db = client[name]
         else:
             db = client['mongodb_' + str_generator(self)]
-        
+
         return db
-    
+
     def data_filler_simple_registration(self, number_of_rows, db):
         '''creates and fills the table with simple regis. information
         '''
-                
+
         try:
             simple_registration = db.simple_registration
-            
+            data_list = list()
             for i in range(0, number_of_rows):
                 post_simple_reg = {"id": rnd_id_generator(self),
                                    "email": self.faker.safe_email(),
                                    "password": self.faker.md5(raw_output=False)
                                    }
-                
-                simple_registration.insert(post_simple_reg)
-                
+                data_list.append(post_simple_reg)
+
+            simple_registration.insert(data_list)
             logger.warning('simple_registration Commits are successful after write job!', extra=d)
-            
+
         except Exception as e:
             logger.error(e, extra=d)
 
     def data_filler_detailed_registration(self, number_of_rows, db):
         '''creates and fills the table with detailed regis. information
         '''
-                
+
         try:
             detailed_registration = db.detailed_registration
-            
+            data_list = list()
             for i in range(0, number_of_rows):
                 post_det_reg = {"id": rnd_id_generator(self),
                                "email": self.faker.safe_email(),
@@ -90,10 +90,11 @@ class Fake2dbMongodbHandler():
                                 "adress": self.faker.address(),
                                 "phone": self.faker.phone_number()
                             }
-                detailed_registration.insert(post_det_reg)
-                
+                data_list.append(post_det_reg)
+            detailed_registration.insert(data_list)
+
             logger.warning('detailed_registration Commits are successful after write job!', extra=d)
-            
+
         except Exception as e:
             logger.error(e, extra=d)
 
@@ -103,15 +104,16 @@ class Fake2dbMongodbHandler():
 
         try:
             user_agent = db.user_agent
-            
+            data_list = list()
             for i in range(0, number_of_rows):
                 post_uo_reg={"id": rnd_id_generator(self),
                              "ip": self.faker.ipv4(),
                              "countrycode": self.faker.country_code(),
                             "useragent": self.faker.user_agent()
                 }
-                user_agent.insert(post_uo_reg)
-                
+                data_list.append(post_uo_reg)
+            user_agent.insert(data_list)
+
             logger.warning('user_agent Commits are successful after write job!', extra=d)
         except Exception as e:
             logger.error(e, extra=d)
@@ -122,7 +124,7 @@ class Fake2dbMongodbHandler():
 
         try:
             company = db.company
-            
+            data_list = list()
             for i in range(0, number_of_rows):
                 post_comp_reg = {"id": rnd_id_generator(self),
                                  "name": self.faker.company(),
@@ -131,18 +133,20 @@ class Fake2dbMongodbHandler():
                                  "domain": self.faker.safe_email(),
                                  "city": self.faker.city()
                 }
-                company.insert(post_comp_reg)
+                data_list.append(post_comp_reg)
+            company.insert(data_list)
             logger.warning('companies Commits are successful after write job!', extra=d)
         except Exception as e:
             logger.error(e, extra=d)
 
-        
+
     def data_filler_customer(self, number_of_rows, db):
         '''creates and fills the table with customer data
         '''
-        
+
         try:
             customer = db.customer
+            data_list = list()
             for i in range(0, number_of_rows):
                 post_cus_reg = {"id": rnd_id_generator(self),
                                 "name": self.faker.name(),
@@ -156,9 +160,9 @@ class Fake2dbMongodbHandler():
                                 "phone_number": self.faker.phone_number(),
                                 "locale": self.faker.locale()
                 }
-                
-                customer.insert(post_cus_reg)
-                
+                data_list.append(post_cus_reg)
+            customer.insert(data_list)
+
             logger.warning('customer Commits are successful after write job!', extra=d)
         except Exception as e:
             logger.error(e, extra=d)
