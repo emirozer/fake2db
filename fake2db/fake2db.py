@@ -1,8 +1,4 @@
-import sys
 import argparse
-import socket
-import getpass
-import logging
 import subprocess
 import time
 
@@ -21,7 +17,7 @@ def _postgresql_process_checkpoint():
     if not fires up one
     '''
     try:
-        postgresql_check = subprocess.check_output("pgrep postgres", shell=True)
+        subprocess.check_output("pgrep postgres", shell=True)
     except:
         logger.warning('Your postgresql server is offline, fake2db will try to launch it now!', extra=extra_information)
         # close_fds = True argument is the flag that is responsible
@@ -36,7 +32,7 @@ def _mysqld_process_checkpoint():
     if not fires up one
     '''
     try:
-        mysqld_check = subprocess.check_output("pgrep mysqld", shell=True)
+        subprocess.check_output("pgrep mysqld", shell=True)
     except:
         logger.warning('Your mysql server is offline, fake2db will try to launch it now!', extra=extra_information)
         # close_fds = True argument is the flag that is responsible
@@ -51,7 +47,7 @@ def _mongodb_process_checkpoint():
     if not fires up one
     '''
     try:
-        mongodb_check = subprocess.check_output("pgrep mongod", shell=True)
+        subprocess.check_output("pgrep mongod", shell=True)
     except:
         logger.warning('Your mongodb server is offline, fake2db will try to launch it now!', extra=extra_information)
         # close_fds = True argument is the flag that is responsible
@@ -68,7 +64,7 @@ def main():
     parser.add_argument("--name", help="OPTIONAL : Give a name to the db to be generated. ")
     parser.add_argument("--host", help="OPTIONAL : Hostname of db. ")
     parser.add_argument("--port", help="OPTIONAL : Port of db. ")
-    
+
     args = parser.parse_args()
 
     if not args.rows or not args.db:
@@ -89,7 +85,7 @@ def main():
                 fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows), str(args.name))
             else:
                 fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows))
-                
+
         elif args.db == 'mysql':
             try:
                 from mysql_handler import Fake2dbMySqlHandler
@@ -103,7 +99,7 @@ def main():
                 fake_mysql_handler.fake2db_mysql_initiator(host, port, int(args.rows), str(args.name))
             else:
                 fake_mysql_handler.fake2db_mysql_initiator(host, port, int(args.rows))
-                
+
         elif args.db == 'postgresql':
             try:
                 from postgresql_handler import Fake2dbPostgresqlHandler
@@ -117,7 +113,7 @@ def main():
                 fake_postgresql_handler.fake2db_postgresql_initiator(host, port, int(args.rows), str(args.name))
             else:
                 fake_postgresql_handler.fake2db_postgresql_initiator(host, port, int(args.rows))
-                
+
         elif args.db == 'mongodb':
             try:
                 from mongodb_handler import Fake2dbMongodbHandler
@@ -131,7 +127,7 @@ def main():
                 fake_mongodb_handler.fake2db_mongodb_initiator(host, int(port), int(args.rows), str(args.name))
             else:
                 fake_mongodb_handler.fake2db_mongodb_initiator(host, int(port), int(args.rows))
-                
+
         else:
             logger.error('Wrong arg for db parameter. Valid ones : sqlite - mysql - postgresql - mongodb',
                          extra=extra_information)

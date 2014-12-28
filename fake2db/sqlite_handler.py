@@ -24,12 +24,12 @@ class Fake2dbSqliteHandler():
         '''Main handler for the operation
         '''
         rows = number_of_rows
-        
+
         if name:
             conn = self.database_caller_creator(name)
         else:
             conn = self.database_caller_creator()
-            
+
         self.data_filler_simple_registration(rows, conn)
         self.data_filler_detailed_registration(rows, conn)
         self.data_filler_company(rows, conn)
@@ -48,7 +48,7 @@ class Fake2dbSqliteHandler():
                 database = name + '.db'
             else:
                 database = 'sqlite_' + str_generator(self) + '.db'
-                
+
             conn = sqlite3.connect(database)
             logger.warning('Database created and opened succesfully: %s' % database, extra=d)
         except:
@@ -63,7 +63,7 @@ class Fake2dbSqliteHandler():
         cursor = conn.cursor()
 
         cursor.execute('''
-        CREATE TABLE simple_registration(id TEXT PRIMARY KEY, 
+        CREATE TABLE simple_registration(id TEXT PRIMARY KEY,
         email TEXT , password TEXT)
         ''')
         conn.commit()
@@ -82,7 +82,7 @@ class Fake2dbSqliteHandler():
         cursor = conn.cursor()
 
         cursor.execute('''
-        CREATE TABLE detailed_registration(id TEXT PRIMARY KEY, 
+        CREATE TABLE detailed_registration(id TEXT PRIMARY KEY,
         email TEXT, password TEXT, lastname TEXT,
         name TEXT, adress TEXT, phone TEXT)
         ''')
@@ -106,7 +106,7 @@ class Fake2dbSqliteHandler():
         cursor = conn.cursor()
 
         cursor.execute('''
-        CREATE TABLE user_agent(id TEXT PRIMARY KEY, 
+        CREATE TABLE user_agent(id TEXT PRIMARY KEY,
         ip TEXT, countrycode TEXT, useragent TEXT)
         ''')
         conn.commit()
@@ -127,7 +127,7 @@ class Fake2dbSqliteHandler():
         cursor = conn.cursor()
 
         cursor.execute('''
-        CREATE TABLE company(id TEXT PRIMARY KEY, 
+        CREATE TABLE company(id TEXT PRIMARY KEY,
         name TEXT, sdate TEXT, email TEXT, domain TEXT, city TEXT)
         ''')
         conn.commit()
@@ -146,7 +146,7 @@ class Fake2dbSqliteHandler():
         '''
         cursor = conn.cursor()
         cursor.execute('''
-        CREATE TABLE customer(id TEXT PRIMARY KEY, 
+        CREATE TABLE customer(id TEXT PRIMARY KEY,
         name TEXT, lastname TEXT, address TEXT, country TEXT, city TEXT, registry_date TEXT, birthdate TEXT, email TEXT,
          phone_number TEXT, locale TEXT)
         ''')

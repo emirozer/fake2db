@@ -38,7 +38,6 @@ class Fake2dbMongodbHandler():
         self.data_filler_user_agent(rows, db)
         self.data_filler_customer(rows, db)
 
-
     def database_caller_creator(self, host, port, name=None):
         '''creates a mongodb database
         returns the related connection object
@@ -83,13 +82,12 @@ class Fake2dbMongodbHandler():
             data_list = list()
             for i in range(0, number_of_rows):
                 post_det_reg = {"id": rnd_id_generator(self),
-                               "email": self.faker.safe_email(),
+                                "email": self.faker.safe_email(),
                                 "password": self.faker.md5(raw_output=False),
                                 "lastname": self.faker.last_name(),
                                 "name": self.faker.name(),
                                 "adress": self.faker.address(),
-                                "phone": self.faker.phone_number()
-                            }
+                                "phone": self.faker.phone_number()}
                 data_list.append(post_det_reg)
             detailed_registration.insert(data_list)
 
@@ -106,11 +104,10 @@ class Fake2dbMongodbHandler():
             user_agent = db.user_agent
             data_list = list()
             for i in range(0, number_of_rows):
-                post_uo_reg={"id": rnd_id_generator(self),
-                             "ip": self.faker.ipv4(),
-                             "countrycode": self.faker.country_code(),
-                            "useragent": self.faker.user_agent()
-                }
+                post_uo_reg = {"id": rnd_id_generator(self),
+                               "ip": self.faker.ipv4(),
+                               "countrycode": self.faker.country_code(),
+                               "useragent": self.faker.user_agent()}
                 data_list.append(post_uo_reg)
             user_agent.insert(data_list)
 
@@ -131,14 +128,12 @@ class Fake2dbMongodbHandler():
                                  "date": self.faker.date(pattern="%d-%m-%Y"),
                                  "email": self.faker.company_email(),
                                  "domain": self.faker.safe_email(),
-                                 "city": self.faker.city()
-                }
+                                 "city": self.faker.city()}
                 data_list.append(post_comp_reg)
             company.insert(data_list)
             logger.warning('companies Commits are successful after write job!', extra=d)
         except Exception as e:
             logger.error(e, extra=d)
-
 
     def data_filler_customer(self, number_of_rows, db):
         '''creates and fills the table with customer data
@@ -158,8 +153,7 @@ class Fake2dbMongodbHandler():
                                 "birthdate": self.faker.date(pattern="%d-%m-%Y"),
                                 "email": self.faker.safe_email(),
                                 "phone_number": self.faker.phone_number(),
-                                "locale": self.faker.locale()
-                }
+                                "locale": self.faker.locale()}
                 data_list.append(post_cus_reg)
             customer.insert(data_list)
 

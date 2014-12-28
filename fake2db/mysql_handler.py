@@ -1,5 +1,3 @@
-import sys
-
 from helpers import fake2db_logger, str_generator, rnd_id_generator
 
 
@@ -27,15 +25,15 @@ class Fake2dbMySqlHandler():
         '''Main handler for the operation
         '''
         rows = number_of_rows
-        
+
         if name:
             cursor, conn = self.database_caller_creator(host, port, name)
         else:
             cursor, conn = self.database_caller_creator(host, port)
-        
+
         tables = self.mysql_table_creator()
         keys = tables.keys()
-        
+
         for key in keys:
             try:
                 cursor.execute(tables[key])
@@ -44,7 +42,7 @@ class Fake2dbMySqlHandler():
                 logger.error(err.msg, extra=extra_information)
             else:
                 logger.info("OK", extra=extra_information)
-                
+
         logger.warning('Table creation ops finished', extra=extra_information)
         self.data_filler_simple_registration(rows, cursor, conn)
         self.data_filler_detailed_registration(rows, cursor, conn)
@@ -61,13 +59,13 @@ class Fake2dbMySqlHandler():
         '''
         cursor = None
         conn = None
-        
+
         try:
             if name:
                 db = name
             else:
                 db = 'mysql_' + str_generator(self)
-                
+
             conn = mysql.connector.connect(user='root', host=host, port=port)
             cursor = conn.cursor()
             cursor.execute('CREATE DATABASE IF NOT EXISTS ' + db)
@@ -145,7 +143,7 @@ class Fake2dbMySqlHandler():
     def data_filler_simple_registration(self, number_of_rows, cursor, conn):
         '''creates and fills the table with simple regis. information
         '''
-        
+
         try:
             for i in range(0, number_of_rows):
                 simple_registration_payload = ("INSERT INTO simple_registration "
