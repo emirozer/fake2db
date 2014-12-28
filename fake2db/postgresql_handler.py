@@ -1,4 +1,3 @@
-import sys
 import time
 import getpass
 import subprocess
@@ -30,12 +29,12 @@ class Fake2dbPostgresqlHandler():
         '''Main handler for the operation
         '''
         rows = number_of_rows
-        
+
         if name:
             cursor, conn = self.database_caller_creator(host, port, name)
         else:
             cursor, conn = self.database_caller_creator(host, port)
-        
+
         self.data_filler_simple_registration(rows, cursor, conn)
         self.data_filler_detailed_registration(rows, cursor, conn)
         self.data_filler_company(rows, cursor, conn)
@@ -58,7 +57,7 @@ class Fake2dbPostgresqlHandler():
                 db = name
             else:
                 db = 'postgresql_' + str_generator(self)
-                
+
             subprocess.Popen("createdb --no-password --owner " + username + " " + db, shell=True)
             time.sleep(1)
             conn = psycopg2.connect("dbname=" + db + " user=" + username + " host=" + host + " port=" + port)

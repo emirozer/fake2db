@@ -5,6 +5,7 @@ import string
 import random
 import uuid
 
+
 def fake2db_logger():
     '''creates a logger obj'''
     # Pull the local ip and username for meaningful logging
@@ -18,10 +19,12 @@ def fake2db_logger():
     # --------------------
     return logger, extra_information
 
+
 def str_generator(self):
     '''generates uppercase 8 chars
     '''
     return ''.join(random.choice(string.ascii_uppercase) for i in range(8))
+
 
 def rnd_id_generator(self):
     '''generates a UUID such as :
