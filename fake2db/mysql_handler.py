@@ -1,3 +1,5 @@
+import sys
+
 from helpers import fake2db_logger, str_generator, rnd_id_generator
 
 
@@ -73,7 +75,8 @@ class Fake2dbMySqlHandler():
             logger.warning('Database created and opened succesfully: %s' % db, extra=extra_information)
 
         except mysql.connector.Error as err:
-            logger.error(err.message, extra=extra_information)
+            logger.error(err.msg, extra=extra_information)
+            sys.exit(1)
 
         return cursor, conn
 
