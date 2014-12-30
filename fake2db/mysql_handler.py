@@ -87,57 +87,57 @@ class Fake2dbMySqlHandler():
 
         tables['simple_registration'] = (
             "CREATE TABLE `simple_registration` ("
-            "  `id` varchar(30) NOT NULL,"
-            "  `email` varchar(20) NOT NULL,"
-            "  `password` varchar(20) NOT NULL,"
+            "  `id` varchar(300) NOT NULL,"
+            "  `email` varchar(300) NOT NULL,"
+            "  `password` varchar(300) NOT NULL,"
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
 
         tables['detailed_registration'] = (
-            "CREATE TABLE `simple_registration` ("
-            "  `id` varchar(30) NOT NULL,"
-            "  `email` varchar(20) NOT NULL,"
-            "  `password` varchar(20) NOT NULL,"
-            "  `lastname` varchar(15) NOT NULL,"
-            "  `name` varchar(15) NOT NULL,"
-            "  `adress` varchar(20) NOT NULL,"
-            "  `phone` varchar(20) NOT NULL,"
+            "CREATE TABLE `detailed_registration` ("
+            "  `id` varchar(300) NOT NULL,"
+            "  `email` varchar(300) NOT NULL,"
+            "  `password` varchar(300) NOT NULL,"
+            "  `lastname` varchar(300) NOT NULL,"
+            "  `name` varchar(300) NOT NULL,"
+            "  `address` varchar(300) NOT NULL,"
+            "  `phone` varchar(300) NOT NULL,"
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
 
         tables['user_agent'] = (
             "CREATE TABLE `user_agent` ("
-            "  `id` varchar(30) NOT NULL,"
-            "  `ip` varchar(18) NOT NULL,"
-            "  `countrycode` varchar(10) NOT NULL,"
-            "  `useragent` varchar(100) NOT NULL,"
+            "  `id` varchar(300) NOT NULL,"
+            "  `ip` varchar(300) NOT NULL,"
+            "  `countrycode` varchar(300) NOT NULL,"
+            "  `useragent` varchar(300) NOT NULL,"
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
 
         tables['company'] = (
-            "CREATE TABLE `user_agent` ("
-            "  `id` varchar(30) NOT NULL,"
-            "  `name` varchar(15) NOT NULL,"
+            "CREATE TABLE `company` ("
+            "  `id` varchar(300) NOT NULL,"
+            "  `name` varchar(300) NOT NULL,"
             "  `sdate` date NOT NULL,"
-            "  `email` varchar(20) NOT NULL,"
-            "  `domain` varchar(20) NOT NULL,"
-            "  `city` varchar(15) NOT NULL,"
+            "  `email` varchar(300) NOT NULL,"
+            "  `domain` varchar(300) NOT NULL,"
+            "  `city` varchar(300) NOT NULL,"
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
 
         tables['customer'] = (
-            "CREATE TABLE `simple_registration` ("
-            "  `id` varchar(30) NOT NULL,"
-            "  `name` varchar(15) NOT NULL,"
-            "  `lastname` varchar(15) NOT NULL,"
-            "  `address` varchar(20) NOT NULL,"
-            "  `country` varchar(20) NOT NULL,"
-            "  `city` varchar(20) NOT NULL,"
-            "  `registry_date` varchar(20) NOT NULL,"
-            "  `birthdate` varchar(20) NOT NULL,"
-            "  `email` varchar(20) NOT NULL,"
-            "  `phone_number` varchar(20) NOT NULL,"
-            "  `locale` varchar(20) NOT NULL,"
+            "CREATE TABLE `customer` ("
+            "  `id` varchar(300) NOT NULL,"
+            "  `name` varchar(300) NOT NULL,"
+            "  `lastname` varchar(300) NOT NULL,"
+            "  `address` varchar(300) NOT NULL,"
+            "  `country` varchar(300) NOT NULL,"
+            "  `city` varchar(300) NOT NULL,"
+            "  `registry_date` varchar(300) NOT NULL,"
+            "  `birthdate` varchar(300) NOT NULL,"
+            "  `email` varchar(300) NOT NULL,"
+            "  `phone_number` varchar(300) NOT NULL,"
+            "  `locale` varchar(300) NOT NULL,"
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
 
@@ -170,7 +170,7 @@ class Fake2dbMySqlHandler():
             for i in range(0, number_of_rows):
                 detailed_registration_payload = ("INSERT INTO detailed_registration "
                                                  "(id, email, password, lastname, name,"
-                                                 "adress, phone) "
+                                                 "address, phone) "
                                                  "VALUES (%s, %s, %s, %s, %s, %s, %s)")
                 detailed_registration_data = (
                     rnd_id_generator(self), self.faker.safe_email(), self.faker.md5(raw_output=False),
@@ -209,7 +209,7 @@ class Fake2dbMySqlHandler():
                 companies_payload = ("INSERT INTO company "
                                      "(id, name, sdate, email, domain, city) "
                                      "VALUES (%s, %s, %s, %s, %s, %s)")
-                companies_data = (rnd_id_generator(self), self.faker.company(), self.faker.date(pattern="%d-%m-%Y"),
+                companies_data = (rnd_id_generator(self), self.faker.company(), self.faker.date(pattern="%Y-%m-%d"),
                                   self.faker.company_email(), self.faker.safe_email(), self.faker.city())
                 cursor.execute(companies_payload, companies_data)
                 conn.commit()
@@ -223,7 +223,7 @@ class Fake2dbMySqlHandler():
 
         try:
             for i in range(0, number_of_rows):
-                customer_payload = ("INSERT INTO detailed_registration "
+                customer_payload = ("INSERT INTO customer "
                                     "(id, name, lastname, address, country, city, registry_date, birthdate, email, "
                                     "phone_number, locale)"
                                     "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
