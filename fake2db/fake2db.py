@@ -64,6 +64,7 @@ def main():
     parser.add_argument("--name", help="OPTIONAL : Give a name to the db to be generated. ")
     parser.add_argument("--host", help="OPTIONAL : Hostname of db. ")
     parser.add_argument("--port", help="OPTIONAL : Port of db. ")
+    parser.add_argument("--password", help="OPTIONAL : Password for root. ")
 
     args = parser.parse_args()
 
@@ -96,9 +97,9 @@ def main():
             host = args.host or "127.0.0.1"
             port = args.port or "3306"
             if args.name:
-                fake_mysql_handler.fake2db_mysql_initiator(host, port, int(args.rows), str(args.name))
+                fake_mysql_handler.fake2db_mysql_initiator(host, port, args.password, int(args.rows), str(args.name))
             else:
-                fake_mysql_handler.fake2db_mysql_initiator(host, port, int(args.rows))
+                fake_mysql_handler.fake2db_mysql_initiator(host, port, args.password, int(args.rows))
 
         elif args.db == 'postgresql':
             try:
