@@ -6,3 +6,5 @@ fake2db/*.db
 fake2db/*.db-journal
 fake2db.egg-info
 dist/
+*.swp
+build/

@@ -49,6 +49,8 @@ It is as follows, at this point in time, fake2db accepts rows and db argument.
 
 *--port* argument is OPTIONAL. Port to use for database connection. Not used for sqlite.
 
+*--password* argument is OPTIONAL. Password for root. Only supported for mysql.
+
 > fake2db --rows 200 --db sqlite
 <br>
 > fake2db --rows 1500 --db postgresql --name test_database_postgre
