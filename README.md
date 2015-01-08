@@ -1,7 +1,5 @@
 ![Screenshot](https://raw.github.com/emirozer/fake2db/master/docs/fake2db_logo_screenshot.png)
 ===========
-This is a WIP
-------
 ***
 
 
