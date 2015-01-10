@@ -18,7 +18,7 @@ def _postgresql_process_checkpoint():
     '''
     try:
         subprocess.check_output("pgrep postgres", shell=True)
-    except:
+    except Exception:
         logger.warning('Your postgresql server is offline, fake2db will try to launch it now!', extra=extra_information)
         # close_fds = True argument is the flag that is responsible
         # for Popen to launch the process completely independent
@@ -33,7 +33,7 @@ def _mysqld_process_checkpoint():
     '''
     try:
         subprocess.check_output("pgrep mysqld", shell=True)
-    except:
+    except Exception:
         logger.warning('Your mysql server is offline, fake2db will try to launch it now!', extra=extra_information)
         # close_fds = True argument is the flag that is responsible
         # for Popen to launch the process completely independent
@@ -48,7 +48,7 @@ def _mongodb_process_checkpoint():
     '''
     try:
         subprocess.check_output("pgrep mongod", shell=True)
-    except:
+    except Exception:
         logger.warning('Your mongodb server is offline, fake2db will try to launch it now!', extra=extra_information)
         # close_fds = True argument is the flag that is responsible
         # for Popen to launch the process completely independent
@@ -80,7 +80,7 @@ def main():
             try:
                 from sqlite_handler import Fake2dbSqliteHandler
                 fake_sqlite_handler = Fake2dbSqliteHandler()
-            except:
+            except Exception:
                 raise InstantiateDBHandlerException
             if args.name:
                 fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows), str(args.name))
@@ -91,7 +91,7 @@ def main():
             try:
                 from mysql_handler import Fake2dbMySqlHandler
                 fake_mysql_handler = Fake2dbMySqlHandler()
-            except:
+            except Exception:
                 raise InstantiateDBHandlerException
             _mysqld_process_checkpoint()
             host = args.host or "127.0.0.1"
@@ -105,7 +105,7 @@ def main():
             try:
                 from postgresql_handler import Fake2dbPostgresqlHandler
                 fake_postgresql_handler = Fake2dbPostgresqlHandler()
-            except:
+            except Exception:
                 raise InstantiateDBHandlerException
             _postgresql_process_checkpoint()
             host = args.host or "localhost"
@@ -119,7 +119,7 @@ def main():
             try:
                 from mongodb_handler import Fake2dbMongodbHandler
                 fake_mongodb_handler = Fake2dbMongodbHandler()
-            except:
+            except Exception:
                 raise InstantiateDBHandlerException
             _mongodb_process_checkpoint()
             host = args.host or "localhost"

@@ -51,7 +51,7 @@ class Fake2dbSqliteHandler():
 
             conn = sqlite3.connect(database)
             logger.warning('Database created and opened succesfully: %s' % database, extra=d)
-        except:
+        except Exception:
             logger.error('Failed to connect or create database / sqlite3', extra=d)
             raise DbConnException
 
