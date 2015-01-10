@@ -119,7 +119,7 @@ def main():
             try:
                 from mongodb_handler import Fake2dbMongodbHandler
                 fake_mongodb_handler = Fake2dbMongodbHandler()
-            except:
+            except Exception:
                 raise InstantiateDBHandlerException
             _mongodb_process_checkpoint()
             host = args.host or "localhost"
