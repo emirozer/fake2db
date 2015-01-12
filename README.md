@@ -10,12 +10,13 @@ Current support is *sqlite, mysql, postgresql, mongodb*. <br>
 
 ##### Installation
 
-The installation through pypi also retrieves 'requirements'.
-Which are : *fake-factory, pymongo, psycopg2*
+The installation through pypi retrieves 'fake-factory' as a main dependency.
 > pip install fake2db
 <br>
 
-###### non-PYPI included REQUIREMENT
+###### Optional requirements
+
+###### PostgreSQL
 
 For psycopg2 to install you need *pg_config* in your system.
 
@@ -26,8 +27,7 @@ On CentOS, the solution is to install *postgresql-devel*:
 > sudo yum install postgresql-devel
 <br>
 
-
-###### Optional - if you are going to use mysql
+###### MySQL
 
 mysql connector is needed for mysql db generation:
 > http://dev.mysql.com/downloads/connector/python/
