@@ -18,6 +18,8 @@ The installation through pypi retrieves 'fake-factory' as a main dependency.
 
 ###### PostgreSQL
 
+    pip install psycopg2
+
 For psycopg2 to install you need *pg_config* in your system.
 
 On Mac, the solution is to install *postgresql*:
@@ -26,6 +28,10 @@ On Mac, the solution is to install *postgresql*:
 On CentOS, the solution is to install *postgresql-devel*:
 > sudo yum install postgresql-devel
 <br>
+
+###### Mongodb
+
+    pip install pymongo
 
 ###### MySQL
 
