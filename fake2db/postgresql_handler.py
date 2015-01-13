@@ -1,6 +1,7 @@
 import time
 import getpass
 import subprocess
+import psycopg2
 
 from helpers import fake2db_logger, str_generator
 
@@ -11,13 +12,6 @@ try:
     from faker import Factory
 except ImportError:
     logger.error('faker package not found onto python packages, please run : \
-    pip install -r requirements.txt  \
-    on the root of the project')
-
-try:
-    import psycopg2
-except ImportError:
-    logger.error('psycopg2 package not found onto python packages, please run : \
     pip install -r requirements.txt  \
     on the root of the project')
 

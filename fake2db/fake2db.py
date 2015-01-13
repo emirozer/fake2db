@@ -10,6 +10,9 @@ logger, extra_information = fake2db_logger()
 class InstantiateDBHandlerException(Exception):
     '''An Exception at the instantiation of the handler '''
 
+    
+class MissingDependencyException(Exception):
+    '''An Exception to be thrown if the dependencies are missing'''
 
 def _postgresql_process_checkpoint():
     '''this helper method checks if
@@ -103,6 +106,11 @@ def main():
 
         elif args.db == 'postgresql':
             try:
+                import psycopg2
+            except ImportError:
+                raise MissingDependencyException('psycopg2 package not found on the python packages, please run: pip install psycopg2')
+                
+            try:
                 from postgresql_handler import Fake2dbPostgresqlHandler
                 fake_postgresql_handler = Fake2dbPostgresqlHandler()
             except Exception:
@@ -116,6 +124,11 @@ def main():
                 fake_postgresql_handler.fake2db_postgresql_initiator(host, port, int(args.rows))
 
         elif args.db == 'mongodb':
+            try:
+                import pymongo
+            except ImportError:
+                raise MissingDependencyException('pymongo package not found on the python packages, please run: pip install pymongo')
+                                
             try:
                 from mongodb_handler import Fake2dbMongodbHandler
                 fake_mongodb_handler = Fake2dbMongodbHandler()
