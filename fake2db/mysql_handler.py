@@ -146,17 +146,19 @@ class Fake2dbMySqlHandler():
     def data_filler_simple_registration(self, number_of_rows, cursor, conn):
         '''creates and fills the table with simple regis. information
         '''
-
+        simple_registration_data = []
+        
         try:
             for i in range(0, number_of_rows):
-                simple_registration_payload = ("INSERT INTO simple_registration "
+                simple_registration_data.append((
+                    rnd_id_generator(self), self.faker.safe_email(), self.faker.md5(raw_output=False)))
+                
+            simple_registration_payload = ("INSERT INTO simple_registration "
                                                "(id, email, password) "
                                                "VALUES (%s, %s, %s)")
-
-                simple_registration_data = (
-                    rnd_id_generator(self), self.faker.safe_email(), self.faker.md5(raw_output=False))
-                cursor.execute(simple_registration_payload, simple_registration_data)
-                conn.commit()
+            
+            cursor.executemany(simple_registration_payload, simple_registration_data)
+            conn.commit()
 
             logger.warning('simple_registration Commits are successful after write job!', extra=extra_information)
         except Exception as e:
@@ -165,19 +167,20 @@ class Fake2dbMySqlHandler():
     def data_filler_detailed_registration(self, number_of_rows, cursor, conn):
         '''creates and fills the table with detailed regis. information
         '''
-
+        detailed_registration_data = []
+        
         try:
             for i in range(0, number_of_rows):
-                detailed_registration_payload = ("INSERT INTO detailed_registration "
-                                                 "(id, email, password, lastname, name,"
-                                                 "address, phone) "
-                                                 "VALUES (%s, %s, %s, %s, %s, %s, %s)")
-                detailed_registration_data = (
+                detailed_registration_data.append((
                     rnd_id_generator(self), self.faker.safe_email(), self.faker.md5(raw_output=False),
-                    self.faker.last_name(), self.faker.name(), self.faker.address(), self.faker.phone_number())
-
-                cursor.execute(detailed_registration_payload, detailed_registration_data)
-                conn.commit()
+                    self.faker.last_name(), self.faker.name(), self.faker.address(), self.faker.phone_number()))
+            detailed_registration_payload = ("INSERT INTO detailed_registration "
+                                             "(id, email, password, lastname, name,"
+                                             "address, phone) "
+                                             "VALUES (%s, %s, %s, %s, %s, %s, %s)")
+            
+            cursor.executemany(detailed_registration_payload, detailed_registration_data)
+            conn.commit()
 
             logger.warning('detailed_registration Commits are successful after write job!', extra=extra_information)
 
@@ -187,16 +190,19 @@ class Fake2dbMySqlHandler():
     def data_filler_user_agent(self, number_of_rows, cursor, conn):
         '''creates and fills the table with user agent data
         '''
+        user_agent_data = []
+        
         try:
             for i in range(0, number_of_rows):
-                user_agent_payload = ("INSERT INTO user_agent "
-                                      "(id, ip, countrycode, useragent) "
-                                      "VALUES (%s, %s, %s, %s)")
-                user_agent_data = (rnd_id_generator(self), self.faker.ipv4(), self.faker.country_code(),
-                                   self.faker.user_agent())
-                cursor.execute(user_agent_payload, user_agent_data)
-                conn.commit()
-
+                user_agent_data.append((rnd_id_generator(self), self.faker.ipv4(),
+                                        self.faker.country_code(), self.faker.user_agent()))
+                
+            user_agent_payload = ("INSERT INTO user_agent "
+                                  "(id, ip, countrycode, useragent) "
+                                  "VALUES (%s, %s, %s, %s)")
+            
+            cursor.executemany(user_agent_payload, user_agent_data)
+            conn.commit()
             logger.warning('user_agent Commits are successful after write job!', extra=extra_information)
         except Exception as e:
             logger.error(e, extra=extra_information)
@@ -204,15 +210,20 @@ class Fake2dbMySqlHandler():
     def data_filler_company(self, number_of_rows, cursor, conn):
         '''creates and fills the table with company data
         '''
+        companies_data = []
+        
         try:
             for i in range(0, number_of_rows):
-                companies_payload = ("INSERT INTO company "
-                                     "(id, name, sdate, email, domain, city) "
-                                     "VALUES (%s, %s, %s, %s, %s, %s)")
-                companies_data = (rnd_id_generator(self), self.faker.company(), self.faker.date(pattern="%Y-%m-%d"),
-                                  self.faker.company_email(), self.faker.safe_email(), self.faker.city())
-                cursor.execute(companies_payload, companies_data)
-                conn.commit()
+                
+                companies_data.append((rnd_id_generator(self), self.faker.company(), self.faker.date(pattern="%Y-%m-%d"),
+                                  self.faker.company_email(), self.faker.safe_email(), self.faker.city()))
+                
+            companies_payload = ("INSERT INTO company "
+                                 "(id, name, sdate, email, domain, city) "
+                                 "VALUES (%s, %s, %s, %s, %s, %s)")
+            
+            cursor.executemany(companies_payload, companies_data)
+            conn.commit()
             logger.warning('companies Commits are successful after write job!', extra=extra_information)
         except Exception as e:
             logger.error(e, extra=extra_information)
@@ -220,23 +231,23 @@ class Fake2dbMySqlHandler():
     def data_filler_customer(self, number_of_rows, cursor, conn):
         '''creates and fills the table with customer
         '''
-
+        customer_data = []
+        
         try:
             for i in range(0, number_of_rows):
-                customer_payload = ("INSERT INTO customer "
-                                    "(id, name, lastname, address, country, city, registry_date, birthdate, email, "
-                                    "phone_number, locale)"
-                                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
-                customer_data = (
+                
+                customer_data.append((
                     rnd_id_generator(self), self.faker.name(), self.faker.last_name(), self.faker.address(),
                     self.faker.country(), self.faker.city(), self.faker.date(pattern="%d-%m-%Y"),
                     self.faker.date(pattern="%d-%m-%Y"), self.faker.safe_email(), self.faker.phone_number(),
-                    self.faker.locale())
-
-                cursor.execute(customer_payload, customer_data)
-
-                conn.commit()
-
+                    self.faker.locale()))
+                
+            customer_payload = ("INSERT INTO customer "
+                                "(id, name, lastname, address, country, city, registry_date, birthdate, email, "
+                                "phone_number, locale)"
+                                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+            cursor.executemany(customer_payload, customer_data)
+            conn.commit()
             logger.warning('detailed_registration Commits are successful after write job!', extra=extra_information)
         except Exception as e:
             logger.error(e, extra=extra_information)
