@@ -67,11 +67,13 @@ class Fake2dbSqliteHandler():
         email TEXT , password TEXT)
         ''')
         conn.commit()
+        multi_lines = []
+        
         try:
             for i in range(0, number_of_rows):
-                cursor.execute('insert into simple_registration values(?,?,?)',
-                               (rnd_id_generator(self), self.faker.safe_email(), self.faker.md5(raw_output=False)))
-                conn.commit()
+                multi_lines.append((rnd_id_generator(self), self.faker.safe_email(), self.faker.md5(raw_output=False)))
+            cursor.executemany('insert into simple_registration values(?,?,?)',multi_lines)
+            conn.commit()
             logger.warning('simple_registration Commits are successful after write job!', extra=d)
         except Exception as e:
             logger.error(e, extra=d)
@@ -87,14 +89,16 @@ class Fake2dbSqliteHandler():
         name TEXT, adress TEXT, phone TEXT)
         ''')
         conn.commit()
-
+        multi_lines = []
+        
         try:
             for i in range(0, number_of_rows):
-                cursor.execute('insert into detailed_registration values(?,?,?,?,?,?,?)', (
-                    rnd_id_generator(self), self.faker.safe_email(), self.faker.md5(raw_output=False),
-                    self.faker.last_name(), self.faker.name(), self.faker.address(), self.faker.phone_number()))
-                conn.commit()
-
+                multi_lines.append((rnd_id_generator(self), self.faker.safe_email(),
+                                    self.faker.md5(raw_output=False), self.faker.last_name(),
+                                    self.faker.name(), self.faker.address(), self.faker.phone_number()))
+                
+            cursor.executemany('insert into detailed_registration values(?,?,?,?,?,?,?)', multi_lines)
+            conn.commit()
             logger.warning('detailed_registration Commits are successful after write job!', extra=d)
 
         except Exception as e:
@@ -110,13 +114,15 @@ class Fake2dbSqliteHandler():
         ip TEXT, countrycode TEXT, useragent TEXT)
         ''')
         conn.commit()
-
+        multi_lines = []
+        
         try:
             for i in range(0, number_of_rows):
-                cursor.execute('insert into user_agent values(?,?,?,?)',
-                               (rnd_id_generator(self), self.faker.ipv4(), self.faker.country_code(),
-                                self.faker.user_agent()))
-                conn.commit()
+                multi_lines.append((rnd_id_generator(self), self.faker.ipv4(), self.faker.country_code(),
+                                    self.faker.user_agent()))
+                
+            cursor.executemany('insert into user_agent values(?,?,?,?)', multi_lines)
+            conn.commit()
             logger.warning('user_agent Commits are successful after write job!', extra=d)
         except Exception as e:
             logger.error(e, extra=d)
@@ -131,11 +137,17 @@ class Fake2dbSqliteHandler():
         name TEXT, sdate TEXT, email TEXT, domain TEXT, city TEXT)
         ''')
         conn.commit()
+        multi_lines = []
+        
         try:
             for i in range(0, number_of_rows):
-                cursor.execute('insert into company values (?,?,?,?,?,?)',
-                               (rnd_id_generator(self), self.faker.company(), self.faker.date(pattern="%d-%m-%Y"),
-                                self.faker.company_email(), self.faker.safe_email(), self.faker.city()))
+                
+                multi_lines.append((rnd_id_generator(self), self.faker.company(),
+                                    self.faker.date(pattern="%d-%m-%Y"),
+                                    self.faker.company_email(), self.faker.safe_email(),
+                                    self.faker.city()))
+                
+            cursor.executemany('insert into company values (?,?,?,?,?,?)', multi_lines)
             conn.commit()
             logger.warning('companies Commits are successful after write job!', extra=d)
         except Exception as e:
@@ -151,13 +163,17 @@ class Fake2dbSqliteHandler():
          phone_number TEXT, locale TEXT)
         ''')
         conn.commit()
+        multi_lines = []
+        
         try:
             for i in range(0, number_of_rows):
-                cursor.execute('insert into customer values (?,?,?,?,?,?,?,?,?,?,?)',
-                               (rnd_id_generator(self), self.faker.name(), self.faker.last_name(), self.faker.address(),
-                                self.faker.country(), self.faker.city(), self.faker.date(pattern="%d-%m-%Y"),
-                                self.faker.date(pattern="%d-%m-%Y"), self.faker.safe_email(), self.faker.phone_number(),
-                                self.faker.locale()))
+                
+                multi_lines.append((rnd_id_generator(self), self.faker.name(), self.faker.last_name(), self.faker.address(),
+                                    self.faker.country(), self.faker.city(), self.faker.date(pattern="%d-%m-%Y"),
+                                    self.faker.date(pattern="%d-%m-%Y"), self.faker.safe_email(), self.faker.phone_number(),
+                                    self.faker.locale()))
+                               
+            cursor.executemany('insert into customer values (?,?,?,?,?,?,?,?,?,?,?)', multi_lines)
             conn.commit()
             logger.warning('customer Commits are successful after write job!', extra=d)
         except Exception as e:
