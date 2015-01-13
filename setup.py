@@ -14,8 +14,6 @@ setup(
                   ['fake2db = fake2db.fake2db:main']},
     install_requires=[
         'fake-factory>=0.4.2',
-        'pymongo>=2.7.2',
-        'psycopg2>=2.5.4',
     ],
     include_package_data=True,
     classifiers=[
