@@ -68,15 +68,20 @@ class Fake2dbPostgresqlHandler():
 
         cursor.execute("CREATE TABLE simple_registration (id serial PRIMARY KEY, email varchar(300), password varchar(300));")
         conn.commit()
-
+        
+        simple_registration_data = []
+        
         try:
 
             for i in range(0, number_of_rows):
-                cursor.execute("INSERT INTO simple_registration "
-                               "(email, password) "
-                               "VALUES (%s, %s)", (self.faker.safe_email(), self.faker.md5(raw_output=False)))
-                conn.commit()
-
+                simple_registration_data.append((self.faker.safe_email(), self.faker.md5(raw_output=False)))
+                
+            simple_registration_payload = ("INSERT INTO simple_registration "
+                                           "(email, password) "
+                                           "VALUES (%s, %s)")
+            cursor.executemany(simple_registration_payload, simple_registration_data)
+            conn.commit()
+            
             logger.warning('simple_registration Commits are successful after write job!', extra=d)
 
         except Exception as e:
@@ -91,16 +96,21 @@ class Fake2dbPostgresqlHandler():
             "(id serial PRIMARY KEY, email varchar(300), password varchar(300), "
             "lastname varchar(300), name varchar(300), adress varchar(300), phone varchar(300));")
         conn.commit()
+        detailed_registration_data = []
+        
         try:
 
             for i in range(0, number_of_rows):
-                cursor.execute("INSERT INTO detailed_registration "
-                               "(email, password, lastname, name, adress, phone) "
-                               "VALUES (%s, %s, %s, %s, %s, %s)",
-                               (self.faker.safe_email(), self.faker.md5(raw_output=False), self.faker.last_name(),
-                                self.faker.name(), self.faker.address(), self.faker.phone_number()))
-                conn.commit()
-
+                
+                detailed_registration_data.append((self.faker.safe_email(), self.faker.md5(raw_output=False), self.faker.last_name(),
+                                                   self.faker.name(), self.faker.address(), self.faker.phone_number()))
+                
+            detailed_registration_payload = ("INSERT INTO detailed_registration "
+                                             "(email, password, lastname, name, adress, phone) "
+                                             "VALUES (%s, %s, %s, %s, %s, %s)")
+            
+            cursor.executemany(detailed_registration_payload, detailed_registration_data)
+            conn.commit()
             logger.warning('detailed_registration Commits are successful after write job!', extra=d)
 
         except Exception as e:
@@ -112,16 +122,24 @@ class Fake2dbPostgresqlHandler():
 
         cursor.execute(
             "CREATE TABLE user_agent (id serial PRIMARY KEY, ip varchar(300), countrycode varchar(300), useragent varchar(300));")
+        conn.commit()
+
+        user_agent_data = []
+        
         try:
 
             for i in range(0, number_of_rows):
-                cursor.execute("INSERT INTO user_agent "
+                
+                user_agent_data.append((self.faker.ipv4(), self.faker.country_code(),
+                 self.faker.user_agent()))
+                
+            user_agent_payload = ("INSERT INTO user_agent "
                                "(ip, countrycode, useragent) "
-                               "VALUES (%s, %s, %s)",
-                               (self.faker.ipv4(), self.faker.country_code(),
-                                self.faker.user_agent()))
-                conn.commit()
-
+                               "VALUES (%s, %s, %s)")
+            
+            cursor.executemany(user_agent_payload, user_agent_data)
+            conn.commit()
+            
             logger.warning('user_agent Commits are successful after write job!', extra=d)
         except Exception as e:
             logger.error(e, extra=d)
@@ -134,15 +152,20 @@ class Fake2dbPostgresqlHandler():
             "CREATE TABLE company (id serial PRIMARY KEY, "
             "name varchar(300), sdate varchar(300), email varchar(300), domain varchar(300), city varchar(300));")
         conn.commit()
+        company_data = []
+        
         try:
             for i in range(0, number_of_rows):
-                cursor.execute("INSERT INTO company "
+                
+                company_data.append((self.faker.company(), self.faker.date(pattern="%d-%m-%Y"),
+                                     self.faker.company_email(), self.faker.safe_email(), self.faker.city()))
+                
+            company_payload = ("INSERT INTO company "
                                "(name, sdate, email, domain, city) "
-                               "VALUES (%s, %s, %s, %s, %s)",
-                               (self.faker.company(), self.faker.date(pattern="%d-%m-%Y"),
-                                self.faker.company_email(), self.faker.safe_email(), self.faker.city()))
-                conn.commit()
-
+                               "VALUES (%s, %s, %s, %s, %s)")
+            
+            cursor.executemany(company_payload, company_data)
+            conn.commit()
             logger.warning('companies Commits are successful after write job!', extra=d)
         except Exception as e:
             logger.error(e, extra=d)
@@ -157,16 +180,23 @@ class Fake2dbPostgresqlHandler():
             "city varchar(300), registry_date varchar(300), birthdate varchar(300), email varchar(300), "
             "phone_number varchar(300), locale varchar(300));")
         conn.commit()
+
+        customer_data = []
+        
         try:
             for i in range(0, number_of_rows):
-                cursor.execute("INSERT INTO customer "
-                               "(name, lastname, address, country, city, registry_date, "
-                               "birthdate, email, phone_number, locale)"
-                               "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                               (self.faker.name(), self.faker.last_name(), self.faker.address(),
-                                self.faker.country(), self.faker.city(), self.faker.date(pattern="%d-%m-%Y"),
-                                self.faker.date(pattern="%d-%m-%Y"), self.faker.safe_email(), self.faker.phone_number(),
-                                self.faker.locale()))
+                
+                customer_data.append((self.faker.name(), self.faker.last_name(), self.faker.address(),
+                                      self.faker.country(), self.faker.city(), self.faker.date(pattern="%d-%m-%Y"),
+                                      self.faker.date(pattern="%d-%m-%Y"), self.faker.safe_email(), self.faker.phone_number(),
+                                      self.faker.locale()))
+                
+            customer_payload = ("INSERT INTO customer "
+                                "(name, lastname, address, country, city, registry_date, "
+                                "birthdate, email, phone_number, locale)"
+                                "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+            
+            cursor.executemany(customer_payload, customer_data)
             conn.commit()
             logger.warning('customer Commits are successful after write job!', extra=d)
         except Exception as e:
