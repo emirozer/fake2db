@@ -16,20 +16,18 @@ except ImportError:
 class Fake2dbRedisHandler():
     faker = Factory.create()
 
-    def fake2db_mongodb_initiator(self, host, port, number_of_rows, name=None):
+    def fake2db_redis_initiator(self, host, port, number_of_rows, name=None):
         '''Main handler for the operation
         '''
 
-        if name:
-            db = self.database_caller_creator(host, port, name)
-        else:
-            db = self.database_caller_creator(host, port)
+        client, pipe = self.database_caller_creator(host, port, name)
 
-        self.data_filler_simple_registration(number_of_rows, db)
-        self.data_filler_detailed_registration(number_of_rows, db)
-        self.data_filler_company(number_of_rows, db)
-        self.data_filler_user_agent(number_of_rows, db)
-        self.data_filler_customer(number_of_rows, db)
+        self.data_filler_simple_registration(number_of_rows, pipe)
+        self.data_filler_detailed_registration(number_of_rows, pipe)
+        self.data_filler_company(number_of_rows, pipe)
+        self.data_filler_user_agent(number_of_rows, pipe)
+        self.data_filler_customer(number_of_rows, pipe)
+        client.save()
 
     def database_caller_creator(self, host, port, name=None):
         '''creates a redis connection object
@@ -39,7 +37,7 @@ class Fake2dbRedisHandler():
         client = redis.StrictRedis(host=host, port=port, db=name)
         pipe = client.pipeline(transaction=False)
 
-        return pipe
+        return client, pipe
 
     def data_filler_simple_registration(self, number_of_rows, pipe):
         '''creates keys with simple regis. information

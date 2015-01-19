@@ -6,7 +6,7 @@
 ##### About
 
 Generate fake but valid data filled databases for test purposes using most popular patterns(AFAIK).
-Current support is *sqlite, mysql, postgresql, mongodb*. <br>
+Current support is *sqlite, mysql, postgresql, mongodb, redis*. <br>
 
 ##### Installation
 
@@ -32,6 +32,10 @@ On CentOS, the solution is to install *postgresql-devel*:
 ###### Mongodb
 
     pip install pymongo
+    
+###### Redis
+
+    pip install redis
 
 ###### MySQL
 
@@ -45,7 +49,7 @@ It is as follows, at this point in time, fake2db accepts rows and db argument.
 
 *--rows* argument is pretty clear...
 
-*--db* argument takes 4 possible options : sqlite, mysql, postgresql, mongodb
+*--db* argument takes 4 possible options : sqlite, mysql, postgresql, mongodb, redis
 
 *--name* argument is OPTIONAL. When it is absent fake2db will name db's randomly.
 

@@ -69,7 +69,7 @@ def _redis_process_checkpoint():
         logger.warning('Your redis server is offline, fake2db will try to launch it now!', extra=extra_information)
         # close_fds = True argument is the flag that is responsible
         # for Popen to launch the process completely independent
-        subprocess.Popen("redis", close_fds=True, shell=True)
+        subprocess.Popen("redis-server", close_fds=True, shell=True)
         time.sleep(3)
 
 
@@ -77,7 +77,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--rows", help="Amount of rows desired per table")
     parser.add_argument("--db",
-                        help="Db type for creation: sqlite, mysql, postgresql, mongodb, couchdb, to be expanded")
+                        help="Db type for creation: sqlite, mysql, postgresql, mongodb, redis, couchdb, to be expanded")
     parser.add_argument("--name", help="OPTIONAL : Give a name to the db to be generated. ")
     parser.add_argument("--host", help="OPTIONAL : Hostname of db. ")
     parser.add_argument("--port", help="OPTIONAL : Port of db. ")
@@ -171,11 +171,11 @@ def main():
                 raise InstantiateDBHandlerException
             _redis_process_checkpoint()
             host = args.host or "localhost"
-            port = args.port or 6379
+            port = args.port or "6379"
             if args.name:
-                fake_redis_handler.fake2db_mongodb_initiator(host, int(port), int(args.rows), str(args.name))
+                fake_redis_handler.fake2db_redis_initiator(host, int(port), int(args.rows), str(args.name))
             else:
-                fake_redis_handler.fake2db_mongodb_initiator(host, int(port), int(args.rows))
+                fake_redis_handler.fake2db_redis_initiator(host, int(port), int(args.rows))
 
         else:
             logger.error('Wrong arg for db parameter. Valid ones : sqlite - mysql - postgresql - mongodb - redis',
