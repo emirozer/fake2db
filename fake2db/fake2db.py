@@ -59,11 +59,26 @@ def _mongodb_process_checkpoint():
         time.sleep(3)
 
 
+def _redis_process_checkpoint(host, port):
+    '''this helper method checks if
+    redis server is available in the sys
+    if not fires up one
+    '''
+    try:
+        subprocess.check_output("pgrep redis", shell=True)
+    except Exception:
+        logger.warning('Your redis server is offline, fake2db will try to launch it now!', extra=extra_information)
+        # close_fds = True argument is the flag that is responsible
+        # for Popen to launch the process completely independent
+        subprocess.Popen("redis-server --bind %s --port %s" % (host, port), close_fds=True, shell=True)
+        time.sleep(3)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--rows", help="Amount of rows desired per table")
     parser.add_argument("--db",
-                        help="Db type for creation: sqlite, mysql, postgresql, mongodb, couchdb, to be expanded")
+                        help="Db type for creation: sqlite, mysql, postgresql, mongodb, redis, couchdb, to be expanded")
     parser.add_argument("--name", help="OPTIONAL : Give a name to the db to be generated. ")
     parser.add_argument("--host", help="OPTIONAL : Hostname of db. ")
     parser.add_argument("--port", help="OPTIONAL : Port of db. ")
@@ -142,8 +157,31 @@ def main():
             else:
                 fake_mongodb_handler.fake2db_mongodb_initiator(host, int(port), int(args.rows))
 
+        elif args.db == 'redis':
+            if args.name and (not args.name.isdigit() or int(args.name) < 0):
+                logger.error('redis db name must be a non-negative integer', extra=extra_information)
+                return
+
+            try:
+                import redis
+            except ImportError:
+                raise MissingDependencyException('redis package not found on the python packages, please run: pip install redis')
+
+            try:
+                from redis_handler import Fake2dbRedisHandler
+                fake_redis_handler = Fake2dbRedisHandler()
+            except Exception:
+                raise InstantiateDBHandlerException
+            host = args.host or "localhost"
+            port = args.port or "6379"
+            _redis_process_checkpoint(host, port)
+            if args.name:
+                fake_redis_handler.fake2db_redis_initiator(host, int(port), int(args.rows), str(args.name))
+            else:
+                fake_redis_handler.fake2db_redis_initiator(host, int(port), int(args.rows))
+
         else:
-            logger.error('Wrong arg for db parameter. Valid ones : sqlite - mysql - postgresql - mongodb',
+            logger.error('Wrong arg for db parameter. Valid ones : sqlite - mysql - postgresql - mongodb - redis',
                          extra=extra_information)
 
 
