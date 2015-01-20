@@ -9,8 +9,7 @@ try:
     from faker import Factory
 except ImportError:
     logger.error('faker package not found onto python packages, please run : \
-    pip install -r requirements.txt  \
-    on the root of the project')
+    pip install -r requirements.txt on the root of the project')
 
 
 class Fake2dbRedisHandler():
@@ -27,16 +26,17 @@ class Fake2dbRedisHandler():
         self.data_filler_company(number_of_rows, pipe)
         self.data_filler_user_agent(number_of_rows, pipe)
         self.data_filler_customer(number_of_rows, pipe)
+
         client.save()
 
     def database_caller_creator(self, host, port, name=None):
         '''creates a redis connection object
         which will be later used to modify the db
         '''
+
         name = name or 0
         client = redis.StrictRedis(host=host, port=port, db=name)
         pipe = client.pipeline(transaction=False)
-
         return client, pipe
 
     def data_filler_simple_registration(self, number_of_rows, pipe):
@@ -105,7 +105,7 @@ class Fake2dbRedisHandler():
                     'id': rnd_id_generator(self),
                     'name': self.faker.company(),
                     'date': self.faker.date(pattern="%d-%m-%Y"),
-                    'email': self.faker.safe_email(),
+                    'email': self.faker.company_email(),
                     'domain': self.faker.safe_email(),
                     'city': self.faker.city()
                 })
