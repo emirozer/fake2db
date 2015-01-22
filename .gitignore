@@ -8,3 +8,4 @@ fake2db.egg-info
 dist/
 *.swp
 build/
+*.rdb
