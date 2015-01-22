@@ -3,7 +3,7 @@ import os
 
 setup(
     name='fake2db',
-    version='0.2.1',
+    version='0.2.2',
     author='Emir Ozer',
     author_email='emirozer@yandex.com',
     url='https://github.com/emirozer/fake2db',
