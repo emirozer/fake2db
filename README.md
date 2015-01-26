@@ -2,6 +2,8 @@
 ===========
 ***
 
+[![Downloads](https://pypip.in/download/fake2db/badge.svg)](https://pypi.python.org/pypi/fake2db/)
+[![Latest Version](https://pypip.in/version/fake2db/badge.svg)](https://pypi.python.org/pypi/fake2db/)
 
 ##### About
 
@@ -32,7 +34,7 @@ On CentOS, the solution is to install *postgresql-devel*:
 ###### Mongodb
 
     pip install pymongo
-    
+
 ###### Redis
 
     pip install redis
