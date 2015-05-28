@@ -61,7 +61,7 @@ class Fake2dbMongodbHandler():
                                    }
                 data_list.append(post_simple_reg)
 
-            simple_registration.insert(data_list)
+            simple_registration.insert_many(data_list)
             logger.warning('simple_registration Commits are successful after write job!', extra=d)
 
         except Exception as e:
@@ -83,7 +83,7 @@ class Fake2dbMongodbHandler():
                                 "adress": self.faker.address(),
                                 "phone": self.faker.phone_number()}
                 data_list.append(post_det_reg)
-            detailed_registration.insert(data_list)
+            detailed_registration.insert_many(data_list)
 
             logger.warning('detailed_registration Commits are successful after write job!', extra=d)
 
@@ -103,7 +103,7 @@ class Fake2dbMongodbHandler():
                                "countrycode": self.faker.country_code(),
                                "useragent": self.faker.user_agent()}
                 data_list.append(post_uo_reg)
-            user_agent.insert(data_list)
+            user_agent.insert_many(data_list)
 
             logger.warning('user_agent Commits are successful after write job!', extra=d)
         except Exception as e:
@@ -124,7 +124,7 @@ class Fake2dbMongodbHandler():
                                  "domain": self.faker.safe_email(),
                                  "city": self.faker.city()}
                 data_list.append(post_comp_reg)
-            company.insert(data_list)
+            company.insert_many(data_list)
             logger.warning('companies Commits are successful after write job!', extra=d)
         except Exception as e:
             logger.error(e, extra=d)
@@ -149,7 +149,7 @@ class Fake2dbMongodbHandler():
                                 "phone_number": self.faker.phone_number(),
                                 "locale": self.faker.locale()}
                 data_list.append(post_cus_reg)
-            customer.insert(data_list)
+            customer.insert_many(data_list)
 
             logger.warning('customer Commits are successful after write job!', extra=d)
         except Exception as e:
