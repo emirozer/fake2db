@@ -42,7 +42,7 @@ class Fake2dbSqliteHandler():
         returns the related connection object
         which will be later used to spawn the cursor
         '''
-        database = ''
+
         try:
             if name:
                 database = name + '.db'
