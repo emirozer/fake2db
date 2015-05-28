@@ -24,11 +24,7 @@ class Fake2dbSqliteHandler():
         '''Main handler for the operation
         '''
         rows = number_of_rows
-
-        if name:
-            conn = self.database_caller_creator(name)
-        else:
-            conn = self.database_caller_creator()
+        conn = self.database_caller_creator(name)
 
         self.data_filler_simple_registration(rows, conn)
         self.data_filler_detailed_registration(rows, conn)

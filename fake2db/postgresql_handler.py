@@ -23,11 +23,7 @@ class Fake2dbPostgresqlHandler():
         '''Main handler for the operation
         '''
         rows = number_of_rows
-
-        if name:
-            cursor, conn = self.database_caller_creator(host, port, name)
-        else:
-            cursor, conn = self.database_caller_creator(host, port)
+        cursor, conn = self.database_caller_creator(host, port, name)
 
         self.data_filler_simple_registration(rows, cursor, conn)
         self.data_filler_detailed_registration(rows, cursor, conn)
