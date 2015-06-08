@@ -20,11 +20,7 @@ class Fake2dbMongodbHandler():
         '''Main handler for the operation
         '''
         rows = number_of_rows
-
-        if name:
-            db = self.database_caller_creator(host, port, name)
-        else:
-            db = self.database_caller_creator(host, port)
+        db = self.database_caller_creator(host, port, name)
 
         self.data_filler_simple_registration(rows, db)
         self.data_filler_detailed_registration(rows, db)
