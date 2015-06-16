@@ -2,8 +2,9 @@
 ===========
 ***
 
-[![Downloads](https://pypip.in/download/fake2db/badge.svg)](https://pypi.python.org/pypi/fake2db/)
-[![Latest Version](https://pypip.in/version/fake2db/badge.svg)](https://pypi.python.org/pypi/fake2db/)
+[![Latest Version](https://img.shields.io/pypi/v/fake2db.svg)](https://img.shields.io/pypi/v/fake2db.svg)
+[![Downloads](https://img.shields.io/pypi/dm/fake2db.svg)](https://img.shields.io/pypi/dm/fake2db.svg)
+
 
 ##### About
 
