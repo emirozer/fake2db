@@ -52,7 +52,7 @@ It is as follows, at this point in time, fake2db accepts rows and db argument.
 
 *--rows* argument is pretty clear...
 
-*--db* argument takes 4 possible options : sqlite, mysql, postgresql, mongodb, redis
+*--db* argument takes 5 possible options : sqlite, mysql, postgresql, mongodb, redis
 
 *--name* argument is OPTIONAL. When it is absent fake2db will name db's randomly.
 
