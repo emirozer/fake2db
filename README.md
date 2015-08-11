@@ -4,6 +4,8 @@
 
 [![Latest Version](https://img.shields.io/pypi/v/fake2db.svg)](https://img.shields.io/pypi/v/fake2db.svg)
 [![Downloads](https://img.shields.io/pypi/dm/fake2db.svg)](https://img.shields.io/pypi/dm/fake2db.svg)
+[![Status](https://img.shields.io/pypi/status/fake2db.svg)](https://img.shields.io/pypi/status/fake2db.svg)
+
 
 
 ##### About
