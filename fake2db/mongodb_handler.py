@@ -75,7 +75,7 @@ class Fake2dbMongodbHandler():
                                 "email": self.faker.safe_email(),
                                 "password": self.faker.md5(raw_output=False),
                                 "lastname": self.faker.last_name(),
-                                "name": self.faker.name(),
+                                "name": self.faker.first_name(),
                                 "adress": self.faker.address(),
                                 "phone": self.faker.phone_number()}
                 data_list.append(post_det_reg)
@@ -134,7 +134,7 @@ class Fake2dbMongodbHandler():
             data_list = list()
             for i in range(0, number_of_rows):
                 post_cus_reg = {"id": rnd_id_generator(self),
-                                "name": self.faker.name(),
+                                "name": self.faker.first_name(),
                                 "lastname": self.faker.last_name(),
                                 "address": self.faker.address(),
                                 "country": self.faker.country(),

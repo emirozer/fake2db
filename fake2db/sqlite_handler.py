@@ -91,7 +91,7 @@ class Fake2dbSqliteHandler():
             for i in range(0, number_of_rows):
                 multi_lines.append((rnd_id_generator(self), self.faker.safe_email(),
                                     self.faker.md5(raw_output=False), self.faker.last_name(),
-                                    self.faker.name(), self.faker.address(), self.faker.phone_number()))
+                                    self.faker.first_name(), self.faker.address(), self.faker.phone_number()))
                 
             cursor.executemany('insert into detailed_registration values(?,?,?,?,?,?,?)', multi_lines)
             conn.commit()
@@ -164,7 +164,7 @@ class Fake2dbSqliteHandler():
         try:
             for i in range(0, number_of_rows):
                 
-                multi_lines.append((rnd_id_generator(self), self.faker.name(), self.faker.last_name(), self.faker.address(),
+                multi_lines.append((rnd_id_generator(self), self.faker.first_name(), self.faker.last_name(), self.faker.address(),
                                     self.faker.country(), self.faker.city(), self.faker.date(pattern="%d-%m-%Y"),
                                     self.faker.date(pattern="%d-%m-%Y"), self.faker.safe_email(), self.faker.phone_number(),
                                     self.faker.locale()))

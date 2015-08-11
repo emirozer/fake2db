@@ -67,7 +67,7 @@ class Fake2dbRedisHandler():
                     'email': self.faker.safe_email(),
                     'password': self.faker.md5(raw_output=False),
                     'lastname': self.faker.last_name(),
-                    'name': self.faker.name(),
+                    'name': self.faker.first_name(),
                     'address': self.faker.address(),
                     'phone': self.faker.phone_number()
                 })
@@ -123,7 +123,7 @@ class Fake2dbRedisHandler():
             for i in range(number_of_rows):
                 pipe.hmset('customer:%s' % i, {
                     'id': rnd_id_generator(self),
-                    'name': self.faker.name(),
+                    'name': self.faker.first_name(),
                     'lastname': self.faker.last_name(),
                     'address': self.faker.address(),
                     'country': self.faker.country(),

@@ -173,7 +173,7 @@ class Fake2dbMySqlHandler():
             for i in range(0, number_of_rows):
                 detailed_registration_data.append((
                     rnd_id_generator(self), self.faker.safe_email(), self.faker.md5(raw_output=False),
-                    self.faker.last_name(), self.faker.name(), self.faker.address(), self.faker.phone_number()))
+                    self.faker.last_name(), self.faker.first_name(), self.faker.address(), self.faker.phone_number()))
             detailed_registration_payload = ("INSERT INTO detailed_registration "
                                              "(id, email, password, lastname, name,"
                                              "address, phone) "
@@ -237,7 +237,7 @@ class Fake2dbMySqlHandler():
             for i in range(0, number_of_rows):
                 
                 customer_data.append((
-                    rnd_id_generator(self), self.faker.name(), self.faker.last_name(), self.faker.address(),
+                    rnd_id_generator(self), self.faker.first_name(), self.faker.last_name(), self.faker.address(),
                     self.faker.country(), self.faker.city(), self.faker.date(pattern="%d-%m-%Y"),
                     self.faker.date(pattern="%d-%m-%Y"), self.faker.safe_email(), self.faker.phone_number(),
                     self.faker.locale()))
