@@ -1,7 +1,6 @@
 import couchdb
 from helpers import fake2db_logger, lower_str_generator, rnd_id_generator
 
-
 logger, extra_information = fake2db_logger()
 d = extra_information
 
@@ -37,12 +36,12 @@ class Fake2dbCouchdbHandler():
         couch = couchdb.Server()
 
         if name:
-            db = couch.create(name) 
+            db = couch.create(name)
         else:
             n = 'couchdb_' + lower_str_generator(self)
             db = couch.create(n)
-            logger.warning('couchdb database created with the name: %s',n, extra=d)
-            
+            logger.warning('couchdb database created with the name: %s', n,
+                           extra=d)
 
         return db
 
@@ -51,17 +50,19 @@ class Fake2dbCouchdbHandler():
         '''
 
         try:
-            simple_registration = db.simple_registration
-            data_list = list()
-            for i in range(0, number_of_rows):
-                post_simple_reg = {"id": rnd_id_generator(self),
-                                   "email": self.faker.safe_email(),
-                                   "password": self.faker.md5(raw_output=False)
-                                   }
-                data_list.append(post_simple_reg)
+            simple_registration = db
 
-            simple_registration.save(data_list)
-            logger.warning('simple_registration Commits are successful after write job!', extra=d)
+            for i in range(0, number_of_rows):
+                post_simple_reg = {
+                    "id": rnd_id_generator(self),
+                    "email": self.faker.safe_email(),
+                    "password": self.faker.md5(raw_output=False)
+                }
+                simple_registration.save(post_simple_reg)
+
+            logger.warning(
+                'simple_registration Commits are successful after write job!',
+                extra=d)
 
         except Exception as e:
             logger.error(e, extra=d)
@@ -71,20 +72,23 @@ class Fake2dbCouchdbHandler():
         '''
 
         try:
-            detailed_registration = db.detailed_registration
+            detailed_registration = db
             data_list = list()
             for i in range(0, number_of_rows):
-                post_det_reg = {"id": rnd_id_generator(self),
-                                "email": self.faker.safe_email(),
-                                "password": self.faker.md5(raw_output=False),
-                                "lastname": self.faker.last_name(),
-                                "name": self.faker.first_name(),
-                                "adress": self.faker.address(),
-                                "phone": self.faker.phone_number()}
-                data_list.append(post_det_reg)
-            detailed_registration.save(data_list)
+                post_det_reg = {
+                    "id": rnd_id_generator(self),
+                    "email": self.faker.safe_email(),
+                    "password": self.faker.md5(raw_output=False),
+                    "lastname": self.faker.last_name(),
+                    "name": self.faker.first_name(),
+                    "adress": self.faker.address(),
+                    "phone": self.faker.phone_number()
+                }
+                detailed_registration.save(post_det_reg)
 
-            logger.warning('detailed_registration Commits are successful after write job!', extra=d)
+            logger.warning(
+                'detailed_registration Commits are successful after write job!',
+                extra=d)
 
         except Exception as e:
             logger.error(e, extra=d)
@@ -94,17 +98,20 @@ class Fake2dbCouchdbHandler():
         '''
 
         try:
-            user_agent = db.user_agent
+            user_agent = db
             data_list = list()
             for i in range(0, number_of_rows):
-                post_uo_reg = {"id": rnd_id_generator(self),
-                               "ip": self.faker.ipv4(),
-                               "countrycode": self.faker.country_code(),
-                               "useragent": self.faker.user_agent()}
-                data_list.append(post_uo_reg)
-            user_agent.save(data_list)
+                post_uo_reg = {
+                    "id": rnd_id_generator(self),
+                    "ip": self.faker.ipv4(),
+                    "countrycode": self.faker.country_code(),
+                    "useragent": self.faker.user_agent()
+                }
+                user_agent.save(post_uo_reg)
 
-            logger.warning('user_agent Commits are successful after write job!', extra=d)
+            logger.warning(
+                'user_agent Commits are successful after write job!',
+                extra=d)
         except Exception as e:
             logger.error(e, extra=d)
 
@@ -113,18 +120,21 @@ class Fake2dbCouchdbHandler():
         '''
 
         try:
-            company = db.company
+            company = db
             data_list = list()
             for i in range(0, number_of_rows):
-                post_comp_reg = {"id": rnd_id_generator(self),
-                                 "name": self.faker.company(),
-                                 "date": self.faker.date(pattern="%d-%m-%Y"),
-                                 "email": self.faker.company_email(),
-                                 "domain": self.faker.safe_email(),
-                                 "city": self.faker.city()}
-                data_list.append(post_comp_reg)
-            company.save(data_list)
-            logger.warning('companies Commits are successful after write job!', extra=d)
+                post_comp_reg = {
+                    "id": rnd_id_generator(self),
+                    "name": self.faker.company(),
+                    "date": self.faker.date(pattern="%d-%m-%Y"),
+                    "email": self.faker.company_email(),
+                    "domain": self.faker.safe_email(),
+                    "city": self.faker.city()
+                }
+                company.save(post_comp_reg)
+
+            logger.warning('companies Commits are successful after write job!',
+                           extra=d)
         except Exception as e:
             logger.error(e, extra=d)
 
@@ -133,23 +143,25 @@ class Fake2dbCouchdbHandler():
         '''
 
         try:
-            customer = db.customer
+            customer = db
             data_list = list()
             for i in range(0, number_of_rows):
-                post_cus_reg = {"id": rnd_id_generator(self),
-                                "name": self.faker.first_name(),
-                                "lastname": self.faker.last_name(),
-                                "address": self.faker.address(),
-                                "country": self.faker.country(),
-                                "city": self.faker.city(),
-                                "registry_date": self.faker.date(pattern="%d-%m-%Y"),
-                                "birthdate": self.faker.date(pattern="%d-%m-%Y"),
-                                "email": self.faker.safe_email(),
-                                "phone_number": self.faker.phone_number(),
-                                "locale": self.faker.locale()}
-                data_list.append(post_cus_reg)
-            customer.save(data_list)
+                post_cus_reg = {
+                    "id": rnd_id_generator(self),
+                    "name": self.faker.first_name(),
+                    "lastname": self.faker.last_name(),
+                    "address": self.faker.address(),
+                    "country": self.faker.country(),
+                    "city": self.faker.city(),
+                    "registry_date": self.faker.date(pattern="%d-%m-%Y"),
+                    "birthdate": self.faker.date(pattern="%d-%m-%Y"),
+                    "email": self.faker.safe_email(),
+                    "phone_number": self.faker.phone_number(),
+                    "locale": self.faker.locale()
+                }
+                customer.save(post_cus_reg)
 
-            logger.warning('customer Commits are successful after write job!', extra=d)
+            logger.warning('customer Commits are successful after write job!',
+                           extra=d)
         except Exception as e:
             logger.error(e, extra=d)
