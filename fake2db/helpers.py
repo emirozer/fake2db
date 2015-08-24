@@ -25,6 +25,11 @@ def str_generator(self):
     '''
     return ''.join(random.choice(string.ascii_uppercase) for i in range(8))
 
+def lower_str_generator(self):
+    '''generates lowercase 8 chars
+    '''
+    return ''.join(random.choice(string.ascii_lowercase) for i in range(8))
+
 
 def rnd_id_generator(self):
     '''generates a UUID such as :

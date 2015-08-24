@@ -11,7 +11,7 @@
 ##### About
 
 Generate fake but valid data filled databases for test purposes using most popular patterns(AFAIK).
-Current support is *sqlite, mysql, postgresql, mongodb, redis*. <br>
+Current support is *sqlite, mysql, postgresql, mongodb, redis, couchdb*. <br>
 
 ##### Installation
 
@@ -48,13 +48,17 @@ mysql connector is needed for mysql db generation:
 > http://dev.mysql.com/downloads/connector/python/
 <br>
 
+##### CouchDB
+
+	pip install couchdb
+
 ##### Usage
 
 It is as follows, at this point in time, fake2db accepts rows and db argument.
 
 *--rows* argument is pretty clear...
 
-*--db* argument takes 5 possible options : sqlite, mysql, postgresql, mongodb, redis
+*--db* argument takes 6 possible options : sqlite, mysql, postgresql, mongodb, redis, couchdb
 
 *--name* argument is OPTIONAL. When it is absent fake2db will name db's randomly.
 
@@ -78,6 +82,3 @@ In addition to the databases supported in the db argument, you can also run fake
 
 
 <br>
-#### TODO
-    * Add more DB types
-    * Fix db patterns / add more
