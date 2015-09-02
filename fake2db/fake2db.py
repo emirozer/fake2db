@@ -35,7 +35,7 @@ def _postgresql_process_checkpoint():
 
 
 def _mysqld_process_checkpoint():
-    '''this helper method checks if 
+    '''this helper method checks if
     mysql server is available in the sys
     if not fires up one
     '''
@@ -52,7 +52,7 @@ def _mysqld_process_checkpoint():
 
 
 def _mongodb_process_checkpoint():
-    '''this helper method checks if 
+    '''this helper method checks if
     mongodb server is available in the sys
     if not fires up one
     '''
@@ -69,7 +69,7 @@ def _mongodb_process_checkpoint():
 
 
 def _couchdb_process_checkpoint():
-    '''this helper method checks if 
+    '''this helper method checks if
     couchdb server is available in the sys
     if not fires up one
     '''
