@@ -105,7 +105,8 @@ def _redis_process_checkpoint(host, port):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--rows", help="Amount of rows desired per table")
+    parser.add_argument("--rows", help="Amount of rows desired per table",
+                        type=int)
     parser.add_argument(
         "--db",
         help=
@@ -114,7 +115,7 @@ def main():
         "--name",
         help="OPTIONAL : Give a name to the db to be generated. ")
     parser.add_argument("--host", help="OPTIONAL : Hostname of db. ")
-    parser.add_argument("--port", help="OPTIONAL : Port of db. ")
+    parser.add_argument("--port", help="OPTIONAL : Port of db.", type=int)
     parser.add_argument("--password", help="OPTIONAL : Password for root. ")
 
     args = parser.parse_args()
@@ -137,10 +138,10 @@ def main():
             except Exception:
                 raise InstantiateDBHandlerException
             if args.name:
-                fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows),
-                                                             str(args.name))
+                fake_sqlite_handler.fake2db_sqlite_initiator(args.rows,
+                                                             args.name)
             else:
-                fake_sqlite_handler.fake2db_sqlite_initiator(int(args.rows))
+                fake_sqlite_handler.fake2db_sqlite_initiator(args.rows)
 
         elif args.db == 'mysql':
             try:
@@ -150,13 +151,13 @@ def main():
                 raise InstantiateDBHandlerException
             _mysqld_process_checkpoint()
             host = args.host or "127.0.0.1"
-            port = args.port or "3306"
+            port = args.port or 3306
             if args.name:
                 fake_mysql_handler.fake2db_mysql_initiator(
-                    host, port, args.password, int(args.rows), str(args.name))
+                    host, port, args.password, args.rows, args.name)
             else:
                 fake_mysql_handler.fake2db_mysql_initiator(
-                    host, port, args.password, int(args.rows))
+                    host, port, args.password, args.rows)
 
         elif args.db == 'postgresql':
             try:
@@ -172,13 +173,13 @@ def main():
                 raise InstantiateDBHandlerException
             _postgresql_process_checkpoint()
             host = args.host or "localhost"
-            port = args.port or "5432"
+            port = args.port or 5432
             if args.name:
                 fake_postgresql_handler.fake2db_postgresql_initiator(
-                    host, port, int(args.rows), str(args.name))
+                    host, port, args.rows, args.name)
             else:
                 fake_postgresql_handler.fake2db_postgresql_initiator(
-                    host, port, int(args.rows))
+                    host, port, args.rows)
 
         elif args.db == 'mongodb':
             try:
@@ -197,10 +198,10 @@ def main():
             port = args.port or 27017
             if args.name:
                 fake_mongodb_handler.fake2db_mongodb_initiator(
-                    host, int(port), int(args.rows), str(args.name))
+                    host, port, args.rows, args.name)
             else:
-                fake_mongodb_handler.fake2db_mongodb_initiator(host, int(port),
-                                                               int(args.rows))
+                fake_mongodb_handler.fake2db_mongodb_initiator(host, port,
+                                                               args.rows)
 
         elif args.db == 'couchdb':
             try:
@@ -217,10 +218,10 @@ def main():
             _couchdb_process_checkpoint()
 
             if args.name:
-                fake_couchdb_handler.fake2db_couchdb_initiator(int(args.rows),
-                                                               str(args.name))
+                fake_couchdb_handler.fake2db_couchdb_initiator(args.rows,
+                                                               args.name)
             else:
-                fake_couchdb_handler.fake2db_couchdb_initiator(int(args.rows))
+                fake_couchdb_handler.fake2db_couchdb_initiator(args.rows)
 
         elif args.db == 'redis':
             if args.name and (not args.name.isdigit() or int(args.name) < 0):
@@ -240,14 +241,14 @@ def main():
             except Exception:
                 raise InstantiateDBHandlerException
             host = args.host or "localhost"
-            port = args.port or "6379"
+            port = args.port or 6379
             _redis_process_checkpoint(host, port)
             if args.name:
                 fake_redis_handler.fake2db_redis_initiator(
-                    host, int(port), int(args.rows), str(args.name))
+                    host, port, args.rows, args.name)
             else:
-                fake_redis_handler.fake2db_redis_initiator(host, int(port),
-                                                           int(args.rows))
+                fake_redis_handler.fake2db_redis_initiator(host, port,
+                                                           args.rows)
 
         else:
             logger.error(
