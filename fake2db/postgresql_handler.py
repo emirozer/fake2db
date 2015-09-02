@@ -43,12 +43,12 @@ class Fake2dbPostgresqlHandler():
         conn = None
         username = getpass.getuser()
 
-        try:
-            if name:
-                db = name
-            else:
-                db = 'postgresql_' + str_generator(self)
+        if name:
+            db = name
+        else:
+            db = 'postgresql_' + str_generator(self)
 
+        try:
             subprocess.Popen("createdb --no-password --owner " + username + " " + db, shell=True)
             time.sleep(1)
             conn = psycopg2.connect("dbname=" + db + " user=" + username + " host=" + host + " port=" + port)
