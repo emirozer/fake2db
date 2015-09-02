@@ -19,8 +19,8 @@ except ImportError:
 class Fake2dbPostgresqlHandler():
     faker = Factory.create()
 
-    def fake2db_postgresql_initiator(self, number_of_rows,
-                                     host, port, password=None, name=None):
+    def fake2db_initiator(self, number_of_rows,
+                          host, port, password=None, name=None):
         '''Main handler for the operation
         '''
         rows = number_of_rows

@@ -174,7 +174,7 @@ def main():
             _postgresql_process_checkpoint()
             host = args.host or "localhost"
             port = args.port or 5432
-            fake_postgresql_handler.fake2db_postgresql_initiator(
+            fake_postgresql_handler.fake2db_initiator(
                 host=host, port=port, password=args.password,
                 number_of_rows=args.rows, name=args.name)
 
