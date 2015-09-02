@@ -174,12 +174,8 @@ def main():
             _postgresql_process_checkpoint()
             host = args.host or "localhost"
             port = args.port or 5432
-            if args.name:
-                fake_postgresql_handler.fake2db_postgresql_initiator(
-                    host, port, args.rows, args.name)
-            else:
-                fake_postgresql_handler.fake2db_postgresql_initiator(
-                    host, port, args.rows)
+            fake_postgresql_handler.fake2db_postgresql_initiator(
+                host=host, port=port, number_of_rows=args.rows, name=args.name)
 
         elif args.db == 'mongodb':
             try:
