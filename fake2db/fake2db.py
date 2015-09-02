@@ -111,12 +111,11 @@ def main():
         "--db",
         help=
         "Db type for creation: sqlite, mysql, postgresql, mongodb, redis, couchdb, to be expanded")
-    parser.add_argument(
-        "--name",
-        help="OPTIONAL : Give a name to the db to be generated. ")
-    parser.add_argument("--host", help="OPTIONAL : Hostname of db. ")
-    parser.add_argument("--port", help="OPTIONAL : Port of db.", type=int)
-    parser.add_argument("--password", help="OPTIONAL : Password for root. ")
+    parser.add_argument("--name", help="The name to the db to be generated")
+    parser.add_argument("--host", help="Hostname of db")
+    parser.add_argument("--port", help="Port of db", type=int)
+    parser.add_argument("--username", help="Username")
+    parser.add_argument("--password", help="Password")
 
     args = parser.parse_args()
 
@@ -174,8 +173,8 @@ def main():
             _postgresql_process_checkpoint()
             host = args.host or "localhost"
             port = args.port or 5432
-            fake_postgresql_handler.fake2db_initiator(
-                host=host, port=port, password=args.password,
+            fake_postgresql_handler.fake2db_initiator(host=host, port=port,
+                user=args.username, password=args.password,
                 number_of_rows=args.rows, name=args.name)
 
         elif args.db == 'mongodb':

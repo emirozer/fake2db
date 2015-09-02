@@ -1,6 +1,3 @@
-import time
-import getpass
-import subprocess
 import psycopg2
 
 from helpers import fake2db_logger, str_generator
@@ -19,12 +16,11 @@ except ImportError:
 class Fake2dbPostgresqlHandler():
     faker = Factory.create()
 
-    def fake2db_initiator(self, number_of_rows,
-                          host, port, password=None, name=None):
+    def fake2db_initiator(self, number_of_rows, **connection_kwargs):
         '''Main handler for the operation
         '''
         rows = number_of_rows
-        cursor, conn = self.database_caller_creator(host, port, name)
+        cursor, conn = self.database_caller_creator(**connection_kwargs)
 
         self.data_filler_simple_registration(rows, cursor, conn)
         self.data_filler_detailed_registration(rows, cursor, conn)
@@ -34,26 +30,26 @@ class Fake2dbPostgresqlHandler():
         cursor.close()
         conn.close()
 
-    def database_caller_creator(self, host, port, name=None):
+    def database_caller_creator(self, username, password, host, port, name=None):
         '''creates a postgresql db
         returns the related connection object
         which will be later used to spawn the cursor
         '''
         cursor = None
         conn = None
-        username = getpass.getuser()
 
         if name:
-            db = name
+            dbname = name
         else:
-            db = 'postgresql_' + str_generator(self)
+            dbname = 'postgresql_' + str_generator(self)
 
         try:
-            subprocess.Popen("createdb --no-password --owner " + username + " " + db, shell=True)
-            time.sleep(1)
-            conn = psycopg2.connect("dbname=" + db + " user=" + username + " host=" + host + " port=" + port)
+            # FIXME We can't assume createdb will work, only psycopg2
+            # subprocess.Popen("createdb --no-password --owner " + username + " " + dbname, shell=True)
+            # time.sleep(1)
+            conn = psycopg2.connect(user=username, password=password, host=host, port=port, database=dbname)
             cursor = conn.cursor()
-            logger.warning('Database created and opened succesfully: %s' % db, extra=d)
+            logger.warning('Database created and opened succesfully: %s' % dbname, extra=d)
         except Exception as err:
             logger.error(err, extra=d)
 
