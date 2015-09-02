@@ -1,3 +1,4 @@
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import psycopg2
 
 from helpers import fake2db_logger, str_generator
@@ -41,17 +42,24 @@ class Fake2dbPostgresqlHandler():
         if name:
             dbname = name
         else:
-            dbname = 'postgresql_' + str_generator(self)
-
+            dbname = 'postgresql_' + str_generator(self).lower()
         try:
-            # FIXME We can't assume createdb will work, only psycopg2
-            # subprocess.Popen("createdb --no-password --owner " + username + " " + dbname, shell=True)
-            # time.sleep(1)
-            conn = psycopg2.connect(user=username, password=password, host=host, port=port, database=dbname)
+            # createdb
+            conn = psycopg2.connect(
+                user=username, password=password, host=host, port=port)
+            conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+            cur = conn.cursor()
+            cur.execute('CREATE DATABASE %s;' % dbname)
+            cur.close()
+            conn.close()
+            # reconnect to the new database
+            conn = psycopg2.connect(user=username, password=password,
+                                    host=host, port=port, database=dbname)
             cursor = conn.cursor()
             logger.warning('Database created and opened succesfully: %s' % dbname, extra=d)
         except Exception as err:
             logger.error(err, extra=d)
+            raise
 
         return cursor, conn
 
