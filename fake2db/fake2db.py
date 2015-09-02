@@ -15,25 +15,6 @@ class MissingDependencyException(Exception):
     '''An Exception to be thrown if the dependencies are missing'''
 
 
-def _postgresql_process_checkpoint():
-    '''this helper method checks if
-    postgresql server is available in the sys
-    if not fires up one
-    '''
-    try:
-        subprocess.check_output("pgrep postgres", shell=True)
-    except Exception:
-        logger.warning(
-            'Your postgresql server is offline, fake2db will try to launch it now!',
-            extra=extra_information)
-        # close_fds = True argument is the flag that is responsible
-        # for Popen to launch the process completely independent
-        subprocess.Popen("postgres -D /usr/local/pgsql/data",
-                         close_fds=True,
-                         shell=True)
-        time.sleep(3)
-
-
 def _mysqld_process_checkpoint():
     '''this helper method checks if
     mysql server is available in the sys
@@ -170,7 +151,6 @@ def main():
                 fake_postgresql_handler = Fake2dbPostgresqlHandler()
             except Exception:
                 raise InstantiateDBHandlerException
-            _postgresql_process_checkpoint()
             host = args.host or "localhost"
             port = args.port or 5432
             fake_postgresql_handler.fake2db_initiator(host=host, port=port,
