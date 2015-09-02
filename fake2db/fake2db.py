@@ -1,4 +1,5 @@
 import argparse
+import getpass
 import subprocess
 import time
 
@@ -153,8 +154,9 @@ def main():
                 raise InstantiateDBHandlerException
             host = args.host or "localhost"
             port = args.port or 5432
+            username = args.username or getpass.getuser()
             fake_postgresql_handler.fake2db_initiator(host=host, port=port,
-                username=args.username, password=args.password,
+                username=username, password=args.password,
                 number_of_rows=args.rows, name=args.name)
 
         elif args.db == 'mongodb':
