@@ -1,6 +1,4 @@
-import time
-import getpass
-import subprocess
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import psycopg2
 
 from helpers import fake2db_logger, str_generator
@@ -19,11 +17,11 @@ except ImportError:
 class Fake2dbPostgresqlHandler():
     faker = Factory.create()
 
-    def fake2db_postgresql_initiator(self, host, port, number_of_rows, name=None):
+    def fake2db_initiator(self, number_of_rows, **connection_kwargs):
         '''Main handler for the operation
         '''
         rows = number_of_rows
-        cursor, conn = self.database_caller_creator(host, port, name)
+        cursor, conn = self.database_caller_creator(**connection_kwargs)
 
         self.data_filler_simple_registration(rows, cursor, conn)
         self.data_filler_detailed_registration(rows, cursor, conn)
@@ -33,28 +31,35 @@ class Fake2dbPostgresqlHandler():
         cursor.close()
         conn.close()
 
-    def database_caller_creator(self, host, port, name=None):
+    def database_caller_creator(self, username, password, host, port, name=None):
         '''creates a postgresql db
         returns the related connection object
         which will be later used to spawn the cursor
         '''
         cursor = None
         conn = None
-        username = getpass.getuser()
 
+        if name:
+            dbname = name
+        else:
+            dbname = 'postgresql_' + str_generator(self).lower()
         try:
-            if name:
-                db = name
-            else:
-                db = 'postgresql_' + str_generator(self)
-
-            subprocess.Popen("createdb --no-password --owner " + username + " " + db, shell=True)
-            time.sleep(1)
-            conn = psycopg2.connect("dbname=" + db + " user=" + username + " host=" + host + " port=" + port)
+            # createdb
+            conn = psycopg2.connect(
+                user=username, password=password, host=host, port=port)
+            conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+            cur = conn.cursor()
+            cur.execute('CREATE DATABASE %s;' % dbname)
+            cur.close()
+            conn.close()
+            # reconnect to the new database
+            conn = psycopg2.connect(user=username, password=password,
+                                    host=host, port=port, database=dbname)
             cursor = conn.cursor()
-            logger.warning('Database created and opened succesfully: %s' % db, extra=d)
+            logger.warning('Database created and opened succesfully: %s' % dbname, extra=d)
         except Exception as err:
             logger.error(err, extra=d)
+            raise
 
         return cursor, conn
 
@@ -64,20 +69,20 @@ class Fake2dbPostgresqlHandler():
 
         cursor.execute("CREATE TABLE simple_registration (id serial PRIMARY KEY, email varchar(300), password varchar(300));")
         conn.commit()
-        
+
         simple_registration_data = []
-        
+
         try:
 
             for i in range(0, number_of_rows):
                 simple_registration_data.append((self.faker.safe_email(), self.faker.md5(raw_output=False)))
-                
+
             simple_registration_payload = ("INSERT INTO simple_registration "
                                            "(email, password) "
                                            "VALUES (%s, %s)")
             cursor.executemany(simple_registration_payload, simple_registration_data)
             conn.commit()
-            
+
             logger.warning('simple_registration Commits are successful after write job!', extra=d)
 
         except Exception as e:
@@ -93,18 +98,18 @@ class Fake2dbPostgresqlHandler():
             "lastname varchar(300), name varchar(300), adress varchar(300), phone varchar(300));")
         conn.commit()
         detailed_registration_data = []
-        
+
         try:
 
             for i in range(0, number_of_rows):
-                
+
                 detailed_registration_data.append((self.faker.safe_email(), self.faker.md5(raw_output=False), self.faker.last_name(),
                                                    self.faker.first_name(), self.faker.address(), self.faker.phone_number()))
-                
+
             detailed_registration_payload = ("INSERT INTO detailed_registration "
                                              "(email, password, lastname, name, adress, phone) "
                                              "VALUES (%s, %s, %s, %s, %s, %s)")
-            
+
             cursor.executemany(detailed_registration_payload, detailed_registration_data)
             conn.commit()
             logger.warning('detailed_registration Commits are successful after write job!', extra=d)
@@ -121,21 +126,21 @@ class Fake2dbPostgresqlHandler():
         conn.commit()
 
         user_agent_data = []
-        
+
         try:
 
             for i in range(0, number_of_rows):
-                
+
                 user_agent_data.append((self.faker.ipv4(), self.faker.country_code(),
                  self.faker.user_agent()))
-                
+
             user_agent_payload = ("INSERT INTO user_agent "
                                "(ip, countrycode, useragent) "
                                "VALUES (%s, %s, %s)")
-            
+
             cursor.executemany(user_agent_payload, user_agent_data)
             conn.commit()
-            
+
             logger.warning('user_agent Commits are successful after write job!', extra=d)
         except Exception as e:
             logger.error(e, extra=d)
@@ -149,17 +154,17 @@ class Fake2dbPostgresqlHandler():
             "name varchar(300), sdate varchar(300), email varchar(300), domain varchar(300), city varchar(300));")
         conn.commit()
         company_data = []
-        
+
         try:
             for i in range(0, number_of_rows):
-                
+
                 company_data.append((self.faker.company(), self.faker.date(pattern="%d-%m-%Y"),
                                      self.faker.company_email(), self.faker.safe_email(), self.faker.city()))
-                
+
             company_payload = ("INSERT INTO company "
                                "(name, sdate, email, domain, city) "
                                "VALUES (%s, %s, %s, %s, %s)")
-            
+
             cursor.executemany(company_payload, company_data)
             conn.commit()
             logger.warning('companies Commits are successful after write job!', extra=d)
@@ -178,20 +183,20 @@ class Fake2dbPostgresqlHandler():
         conn.commit()
 
         customer_data = []
-        
+
         try:
             for i in range(0, number_of_rows):
-                
+
                 customer_data.append((self.faker.first_name(), self.faker.last_name(), self.faker.address(),
                                       self.faker.country(), self.faker.city(), self.faker.date(pattern="%d-%m-%Y"),
                                       self.faker.date(pattern="%d-%m-%Y"), self.faker.safe_email(), self.faker.phone_number(),
                                       self.faker.locale()))
-                
+
             customer_payload = ("INSERT INTO customer "
                                 "(name, lastname, address, country, city, registry_date, "
                                 "birthdate, email, phone_number, locale)"
                                 "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
-            
+
             cursor.executemany(customer_payload, customer_data)
             conn.commit()
             logger.warning('customer Commits are successful after write job!', extra=d)
