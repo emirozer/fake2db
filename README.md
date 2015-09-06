@@ -71,6 +71,9 @@ It is as follows, at this point in time, fake2db accepts rows and db argument.
 > fake2db --rows 200 --db sqlite
 <br>
 > fake2db --rows 1500 --db postgresql --name test_database_postgre
+<br>
+> fake2db --db postgresql --rows 2500 --host container.local --password password --user docker
+<br>
 
 In addition to the databases supported in the db argument, you can also run fake2db with FoundationDB SQL Layer. Once SQL Layer is installed, simply use the postgresql generator and specify the SQL Layer port. For example:
 
