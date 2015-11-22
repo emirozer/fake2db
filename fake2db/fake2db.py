@@ -98,6 +98,7 @@ def main():
     parser.add_argument("--port", help="Port of db", type=int)
     parser.add_argument("--username", help="Username")
     parser.add_argument("--password", help="Password")
+    parser.add_argument("--schema", help="Custom schema json for db generation, check github repo for exp.")
 
     args = parser.parse_args()
 
@@ -112,6 +113,12 @@ def main():
                        extra=extra_information)
         logger.info('DB argument : %s', args.db, extra=extra_information)
 
+        if args.schema:
+            import json
+            # if there is a custom schema provided, it has to be interpreted first.
+            # mongoose schema compliant maybe ? TODO
+            schema = json.loads(args.schema)
+            
         if args.db == 'sqlite':
             try:
                 from sqlite_handler import Fake2dbSqliteHandler
