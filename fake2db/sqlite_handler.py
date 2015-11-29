@@ -46,26 +46,32 @@ class Fake2dbSqliteHandler():
         custom_d = faker_options_container()
         sqlst = '''
         CREATE TABLE custom(id TEXT PRIMARY KEY,'''
-        
-        exec_many = ''
+
+        # first one is always ID primary key
+        exec_many = 'insert into custom values(?,'
         
         for c in custom:
             if custom_d.get(c):
                 sqlst += " " + c + " TEXT, "
                 exec_many += '?,'
+                logger.warning("fake2db found valid custom key provided: %s" % c, extra=d)
             else:
-                logger.error("fake2db does not support the custom key you provided.")
+                logger.error("fake2db does not support the custom key you provided.", extra=d )
                 sys.exit(1)
                 
         sqlst = sqlst[:-2] + ")"
-                
+        cursor.execute(sqlst)   
         conn.commit()
         multi_lines = []
+        exec_many = exec_many[:-1] +')'
         
         try:
             for i in range(0, number_of_rows):
-                multi_lines.append((rnd_id_generator(self), self.faker.safe_email(), self.faker.md5(raw_output=False)))
-            cursor.executemany('insert into custom values('+ exec_many[:-1] +')',multi_lines)
+                multi_lines.append([rnd_id_generator(self)])
+                for c in custom:
+                    multi_lines[i].append(getattr(self.faker, c)())
+            
+            cursor.executemany(exec_many, multi_lines)
             conn.commit()
             logger.warning('custom Commits are successful after write job!', extra=d)
         except Exception as e:
