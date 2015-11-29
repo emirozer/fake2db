@@ -13,7 +13,7 @@ setup(
     packages=find_packages(exclude=[]),
     entry_points={'console_scripts': ['fake2db = fake2db.fake2db:main']},
     install_requires=[
-        'fake-factory>=0.4.2',
+        'fake-factory>=0.5.3',
     ],
     include_package_data=True,
     classifiers=[

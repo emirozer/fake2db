@@ -98,7 +98,8 @@ def main():
     parser.add_argument("--port", help="Port of db", type=int)
     parser.add_argument("--username", help="Username")
     parser.add_argument("--password", help="Password")
-    parser.add_argument("--schema", help="Custom schema json for db generation, check github repo for exp.")
+    parser.add_argument("--custom", nargs='+', help="Custom schema for db generation, supports functions that fake-factory provides, see fake2db github repository for options https://github.com/emirozer/fake2db")
+
 
     args = parser.parse_args()
 
@@ -113,21 +114,17 @@ def main():
                        extra=extra_information)
         logger.info('DB argument : %s', args.db, extra=extra_information)
 
-        if args.schema:
-            import json
-            # if there is a custom schema provided, it has to be interpreted first.
-            # mongoose schema compliant maybe ? TODO
-            schema = json.loads(args.schema)
-            
         if args.db == 'sqlite':
             try:
                 from sqlite_handler import Fake2dbSqliteHandler
                 fake_sqlite_handler = Fake2dbSqliteHandler()
             except Exception:
                 raise InstantiateDBHandlerException
-            if args.name:
+            if args.name and args.custom:
                 fake_sqlite_handler.fake2db_sqlite_initiator(args.rows,
-                                                             args.name)
+                                                             args.name, args.custom)
+            elif args.custom:
+                fake_sqlite_handler.fake2db_sqlite_initiator(args.rows, None, args.custom)
             else:
                 fake_sqlite_handler.fake2db_sqlite_initiator(args.rows)
 
