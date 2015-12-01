@@ -1,4 +1,6 @@
 import pymongo
+import sys
+from custom import faker_options_container
 from helpers import fake2db_logger, str_generator, rnd_id_generator
 
 
@@ -16,18 +18,49 @@ except ImportError:
 class Fake2dbMongodbHandler():
     faker = Factory.create()
 
-    def fake2db_mongodb_initiator(self, host, port, number_of_rows, name=None):
+    def fake2db_mongodb_initiator(self, host, port, number_of_rows, name=None, custom=None):
         '''Main handler for the operation
         '''
         rows = number_of_rows
         db = self.database_caller_creator(host, port, name)
 
+        if custom:
+            self.custom_db_creator(rows, db, custom)
+            sys.exit(0)
+            
         self.data_filler_simple_registration(rows, db)
         self.data_filler_detailed_registration(rows, db)
         self.data_filler_company(rows, db)
         self.data_filler_user_agent(rows, db)
         self.data_filler_customer(rows, db)
 
+
+    def custom_db_creator(self, number_of_rows, db, custom):
+        try:
+            customdb = db.custom
+            data_list = list()
+            custom_d = faker_options_container()
+            for c in custom:
+                if custom_d.get(c):
+                    logger.warning("fake2db found valid custom key provided: %s" % c, extra=d)
+                else:
+                    logger.error("fake2db does not support the custom key you provided.", extra=d )
+                    sys.exit(1)
+                    
+            for i in range(0, number_of_rows):
+                dict_c = {"id": rnd_id_generator(self)}
+                for c in custom:
+                    dict_c[c] = getattr(self.faker, c)()
+                          
+                data_list.append(dict_c)
+
+            customdb.insert_many(data_list)
+            logger.warning('custom Commits are successful after write job!', extra=d)
+
+        except Exception as e:
+            logger.error(e, extra=d)
+        
+    
     def database_caller_creator(self, host, port, name=None):
         '''creates a mongodb database
         returns the related connection object

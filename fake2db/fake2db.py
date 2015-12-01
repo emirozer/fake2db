@@ -178,9 +178,13 @@ def main():
             _mongodb_process_checkpoint()
             host = args.host or "localhost"
             port = args.port or 27017
-            if args.name:
+
+            if args.name and args.custom:
                 fake_mongodb_handler.fake2db_mongodb_initiator(
-                    host, port, args.rows, args.name)
+                    host, port, args.rows, args.name, args.custom)
+            elif args.custom:
+                fake_mongodb_handler.fake2db_mongodb_initiator(
+                    host, port, args.rows, None, args.custom)
             else:
                 fake_mongodb_handler.fake2db_mongodb_initiator(host, port,
                                                                args.rows)
