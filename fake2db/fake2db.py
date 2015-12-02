@@ -202,13 +202,16 @@ def main():
             except Exception:
                 raise InstantiateDBHandlerException
             _couchdb_process_checkpoint()
-
-            if args.name:
-                fake_couchdb_handler.fake2db_couchdb_initiator(args.rows,
-                                                               args.name)
+            
+            if args.name and args.custom:
+                fake_couchdb_handler.fake2db_couchdb_initiator(
+                    args.rows, args.name, args.custom)
+            elif args.custom:
+                fake_couchdb_handler.fake2db_couchdb_initiator(
+                    args.rows, None, args.custom)
             else:
                 fake_couchdb_handler.fake2db_couchdb_initiator(args.rows)
-
+                
         elif args.db == 'redis':
             if args.name and (not args.name.isdigit() or int(args.name) < 0):
                 logger.error('redis db name must be a non-negative integer',
@@ -229,9 +232,12 @@ def main():
             host = args.host or "localhost"
             port = args.port or 6379
             _redis_process_checkpoint(host, port)
-            if args.name:
+            if args.name and args.custom:
                 fake_redis_handler.fake2db_redis_initiator(
-                    host, port, args.rows, args.name)
+                    host, port, args.rows, args.name, args.custom)
+            elif args.custom:
+                fake_redis_handler.fake2db_redis_initiator(
+                    host, port, args.rows, None, args.custom)
             else:
                 fake_redis_handler.fake2db_redis_initiator(host, port,
                                                            args.rows)
