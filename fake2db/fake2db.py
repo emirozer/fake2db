@@ -159,9 +159,13 @@ def main():
             host = args.host or "localhost"
             port = args.port or 5432
             username = args.username or getpass.getuser()
+            custom = args.custom or None
             fake_postgresql_handler.fake2db_initiator(host=host, port=port,
-                username=username, password=args.password,
-                number_of_rows=args.rows, name=args.name)
+                                                      username=username,
+                                                      password=args.password,
+                                                      number_of_rows=args.rows,
+                                                      name=args.name,
+                                                      custom=custom)
 
         elif args.db == 'mongodb':
             try:

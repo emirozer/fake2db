@@ -1,7 +1,8 @@
-from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import psycopg2
-
+import sys
+from custom import faker_options_container
 from helpers import fake2db_logger, str_generator
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 logger, extra_information = fake2db_logger()
 d = extra_information
@@ -21,7 +22,7 @@ class Fake2dbPostgresqlHandler():
         '''Main handler for the operation
         '''
         rows = number_of_rows
-        cursor, conn = self.database_caller_creator(**connection_kwargs)
+        cursor, conn = self.database_caller_creator(number_of_rows, **connection_kwargs)
 
         self.data_filler_simple_registration(rows, cursor, conn)
         self.data_filler_detailed_registration(rows, cursor, conn)
@@ -31,7 +32,7 @@ class Fake2dbPostgresqlHandler():
         cursor.close()
         conn.close()
 
-    def database_caller_creator(self, username, password, host, port, name=None):
+    def database_caller_creator(self, number_of_rows, username, password, host, port, name=None, custom=None):
         '''creates a postgresql db
         returns the related connection object
         which will be later used to spawn the cursor
@@ -61,8 +62,57 @@ class Fake2dbPostgresqlHandler():
             logger.error(err, extra=d)
             raise
 
+        if custom:
+            self.custom_db_creator(number_of_rows, cursor, conn, custom)
+            cursor.close()
+            conn.close()
+            sys.exit(0)
+
         return cursor, conn
 
+    def custom_db_creator(self, number_of_rows, cursor, conn, custom):
+        '''creates and fills the table with simple regis. information
+        '''
+
+        custom_d = faker_options_container()
+        sqlst = "CREATE TABLE custom (id serial PRIMARY KEY,"
+        custom_payload = "INSERT INTO custom ("
+        
+        # form the sql query that will set the db up
+        for c in custom:
+            if custom_d.get(c):
+                sqlst += " " + c + " " + custom_d[c] + ","
+                custom_payload += " " + c + ","
+                logger.warning("fake2db found valid custom key provided: %s" % c, extra=d)
+            else:
+                logger.error("fake2db does not support the custom key you provided.", extra=d )
+                sys.exit(1)
+                
+        # the indice thing is for trimming the last extra comma
+        sqlst = sqlst[:-1]
+        sqlst += ");"
+        custom_payload = custom_payload[:-1]
+        custom_payload += ") VALUES ("
+
+        for i in range(0, len(custom)):
+            custom_payload += "%s, "
+        custom_payload = custom_payload[:-2] + ")"
+        cursor.execute(sqlst)
+        conn.commit()
+
+        multi_lines = []
+        try:
+            for i in range(0, number_of_rows):
+                multi_lines.append([])
+                for c in custom:
+                    multi_lines[i].append(getattr(self.faker, c)())
+            
+            cursor.executemany(custom_payload, multi_lines)
+            conn.commit()
+            logger.warning('custom Commits are successful after write job!', extra=d)
+        except Exception as e:
+            logger.error(e, extra=d)
+            
     def data_filler_simple_registration(self, number_of_rows, cursor, conn):
         '''creates and fills the table with simple regis. information
         '''
@@ -76,7 +126,6 @@ class Fake2dbPostgresqlHandler():
 
             for i in range(0, number_of_rows):
                 simple_registration_data.append((self.faker.safe_email(), self.faker.md5(raw_output=False)))
-
             simple_registration_payload = ("INSERT INTO simple_registration "
                                            "(email, password) "
                                            "VALUES (%s, %s)")
