@@ -137,12 +137,16 @@ def main():
             _mysqld_process_checkpoint()
             host = args.host or "127.0.0.1"
             port = args.port or 3306
-            if args.name:
+            username = args.username or getpass.getuser()
+            if args.name and args.custom:
                 fake_mysql_handler.fake2db_mysql_initiator(
-                    host, port, args.password, args.rows, args.name)
+                    host, port, args.password, username, args.rows, args.name, args.custom)
+            elif args.custom:
+                fake_mysql_handler.fake2db_mysql_initiator(
+                    host, port, args.password, username, args.rows, None, args.custom)
             else:
                 fake_mysql_handler.fake2db_mysql_initiator(
-                    host, port, args.password, args.rows)
+                    host, port, args.password, username, args.rows, None, None)
 
         elif args.db == 'postgresql':
             try:
