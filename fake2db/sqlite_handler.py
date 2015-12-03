@@ -1,5 +1,6 @@
 import sqlite3
-
+import sys
+from custom import faker_options_container
 from helpers import fake2db_logger, str_generator, rnd_id_generator
 
 logger, extra_information = fake2db_logger()
@@ -20,18 +21,61 @@ class DbConnException(Exception):
 class Fake2dbSqliteHandler():
     faker = Factory.create()
 
-    def fake2db_sqlite_initiator(self, number_of_rows, name=None):
+    def fake2db_sqlite_initiator(self, number_of_rows, name=None, custom=None):
         '''Main handler for the operation
         '''
         rows = number_of_rows
         conn = self.database_caller_creator(name)
 
+        if custom:
+            self.custom_db_creator(rows, conn, custom)
+            conn.close()
+            sys.exit(0)
+            
         self.data_filler_simple_registration(rows, conn)
         self.data_filler_detailed_registration(rows, conn)
         self.data_filler_company(rows, conn)
         self.data_filler_user_agent(rows, conn)
         self.data_filler_customer(rows, conn)
         conn.close()
+
+    def custom_db_creator(self, number_of_rows, conn, custom):
+        '''creates and fills the table with simple regis. information
+        '''
+        cursor = conn.cursor()
+        custom_d = faker_options_container()
+        sqlst = '''
+        CREATE TABLE custom(id TEXT PRIMARY KEY,'''
+
+        # first one is always ID primary key
+        exec_many = 'insert into custom values(?,'
+        
+        for c in custom:
+            if custom_d.get(c):
+                sqlst += " " + c + " TEXT, "
+                exec_many += '?,'
+                logger.warning("fake2db found valid custom key provided: %s" % c, extra=d)
+            else:
+                logger.error("fake2db does not support the custom key you provided.", extra=d )
+                sys.exit(1)
+                
+        sqlst = sqlst[:-2] + ")"
+        cursor.execute(sqlst)   
+        conn.commit()
+        multi_lines = []
+        exec_many = exec_many[:-1] +')'
+        
+        try:
+            for i in range(0, number_of_rows):
+                multi_lines.append([rnd_id_generator(self)])
+                for c in custom:
+                    multi_lines[i].append(getattr(self.faker, c)())
+            
+            cursor.executemany(exec_many, multi_lines)
+            conn.commit()
+            logger.warning('custom Commits are successful after write job!', extra=d)
+        except Exception as e:
+            logger.error(e, extra=d)
 
     def database_caller_creator(self, name=None):
         '''creates a sqlite3 db
@@ -52,7 +96,7 @@ class Fake2dbSqliteHandler():
             raise DbConnException
 
         return conn
-
+    
     def data_filler_simple_registration(self, number_of_rows, conn):
         '''creates and fills the table with simple regis. information
         '''

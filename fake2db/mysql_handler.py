@@ -1,5 +1,5 @@
 import sys
-
+from custom import faker_options_container
 from helpers import fake2db_logger, str_generator, rnd_id_generator
 
 
@@ -23,15 +23,21 @@ except ImportError:
 class Fake2dbMySqlHandler():
     faker = Factory.create()
 
-    def fake2db_mysql_initiator(self, host, port, password, number_of_rows, name=None):
+    def fake2db_mysql_initiator(self, host, port, password, username, number_of_rows, name=None, custom=None):
         '''Main handler for the operation
         '''
         rows = number_of_rows
 
         if name:
-            cursor, conn = self.database_caller_creator(host, port, password, name)
+            cursor, conn = self.database_caller_creator(host, port, password, username, name)
         else:
-            cursor, conn = self.database_caller_creator(host, port, password)
+            cursor, conn = self.database_caller_creator(host, port, password, username)
+
+        if custom:
+            self.custom_db_creator(rows, cursor, conn, custom)
+            cursor.close()
+            conn.close()
+            sys.exit(0)
 
         tables = self.mysql_table_creator()
         keys = tables.keys()
@@ -46,6 +52,7 @@ class Fake2dbMySqlHandler():
                 logger.info("OK", extra=extra_information)
 
         logger.warning('Table creation ops finished', extra=extra_information)
+
         self.data_filler_simple_registration(rows, cursor, conn)
         self.data_filler_detailed_registration(rows, cursor, conn)
         self.data_filler_company(rows, cursor, conn)
@@ -54,7 +61,7 @@ class Fake2dbMySqlHandler():
         cursor.close()
         conn.close()
 
-    def database_caller_creator(self, host, port, password, name=None):
+    def database_caller_creator(self, host, port, password, username, name=None):
         '''creates a mysql db
         returns the related connection object
         which will be later used to spawn the cursor
@@ -68,7 +75,7 @@ class Fake2dbMySqlHandler():
             else:
                 db = 'mysql_' + str_generator(self)
 
-            conn = mysql.connector.connect(user='root', host=host, port=port, password=password)
+            conn = mysql.connector.connect(user=username, host=host, port=port, password=password)
             cursor = conn.cursor()
             cursor.execute('CREATE DATABASE IF NOT EXISTS ' + db)
             cursor.execute('USE ' + db)
@@ -143,6 +150,52 @@ class Fake2dbMySqlHandler():
 
         return tables
 
+    def custom_db_creator(self, number_of_rows, cursor, conn, custom):
+        '''creates and fills the table with simple regis. information
+        '''
+
+        custom_d = faker_options_container()
+        sqlst = "CREATE TABLE `custom` (`id` varchar(300) NOT NULL,"
+        custom_payload = "INSERT INTO custom (id,"
+        
+        # form the sql query that will set the db up
+        for c in custom:
+            if custom_d.get(c):
+                sqlst += " `" + c + "` " + custom_d[c] + ","
+                custom_payload += " " + c + ","
+                logger.warning("fake2db found valid custom key provided: %s" % c, extra=extra_information)
+            else:
+                logger.error("fake2db does not support the custom key you provided.", extra=extra_information)
+                sys.exit(1)
+                
+        # the indice thing is for trimming the last extra comma
+        sqlst += " PRIMARY KEY (`id`)) ENGINE=InnoDB"
+        custom_payload = custom_payload[:-1]
+        custom_payload += ") VALUES (%s, "
+        
+        for i in range(0, len(custom)):
+            custom_payload += "%s, "
+        custom_payload = custom_payload[:-2] + ")"
+        
+        try:
+            cursor.execute(sqlst)
+            conn.commit()
+        except mysql.connector.Error as err:
+            logger.error(err.msg, extra=extra_information)
+
+        multi_lines = []
+        try:
+            for i in range(0, number_of_rows):
+                multi_lines.append([rnd_id_generator(self)])
+                for c in custom:
+                    multi_lines[i].append(getattr(self.faker, c)())
+            
+            cursor.executemany(custom_payload, multi_lines)
+            conn.commit()
+            logger.warning('custom Commits are successful after write job!', extra=extra_information)
+        except Exception as e:
+            logger.error(e, extra=extra_information)
+    
     def data_filler_simple_registration(self, number_of_rows, cursor, conn):
         '''creates and fills the table with simple regis. information
         '''
