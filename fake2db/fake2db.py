@@ -2,7 +2,8 @@ import argparse
 import getpass
 import subprocess
 import time
-
+import sys
+from custom import faker_options_container
 from helpers import fake2db_logger
 
 logger, extra_information = fake2db_logger()
@@ -114,6 +115,15 @@ def main():
                        extra=extra_information)
         logger.info('DB argument : %s', args.db, extra=extra_information)
 
+        if args.custom:
+            custom_d = faker_options_container()
+            for c in args.custom:
+                if custom_d.get(c):
+                    logger.info("fake2db found valid custom key provided: %s" % c, extra=extra_information)
+                else:
+                    logger.error("fake2db does not support the custom key you provided: %s" % c, extra=extra_information )
+                    sys.exit(1)
+                
         if args.db == 'sqlite':
             try:
                 from sqlite_handler import Fake2dbSqliteHandler
