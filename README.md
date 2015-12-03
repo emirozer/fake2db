@@ -54,9 +54,8 @@ mysql connector is needed for mysql db generation:
 
 ##### Usage
 
-It is as follows, at this point in time, fake2db accepts rows and db argument.
 
-*--rows* argument is pretty clear...
+*--rows* argument is pretty clear :) integer
 
 *--db* argument takes 6 possible options : sqlite, mysql, postgresql, mongodb, redis, couchdb
 
@@ -66,7 +65,10 @@ It is as follows, at this point in time, fake2db accepts rows and db argument.
 
 *--port* argument is OPTIONAL. Port to use for database connection. Not used for sqlite.
 
-*--password* argument is OPTIONAL. Password for root. Only supported for mysql.
+*--username* argument is OPTIONAL. Username for the databse user.
+
+*--password* argument is OPTIONAL. Password for database user. Only supported for mysql & postgresql.
+
 
 > fake2db --rows 200 --db sqlite
 <br>
@@ -78,6 +80,22 @@ It is as follows, at this point in time, fake2db accepts rows and db argument.
 In addition to the databases supported in the db argument, you can also run fake2db with FoundationDB SQL Layer. Once SQL Layer is installed, simply use the postgresql generator and specify the SQL Layer port. For example:
 
 > fake2db --rows --db postgresql --port 15432
+
+
+##### Custom Database Generation
+
+If you want to create a custom db/table, you have to provide **--custom** parameter followed by the column item you want. At the point in time, i mapped all the possible column items you can use here:
+
+<https://github.com/emirozer/fake2db/blob/f/custom_db_generation/fake2db/custom.py>
+
+Feed any keys you want to the custom flag:
+
+> fake2db.py --rows 250 --db mysql --username mysql --password somepassword --custom name date country
+<br>
+>fake2db.py --rows 1500 --db mysql --password randompassword --custom currency_code credit_card_full credit_card_provider
+<br>
+>fake2db.py --rows 20 --db mongodb --custom name date country
+
 
 <br>
 ##### Sample output - sqlite

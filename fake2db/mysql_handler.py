@@ -171,7 +171,7 @@ class Fake2dbMySqlHandler():
         # the indice thing is for trimming the last extra comma
         sqlst += " PRIMARY KEY (`id`)) ENGINE=InnoDB"
         custom_payload = custom_payload[:-1]
-        custom_payload += ") VALUES (%s, "
+        custom_payload += ") VALUES ("
         
         for i in range(0, len(custom)):
             custom_payload += "%s, "
