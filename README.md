@@ -100,6 +100,9 @@ Feed any keys you want to the custom flag:
 <br>
 ##### Sample output - sqlite
 ![Screenshot](https://raw.github.com/emirozer/fake2db/master/docs/fake2db_example_sqlite.png)
-
+<br>
+![Screenshot](https://raw.github.com/emirozer/fake2db/master/docs/mysql_fake2db.png)
+<br>
+![Screenshot](https://raw.github.com/emirozer/fake2db/master/docs/pg_fake2db.png)
 
 <br>
