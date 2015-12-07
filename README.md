@@ -86,7 +86,7 @@ In addition to the databases supported in the db argument, you can also run fake
 
 If you want to create a custom db/table, you have to provide **--custom** parameter followed by the column item you want. At the point in time, i mapped all the possible column items you can use here:
 
-<https://github.com/emirozer/fake2db/blob/f/custom_db_generation/fake2db/custom.py>
+<https://github.com/emirozer/fake2db/blob/master/fake2db/custom.py>
 
 Feed any keys you want to the custom flag:
 
