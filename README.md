@@ -65,7 +65,7 @@ mysql connector is needed for mysql db generation:
 
 *--port* argument is OPTIONAL. Port to use for database connection. Not used for sqlite.
 
-*--username* argument is OPTIONAL. Username for the databse user.
+*--username* argument is OPTIONAL. Username for the database user.
 
 *--password* argument is OPTIONAL. Password for database user. Only supported for mysql & postgresql.
 
