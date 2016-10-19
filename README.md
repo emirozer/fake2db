@@ -71,12 +71,16 @@ mysql connector is needed for mysql db generation:
 
 *--locale* argument is OPTIONAL. The localization of data to be generated ('en_US' as default).
 
+*--seed* argument is OPTIONAL. Integer for seeding random generator to produce the same data set between runs. Note: uuid4 values still generated randomly.
+
 
 > fake2db --rows 200 --db sqlite
 <br>
 > fake2db --rows 1500 --db postgresql --name test_database_postgre
 <br>
 > fake2db --db postgresql --rows 2500 --host container.local --password password --user docker
+<br>
+> fake2db --rows 200 --db sqlite --locale cs_CZ --seed 1337
 <br>
 
 In addition to the databases supported in the db argument, you can also run fake2db with FoundationDB SQL Layer. Once SQL Layer is installed, simply use the postgresql generator and specify the SQL Layer port. For example:

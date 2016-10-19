@@ -15,12 +15,13 @@ except ImportError:
 
 class BaseHandler(object):
 
-    def __init__(self, locale=None):
+    def __init__(self, locale=None, seed=None):
+        '''Base class for DB handlers
         '''
-        Validating locale specified by user:
-        If specified locale not in faker.config.AVAILABLE_LOCALES
-        then faker.Factory will initialized with default locale ('en_US')
-        '''
+
+        # Validating locale specified by user:
+        # If specified locale not in faker.config.AVAILABLE_LOCALES
+        # then faker.Factory will initialized with default locale ('en_US')
         if not locale:
             self.faker = Factory.create()
         else:
@@ -29,3 +30,7 @@ class BaseHandler(object):
             except Exception:
                 logger.warning("Specified locale is wrong or unsupported: '%s'; 'en_US' will be used!" % locale, extra=d)
                 self.faker = Factory.create()
+
+        # Setting the seed value for the random generator
+        if seed:
+            self.faker.seed(seed)

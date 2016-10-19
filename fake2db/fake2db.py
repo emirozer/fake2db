@@ -101,6 +101,7 @@ def main():
     parser.add_argument("--password", help="Password")
     parser.add_argument("--custom", nargs='+', help="Custom schema for db generation, supports functions that fake-factory provides, see fake2db github repository for options https://github.com/emirozer/fake2db")
     parser.add_argument("--locale", help="The locale of the data to be generated: {bg_BG,cs_CZ,...,zh_CN,zh_TW}. 'en_US' as default")
+    parser.add_argument("--seed", help="Seed value for the random generator", type=int)
 
 
     args = parser.parse_args()
@@ -128,7 +129,7 @@ def main():
         if args.db == 'sqlite':
             try:
                 from sqlite_handler import Fake2dbSqliteHandler
-                fake_sqlite_handler = Fake2dbSqliteHandler(args.locale)
+                fake_sqlite_handler = Fake2dbSqliteHandler(args.locale, args.seed)
             except Exception:
                 raise InstantiateDBHandlerException
             if args.name and args.custom:
@@ -142,7 +143,7 @@ def main():
         elif args.db == 'mysql':
             try:
                 from mysql_handler import Fake2dbMySqlHandler
-                fake_mysql_handler = Fake2dbMySqlHandler(args.locale)
+                fake_mysql_handler = Fake2dbMySqlHandler(args.locale, args.seed)
             except Exception:
                 raise InstantiateDBHandlerException
             _mysqld_process_checkpoint()
@@ -168,7 +169,7 @@ def main():
 
             try:
                 from postgresql_handler import Fake2dbPostgresqlHandler
-                fake_postgresql_handler = Fake2dbPostgresqlHandler(args.locale)
+                fake_postgresql_handler = Fake2dbPostgresqlHandler(args.locale, args.seed)
             except Exception:
                 raise InstantiateDBHandlerException
             host = args.host or "localhost"
@@ -191,7 +192,7 @@ def main():
 
             try:
                 from mongodb_handler import Fake2dbMongodbHandler
-                fake_mongodb_handler = Fake2dbMongodbHandler(args.locale)
+                fake_mongodb_handler = Fake2dbMongodbHandler(args.locale, args.seed)
             except Exception:
                 raise InstantiateDBHandlerException
             _mongodb_process_checkpoint()
@@ -217,7 +218,7 @@ def main():
 
             try:
                 from couchdb_handler import Fake2dbCouchdbHandler
-                fake_couchdb_handler = Fake2dbCouchdbHandler(args.locale)
+                fake_couchdb_handler = Fake2dbCouchdbHandler(args.locale, args.seed)
             except Exception:
                 raise InstantiateDBHandlerException
             _couchdb_process_checkpoint()
@@ -245,7 +246,7 @@ def main():
 
             try:
                 from redis_handler import Fake2dbRedisHandler
-                fake_redis_handler = Fake2dbRedisHandler(args.locale)
+                fake_redis_handler = Fake2dbRedisHandler(args.locale, args.seed)
             except Exception:
                 raise InstantiateDBHandlerException
             host = args.host or "localhost"
