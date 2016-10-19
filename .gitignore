@@ -1,6 +1,7 @@
 env/
 .idea/
 .DS_Store
+fake2db/__pycache__/
 fake2db/*.pyc
 fake2db/*.db
 fake2db/*.db-journal

@@ -69,6 +69,8 @@ mysql connector is needed for mysql db generation:
 
 *--password* argument is OPTIONAL. Password for database user. Only supported for mysql & postgresql.
 
+*--locale* argument is OPTIONAL. The localization of data to be generated ('en_US' as default).
+
 
 > fake2db --rows 200 --db sqlite
 <br>

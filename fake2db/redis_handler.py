@@ -1,5 +1,6 @@
 import redis
 import sys
+from base_handler import BaseHandler
 from custom import faker_options_container
 from helpers import fake2db_logger, rnd_id_generator
 
@@ -7,15 +8,8 @@ from helpers import fake2db_logger, rnd_id_generator
 logger, extra_information = fake2db_logger()
 d = extra_information
 
-try:
-    from faker import Factory
-except ImportError:
-    logger.error('faker package not found onto python packages, please run : \
-    pip install -r requirements.txt on the root of the project')
 
-
-class Fake2dbRedisHandler():
-    faker = Factory.create()
+class Fake2dbRedisHandler(BaseHandler):
 
     def fake2db_redis_initiator(self, host, port, number_of_rows, name=None, custom=None):
         '''Main handler for the operation

@@ -1,5 +1,6 @@
 import psycopg2
 import sys
+from base_handler import BaseHandler
 from custom import faker_options_container
 from helpers import fake2db_logger, str_generator
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
@@ -7,16 +8,8 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 logger, extra_information = fake2db_logger()
 d = extra_information
 
-try:
-    from faker import Factory
-except ImportError:
-    logger.error('faker package not found onto python packages, please run : \
-    pip install -r requirements.txt  \
-    on the root of the project')
 
-
-class Fake2dbPostgresqlHandler():
-    faker = Factory.create()
+class Fake2dbPostgresqlHandler(BaseHandler):
 
     def fake2db_initiator(self, number_of_rows, **connection_kwargs):
         '''Main handler for the operation
