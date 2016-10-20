@@ -32,5 +32,5 @@ class BaseHandler(object):
                 self.faker = Factory.create()
 
         # Setting the seed value for the random generator
-        if seed:
+        if seed is not None:
             self.faker.seed(seed)
