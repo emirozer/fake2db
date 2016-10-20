@@ -16,7 +16,7 @@ def faker_options_container():
                      "opera": "varchar(300)",
                      "paragraph": "varchar(300)",
                      "bs": "varchar(300)",
-                     "building_number": "INT",
+                     "building_number": "varchar(20)",
                      "password": "varchar(300)",
                      "century": "varchar(50)",
                      "phone_number": "varchar(250)",

@@ -1,4 +1,5 @@
 import sys
+from base_handler import BaseHandler
 from custom import faker_options_container
 from helpers import fake2db_logger, str_generator, rnd_id_generator
 
@@ -12,16 +13,8 @@ except ImportError:
         'MySql Connector/Python not found on sys, '
         'you need to get it : http://dev.mysql.com/downloads/connector/python/', extra=extra_information)
 
-try:
-    from faker import Factory
-except ImportError:
-    logger.error('faker package not found onto python packages, please run : \
-    pip install -r requirements.txt  \
-    on the root of the project', extra=extra_information)
 
-
-class Fake2dbMySqlHandler():
-    faker = Factory.create()
+class Fake2dbMySqlHandler(BaseHandler):
 
     def fake2db_mysql_initiator(self, host, port, password, username, number_of_rows, name=None, custom=None):
         '''Main handler for the operation
@@ -76,8 +69,9 @@ class Fake2dbMySqlHandler():
                 db = 'mysql_' + str_generator(self)
 
             conn = mysql.connector.connect(user=username, host=host, port=port, password=password)
+
             cursor = conn.cursor()
-            cursor.execute('CREATE DATABASE IF NOT EXISTS ' + db)
+            cursor.execute('CREATE DATABASE IF NOT EXISTS ' + db + ' DEFAULT CHARACTER SET ''utf8''')
             cursor.execute('USE ' + db)
             logger.warning('Database created and opened succesfully: %s' % db, extra=extra_information)
 
