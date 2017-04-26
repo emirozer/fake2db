@@ -1,8 +1,8 @@
 import psycopg2
 import sys
-from base_handler import BaseHandler
-from custom import faker_options_container
-from helpers import fake2db_logger, str_generator
+from .base_handler import BaseHandler
+from .custom import faker_options_container
+from .helpers import fake2db_logger, str_generator
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 logger, extra_information = fake2db_logger()

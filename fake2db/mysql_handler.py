@@ -1,7 +1,7 @@
 import sys
-from base_handler import BaseHandler
-from custom import faker_options_container
-from helpers import fake2db_logger, str_generator, rnd_id_generator
+from .base_handler import BaseHandler
+from .custom import faker_options_container
+from .helpers import fake2db_logger, str_generator, rnd_id_generator
 
 
 logger, extra_information = fake2db_logger()

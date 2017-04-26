@@ -3,8 +3,8 @@ import getpass
 import subprocess
 import time
 import sys
-from custom import faker_options_container
-from helpers import fake2db_logger
+from .custom import faker_options_container
+from .helpers import fake2db_logger
 
 logger, extra_information = fake2db_logger()
 
@@ -128,7 +128,7 @@ def main():
                 
         if args.db == 'sqlite':
             try:
-                from sqlite_handler import Fake2dbSqliteHandler
+                from .sqlite_handler import Fake2dbSqliteHandler
                 fake_sqlite_handler = Fake2dbSqliteHandler(args.locale, args.seed)
             except Exception:
                 raise InstantiateDBHandlerException
@@ -142,7 +142,7 @@ def main():
 
         elif args.db == 'mysql':
             try:
-                from mysql_handler import Fake2dbMySqlHandler
+                from .mysql_handler import Fake2dbMySqlHandler
                 fake_mysql_handler = Fake2dbMySqlHandler(args.locale, args.seed)
             except Exception:
                 raise InstantiateDBHandlerException
@@ -168,7 +168,7 @@ def main():
                     'psycopg2 package not found on the python packages, please run: pip install psycopg2')
 
             try:
-                from postgresql_handler import Fake2dbPostgresqlHandler
+                from .postgresql_handler import Fake2dbPostgresqlHandler
                 fake_postgresql_handler = Fake2dbPostgresqlHandler(args.locale, args.seed)
             except Exception:
                 raise InstantiateDBHandlerException
@@ -191,7 +191,7 @@ def main():
                     'pymongo package not found on the python packages, please run: pip install pymongo')
 
             try:
-                from mongodb_handler import Fake2dbMongodbHandler
+                from .mongodb_handler import Fake2dbMongodbHandler
                 fake_mongodb_handler = Fake2dbMongodbHandler(args.locale, args.seed)
             except Exception:
                 raise InstantiateDBHandlerException
@@ -217,7 +217,7 @@ def main():
                     'couchdb package not found on the python packages, please run: pip install couchdb')
 
             try:
-                from couchdb_handler import Fake2dbCouchdbHandler
+                from .couchdb_handler import Fake2dbCouchdbHandler
                 fake_couchdb_handler = Fake2dbCouchdbHandler(args.locale, args.seed)
             except Exception:
                 raise InstantiateDBHandlerException
@@ -245,7 +245,7 @@ def main():
                     'redis package not found on the python packages, please run: pip install redis')
 
             try:
-                from redis_handler import Fake2dbRedisHandler
+                from .redis_handler import Fake2dbRedisHandler
                 fake_redis_handler = Fake2dbRedisHandler(args.locale, args.seed)
             except Exception:
                 raise InstantiateDBHandlerException

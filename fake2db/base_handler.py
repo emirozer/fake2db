@@ -1,5 +1,5 @@
 import sys
-from helpers import fake2db_logger
+from .helpers import fake2db_logger
 
 logger, extra_information = fake2db_logger()
 d = extra_information
