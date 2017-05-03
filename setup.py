@@ -3,7 +3,7 @@ import os
 
 setup(
     name='fake2db',
-    version='0.5.2',
+    version='0.5.3',
     author='Emir Ozer',
     author_email='emirozer@yandex.com',
     url='https://github.com/emirozer/fake2db',
@@ -13,7 +13,7 @@ setup(
     packages=find_packages(exclude=[]),
     entry_points={'console_scripts': ['fake2db = fake2db.fake2db:main']},
     install_requires=[
-        'fake-factory>=0.5.3',
+        'Faker==0.7.11',
     ],
     include_package_data=True,
     classifiers=[
