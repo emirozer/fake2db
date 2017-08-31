@@ -88,57 +88,57 @@ class Fake2dbMySqlHandler(BaseHandler):
 
         tables['simple_registration'] = (
             "CREATE TABLE `simple_registration` ("
-            "  `id` varchar(300) NOT NULL,"
-            "  `email` varchar(300) NOT NULL,"
-            "  `password` varchar(300) NOT NULL,"
+            "  `id` varchar(200) NOT NULL,"
+            "  `email` varchar(200) NOT NULL,"
+            "  `password` varchar(200) NOT NULL,"
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
 
         tables['detailed_registration'] = (
             "CREATE TABLE `detailed_registration` ("
-            "  `id` varchar(300) NOT NULL,"
-            "  `email` varchar(300) NOT NULL,"
-            "  `password` varchar(300) NOT NULL,"
-            "  `lastname` varchar(300) NOT NULL,"
-            "  `name` varchar(300) NOT NULL,"
-            "  `address` varchar(300) NOT NULL,"
-            "  `phone` varchar(300) NOT NULL,"
+            "  `id` varchar(200) NOT NULL,"
+            "  `email` varchar(200) NOT NULL,"
+            "  `password` varchar(200) NOT NULL,"
+            "  `lastname` varchar(200) NOT NULL,"
+            "  `name` varchar(200) NOT NULL,"
+            "  `address` varchar(200) NOT NULL,"
+            "  `phone` varchar(200) NOT NULL,"
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
 
         tables['user_agent'] = (
             "CREATE TABLE `user_agent` ("
-            "  `id` varchar(300) NOT NULL,"
-            "  `ip` varchar(300) NOT NULL,"
-            "  `countrycode` varchar(300) NOT NULL,"
-            "  `useragent` varchar(300) NOT NULL,"
+            "  `id` varchar(200) NOT NULL,"
+            "  `ip` varchar(200) NOT NULL,"
+            "  `countrycode` varchar(200) NOT NULL,"
+            "  `useragent` varchar(200) NOT NULL,"
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
 
         tables['company'] = (
             "CREATE TABLE `company` ("
-            "  `id` varchar(300) NOT NULL,"
-            "  `name` varchar(300) NOT NULL,"
+            "  `id` varchar(200) NOT NULL,"
+            "  `name` varchar(200) NOT NULL,"
             "  `sdate` date NOT NULL,"
-            "  `email` varchar(300) NOT NULL,"
-            "  `domain` varchar(300) NOT NULL,"
-            "  `city` varchar(300) NOT NULL,"
+            "  `email` varchar(200) NOT NULL,"
+            "  `domain` varchar(200) NOT NULL,"
+            "  `city` varchar(200) NOT NULL,"
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
 
         tables['customer'] = (
             "CREATE TABLE `customer` ("
-            "  `id` varchar(300) NOT NULL,"
-            "  `name` varchar(300) NOT NULL,"
-            "  `lastname` varchar(300) NOT NULL,"
-            "  `address` varchar(300) NOT NULL,"
-            "  `country` varchar(300) NOT NULL,"
-            "  `city` varchar(300) NOT NULL,"
-            "  `registry_date` varchar(300) NOT NULL,"
-            "  `birthdate` varchar(300) NOT NULL,"
-            "  `email` varchar(300) NOT NULL,"
-            "  `phone_number` varchar(300) NOT NULL,"
-            "  `locale` varchar(300) NOT NULL,"
+            "  `id` varchar(200) NOT NULL,"
+            "  `name` varchar(200) NOT NULL,"
+            "  `lastname` varchar(200) NOT NULL,"
+            "  `address` varchar(200) NOT NULL,"
+            "  `country` varchar(200) NOT NULL,"
+            "  `city` varchar(200) NOT NULL,"
+            "  `registry_date` varchar(200) NOT NULL,"
+            "  `birthdate` varchar(200) NOT NULL,"
+            "  `email` varchar(200) NOT NULL,"
+            "  `phone_number` varchar(200) NOT NULL,"
+            "  `locale` varchar(200) NOT NULL,"
             "  PRIMARY KEY (`id`)"
             ") ENGINE=InnoDB")
 
@@ -149,7 +149,7 @@ class Fake2dbMySqlHandler(BaseHandler):
         '''
 
         custom_d = faker_options_container()
-        sqlst = "CREATE TABLE `custom` (`id` varchar(300) NOT NULL,"
+        sqlst = "CREATE TABLE `custom` (`id` varchar(200) NOT NULL,"
         custom_payload = "INSERT INTO custom (id,"
         
         # form the sql query that will set the db up
