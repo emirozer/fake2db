@@ -119,7 +119,7 @@ class Fake2dbSqliteHandler(BaseHandler):
         cursor.execute('''
         CREATE TABLE detailed_registration(id TEXT PRIMARY KEY,
         email TEXT, password TEXT, lastname TEXT,
-        name TEXT, adress TEXT, phone TEXT)
+        name TEXT, address TEXT, phone TEXT)
         ''')
         conn.commit()
         multi_lines = []
