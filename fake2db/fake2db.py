@@ -103,7 +103,6 @@ def main():
     parser.add_argument("--locale", help="The locale of the data to be generated: {bg_BG,cs_CZ,...,zh_CN,zh_TW}. 'en_US' as default")
     parser.add_argument("--seed", help="Seed value for the random generator", type=int)
 
-
     args = parser.parse_args()
 
     if not args.rows or not args.db:
@@ -123,22 +122,16 @@ def main():
                 if custom_d.get(c):
                     logger.info("fake2db found valid custom key provided: %s" % c, extra=extra_information)
                 else:
-                    logger.error("fake2db does not support the custom key you provided: %s" % c, extra=extra_information )
+                    logger.error("fake2db does not support the custom key you provided: %s" % c, extra=extra_information)
                     sys.exit(1)
-                
+
         if args.db == 'sqlite':
             try:
                 from .sqlite_handler import Fake2dbSqliteHandler
                 fake_sqlite_handler = Fake2dbSqliteHandler(args.locale, args.seed)
             except Exception:
                 raise InstantiateDBHandlerException
-            if args.name and args.custom:
-                fake_sqlite_handler.fake2db_sqlite_initiator(args.rows,
-                                                             args.name, args.custom)
-            elif args.custom:
-                fake_sqlite_handler.fake2db_sqlite_initiator(args.rows, None, args.custom)
-            else:
-                fake_sqlite_handler.fake2db_sqlite_initiator(args.rows)
+            fake_sqlite_handler.fake2db_sqlite_initiator(args.rows, args.name, args.custom)
 
         elif args.db == 'mysql':
             try:
@@ -150,15 +143,8 @@ def main():
             host = args.host or "127.0.0.1"
             port = args.port or 3306
             username = args.username or getpass.getuser()
-            if args.name and args.custom:
-                fake_mysql_handler.fake2db_mysql_initiator(
-                    host, port, args.password, username, args.rows, args.name, args.custom)
-            elif args.custom:
-                fake_mysql_handler.fake2db_mysql_initiator(
-                    host, port, args.password, username, args.rows, None, args.custom)
-            else:
-                fake_mysql_handler.fake2db_mysql_initiator(
-                    host, port, args.password, username, args.rows, None, None)
+            fake_mysql_handler.fake2db_mysql_initiator(
+                host, port, args.password, username, args.rows, args.name, args.custom)
 
         elif args.db == 'postgresql':
             try:
@@ -176,12 +162,9 @@ def main():
             port = args.port or 5432
             username = args.username or getpass.getuser()
             custom = args.custom or None
-            fake_postgresql_handler.fake2db_initiator(host=host, port=port,
-                                                      username=username,
-                                                      password=args.password,
-                                                      number_of_rows=args.rows,
-                                                      name=args.name,
-                                                      custom=custom)
+            fake_postgresql_handler.fake2db_initiator(
+                host=host, port=port, username=username, password=args.password,
+                number_of_rows=args.rows, name=args.name, custom=custom)
 
         elif args.db == 'mongodb':
             try:
@@ -199,15 +182,8 @@ def main():
             host = args.host or "localhost"
             port = args.port or 27017
 
-            if args.name and args.custom:
-                fake_mongodb_handler.fake2db_mongodb_initiator(
-                    host, port, args.rows, args.name, args.custom)
-            elif args.custom:
-                fake_mongodb_handler.fake2db_mongodb_initiator(
-                    host, port, args.rows, None, args.custom)
-            else:
-                fake_mongodb_handler.fake2db_mongodb_initiator(host, port,
-                                                               args.rows)
+            fake_mongodb_handler.fake2db_mongodb_initiator(
+                host, port, args.rows, args.name, args.custom)
 
         elif args.db == 'couchdb':
             try:
@@ -222,16 +198,10 @@ def main():
             except Exception:
                 raise InstantiateDBHandlerException
             _couchdb_process_checkpoint()
-            
-            if args.name and args.custom:
-                fake_couchdb_handler.fake2db_couchdb_initiator(
-                    args.rows, args.name, args.custom)
-            elif args.custom:
-                fake_couchdb_handler.fake2db_couchdb_initiator(
-                    args.rows, None, args.custom)
-            else:
-                fake_couchdb_handler.fake2db_couchdb_initiator(args.rows)
-                
+
+            fake_couchdb_handler.fake2db_couchdb_initiator(
+                args.rows, args.name, args.custom)
+
         elif args.db == 'redis':
             if args.name and (not args.name.isdigit() or int(args.name) < 0):
                 logger.error('redis db name must be a non-negative integer',
@@ -252,15 +222,8 @@ def main():
             host = args.host or "localhost"
             port = args.port or 6379
             _redis_process_checkpoint(host, port)
-            if args.name and args.custom:
-                fake_redis_handler.fake2db_redis_initiator(
-                    host, port, args.rows, args.name, args.custom)
-            elif args.custom:
-                fake_redis_handler.fake2db_redis_initiator(
-                    host, port, args.rows, None, args.custom)
-            else:
-                fake_redis_handler.fake2db_redis_initiator(host, port,
-                                                           args.rows)
+            fake_redis_handler.fake2db_redis_initiator(
+                host, port, args.rows, args.name, args.custom)
 
         else:
             logger.error(
