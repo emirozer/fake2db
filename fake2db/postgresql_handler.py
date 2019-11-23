@@ -43,7 +43,10 @@ class Fake2dbPostgresqlHandler(BaseHandler):
                 user=username, password=password, host=host, port=port)
             conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
             cur = conn.cursor()
-            cur.execute('CREATE DATABASE %s;' % dbname)
+            cur.execute("SELECT * FROM pg_database WHERE datname = '%s'" % dbname)
+            if cur.rowcount == 0:
+                # create database if not exist
+                cur.execute('CREATE DATABASE %s;' % dbname)
             cur.close()
             conn.close()
             # reconnect to the new database
